@@ -2,9 +2,7 @@
 // 1. Crossover for Binary Numbers
 // ================================
 
-
 // One-point crossover for binary representations
-
 export function onePointCrossover(parent1, parent2) {
     const point = Math.floor(Math.random() * (parent1.length - 1)) + 1;
     const child1 = [...parent1.slice(0, point), ...parent2.slice(point)];
@@ -16,7 +14,6 @@ export function onePointCrossover(parent1, parent2) {
 }
 
 // Two-point crossover for binary representations
- 
 export function twoPointCrossover(parent1, parent2) {
     let point1 = Math.floor(Math.random() * parent1.length);
     let point2 = Math.floor(Math.random() * (parent1.length - 1));
@@ -40,7 +37,6 @@ export function twoPointCrossover(parent1, parent2) {
 }
 
 // Uniform crossover for binary representations
- 
 export function uniformCrossover(parent1, parent2, crossoverRate = 0.5) {
     const child1 = [];
     const child2 = [];
@@ -67,7 +63,7 @@ export function uniformCrossover(parent1, parent2, crossoverRate = 0.5) {
 // 2. Crossover for Real Numbers
 // ==============================
 
-
+// Simple Crossover for Real Numbers
 export function simpleCrossover(parent1, parent2, alpha = 0.5) { 
     const length = parent1.length;
     const point = Math.floor(Math.random() * (length - 1)) + 1; 
@@ -87,6 +83,7 @@ export function simpleCrossover(parent1, parent2, alpha = 0.5) {
 }
 
 
+// Simple Arithmetic crossover for Real Numbers
 export function simpleArithmeticCrossover(parent1, parent2, alpha = 0.5) {
     const length = parent1.length;
     const point = Math.floor(Math.random() * length); 
@@ -103,6 +100,7 @@ export function simpleArithmeticCrossover(parent1, parent2, alpha = 0.5) {
 }
 
 
+// Whole Arithmetic crossover for Real Numbers
 export function wholeArithmeticCrossover(parent1, parent2, { alpha = 0.5 } = {}) {
     const length = parent1.length;
     
@@ -123,3 +121,5 @@ export function wholeArithmeticCrossover(parent1, parent2, { alpha = 0.5 } = {})
 // ==============================
 // 2. Crossover for Permutation
 // ==============================
+
+// 
