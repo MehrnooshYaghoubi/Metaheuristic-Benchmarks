@@ -156,3 +156,14 @@ export function orderCrossover(parent1, parent2) {
     offspring: [child1, child2],
   };
 }
+
+export function cycleRecombination(parent1, parent2) {
+  const length = parent1.length;
+  const child1 = new Array(length).fill(-1);
+  const child2 = new Array(length).fill(-1);
+  const parent1_cycles = [];
+  const parent2_cycles = [];
+
+  let i = 0;
+  while (true) {}
+}

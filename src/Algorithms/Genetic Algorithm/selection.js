@@ -35,4 +35,35 @@ export function rank_based_selection(population, fitness) {
     const fitness_b = fitness_of_individuals[population.indexOf(b)];
     return fitness_a - fitness_b;
   });
+
+  const rank = sorted_population.map((individual, index) => ({
+    individual,
+    rank: index + 1,
+  }));
+
+  const cumulative_rank = rank.reduce((accumulator, currentValue) => {
+    const lastValue = accumulator[accumulator.length - 1];
+    accumulator.push(lastValue + currentValue.rank);
+    return accumulator;
+  });
+  const random_value = Math.random();
+  const selected_index = cumulative_rank.findIndex(
+    (rank) => rank >= random_value
+  );
+  return population[selected_index];
+}
+
+export function tournament_selection(population, fitness) {
+  const tournament_size = 3;
+  const selected_individuals = [];
+  for (let i = 0; i < tournament_size; i++) {
+    const random_index = Math.floor(Math.random() * population.length);
+    selected_individuals.push(population[random_index]);
+  }
+  const best_individual = selected_individuals.reduce((best, current) => {
+    if (fitness(current) > fitness(best)) {
+      return fitness(current);
+    }
+  });
+  return best_individual;
 }
