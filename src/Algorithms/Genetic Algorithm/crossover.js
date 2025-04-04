@@ -127,6 +127,7 @@ export function orderCrossover(parent1, parent2) {
 
   let point1 = Math.floor(Math.random() * length);
   let point2 = Math.floor(Math.random() * length);
+  
   if (point1 > point2) {
     [point1, point2] = [point2, point1];
   }
