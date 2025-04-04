@@ -123,37 +123,3 @@ export function wholeArithmeticCrossover(parent1, parent2, { alpha = 0.5 } = {})
 // ==============================
 // 2. Crossover for Permutation
 // ==============================
-export function orderCrossover(parent1, parent2) {
-    const length = parent1.length;
-    
-    let point1 = 3;
-    let point2 = 6;
-
-    let child1 = new Array(length).fill(-1);
-    let child2 = new Array(length).fill(-1);
-
-    for (let i = point1; i <= point2; i++) {
-        child1[i] = parent1[i];
-        child2[i] = parent2[i];
-    }
-
-    function fillRemaining(child, parent) {
-        let index = (point2 + 1) % length; 
-        for (let i = 0; i < length; i++) {
-            let gene = parent[(point2 + 1 + i) % length];
-            if (!child.includes(gene)) {
-                child[index] = gene;
-                index = (index + 1) % length; 
-            }
-        }
-    }
-
-    fillRemaining(child1, parent2);
-    fillRemaining(child2, parent1);
-
-    return {
-        offspring: [child1, child2],
-        crossoverPoints: [point1, point2]
-    };
-}
-
