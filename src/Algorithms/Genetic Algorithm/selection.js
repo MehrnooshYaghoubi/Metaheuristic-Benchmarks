@@ -36,28 +36,3 @@ export function rank_based_selection(population, fitness) {
     return fitness_a - fitness_b;
   });
 }
-
-export function orderCrossover(parent1, parent2) {
-  const length = parent1.length;
-
-  let point1 = Math.floor(Math.random() * length);
-  let point2 = Math.floor(Math.random() * length);
-  if (point1 > point2) {
-    [point1, point2] = [point2, point1];
-  }
-
-  let child1 = new Array(length).fill(-1);
-  let child2 = new Array(length).fill(-1);
-
-  for (let i = point1; i <= point2; i++) {
-    child1[i] = parent1[i];
-    child2[i] = parent2[i];
-  }
-
-  let currentIndex1 = (point2 + 1) % length;
-
-  return {
-    offspring: [child1, child2],
-    crossoverPoints: [point1, point2],
-  };
-}
