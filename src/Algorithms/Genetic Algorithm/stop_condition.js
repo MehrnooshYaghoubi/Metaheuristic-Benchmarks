@@ -31,7 +31,12 @@ function stagnationStop(bestFitnessHistory, stagnationLimit) {
     if (bestFitnessHistory.length < stagnationLimit) {
         return false;
     }
-    return bestFitnessHistory.slice(-stagnationLimit).every(fitness => fitness === bestFitnessHistory[bestFitnessHistory.length - 1]);
+    return bestFitnessHistory
+        .slice(-stagnationLimit)
+        .every(
+            (fitness) =>
+                fitness === bestFitnessHistory[bestFitnessHistory.length - 1]
+        );
 }
 
 // ========================
@@ -42,7 +47,7 @@ function timeLimitStop(startTime, timeLimit) {
     /**
      * Stop if the elapsed time exceeds the time limit.
      */
-    return (Date.now() - startTime) >= timeLimit;
+    return Date.now() - startTime >= timeLimit;
 }
 
 // ========================
@@ -58,10 +63,48 @@ function populationConvergenceStop(population, convergenceThreshold) {
     }
     const firstIndividual = population[0];
     for (const individual of population) {
-        const difference = individual.reduce((sum, value, index) => sum + Math.abs(value - firstIndividual[index]), 0);
+        const difference = individual.reduce(
+            (sum, value, index) =>
+                sum + Math.abs(value - firstIndividual[index]),
+            0
+        );
         if (difference > convergenceThreshold) {
             return false;
         }
     }
     return true;
+}
+
+export function stopCondition(
+    method,
+    currentGeneration,
+    bestFitness,
+    bestFitnessHistory,
+    population,
+    startTime,
+    options
+) {
+    /**
+     * Check if the stopping condition is met based on the selected method.
+     */
+    switch (method) {
+        case "maxGenerations":
+            return maxGenerationsStop(
+                currentGeneration,
+                options.maxGenerations
+            );
+        case "fitnessThreshold":
+            return fitnessThresholdStop(bestFitness, options.fitnessThreshold);
+        case "stagnation":
+            return stagnationStop(bestFitnessHistory, options.stagnationLimit);
+        case "timeLimit":
+            return timeLimitStop(startTime, options.timeLimit);
+        case "populationConvergence":
+            return populationConvergenceStop(
+                population,
+                options.convergenceThreshold
+            );
+        default:
+            throw new Error("Invalid stopping condition method");
+    }
 }

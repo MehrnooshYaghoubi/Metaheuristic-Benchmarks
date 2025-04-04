@@ -2,7 +2,7 @@
 // 1. Crossover for Binary Numbers
 // ================================
 // One-point crossover for binary representations
-export function onePointCrossover(parent1, parent2) {
+function onePointCrossover(parent1, parent2) {
     const point = Math.floor(Math.random() * (parent1.length - 1)) + 1;
     const child1 = [...parent1.slice(0, point), ...parent2.slice(point)];
     const child2 = [...parent2.slice(0, point), ...parent1.slice(point)];
@@ -14,7 +14,7 @@ export function onePointCrossover(parent1, parent2) {
 
 // Two-point crossover for binary representations
 
-export function twoPointCrossover(parent1, parent2) {
+function twoPointCrossover(parent1, parent2) {
     let point1 = Math.floor(Math.random() * parent1.length);
     let point2 = Math.floor(Math.random() * (parent1.length - 1));
     if (point2 >= point1) point2++;
@@ -37,7 +37,7 @@ export function twoPointCrossover(parent1, parent2) {
 }
 
 // Uniform crossover for binary representations
-export function uniformCrossover(parent1, parent2, crossoverRate = 0.5) {
+function uniformCrossover(parent1, parent2, crossoverRate = 0.5) {
     const child1 = [];
     const child2 = [];
     const swaps = [];
@@ -63,7 +63,7 @@ export function uniformCrossover(parent1, parent2, crossoverRate = 0.5) {
 // ==============================
 
 // Simple Crossover for Real Numbers
-export function simpleCrossover(parent1, parent2, alpha = 0.5) {
+function simpleCrossover(parent1, parent2, alpha = 0.5) {
     const length = parent1.length;
     const point = Math.floor(Math.random() * (length - 1)) + 1;
 
@@ -82,7 +82,7 @@ export function simpleCrossover(parent1, parent2, alpha = 0.5) {
 }
 
 // Simple Arithmetic crossover for Real Numbers
-export function simpleArithmeticCrossover(parent1, parent2, alpha = 0.5) {
+function simpleArithmeticCrossover(parent1, parent2, alpha = 0.5) {
     const length = parent1.length;
     const point = Math.floor(Math.random() * length);
 
@@ -98,11 +98,7 @@ export function simpleArithmeticCrossover(parent1, parent2, alpha = 0.5) {
 }
 
 // Whole Arithmetic crossover for Real Numbers
-export function wholeArithmeticCrossover(
-    parent1,
-    parent2,
-    { alpha = 0.5 } = {}
-) {
+function wholeArithmeticCrossover(parent1, parent2, { alpha = 0.5 } = {}) {
     const length = parent1.length;
 
     const child1 = [];
@@ -122,7 +118,7 @@ export function wholeArithmeticCrossover(
 // 2. Crossover for Permutation
 // ==============================
 
-export function orderCrossover(parent1, parent2) {
+function orderCrossover(parent1, parent2) {
     const length = parent1.length;
 
     let point1 = Math.floor(Math.random() * length);
@@ -158,7 +154,7 @@ export function orderCrossover(parent1, parent2) {
     };
 }
 
-export function cycleRecombination(parent1, parent2) {
+function cycleRecombination(parent1, parent2) {
     const length = parent1.length;
     const child1 = new Array(length).fill(-1);
     const child2 = new Array(length).fill(-1);
@@ -196,4 +192,27 @@ export function cycleRecombination(parent1, parent2) {
     return {
         offspring: [child1, child2],
     };
+}
+
+export function crossover(method, parent1, parent2) {
+    switch (method) {
+        case "onePoint":
+            return onePointCrossover(parent1, parent2);
+        case "twoPoint":
+            return twoPointCrossover(parent1, parent2);
+        case "uniform":
+            return uniformCrossover(parent1, parent2);
+        case "simple":
+            return simpleCrossover(parent1, parent2);
+        case "simpleArithmetic":
+            return simpleArithmeticCrossover(parent1, parent2);
+        case "wholeArithmetic":
+            return wholeArithmeticCrossover(parent1, parent2);
+        case "order":
+            return orderCrossover(parent1, parent2);
+        case "cycle":
+            return cycleRecombination(parent1, parent2);
+        default:
+            throw new Error("Invalid crossover method");
+    }
 }
