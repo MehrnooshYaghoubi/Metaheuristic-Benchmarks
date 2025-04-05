@@ -5,11 +5,13 @@ import { createPopulation } from "./initialization";
 import { replacement } from "./replacement";
 
 class GeneticAlgorithm {
-    constructor(populationSize, mutationRate, crossoverRate) {
+    constructor(populationSize, mutationRate, crossoverRate, fitness) {
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.population = [];
+        // this.fitness = (individual) => (individual.reduce((acc,val)=> acc + (val^2)))
+        this.fitness = fitness;
     }
 
     run(
