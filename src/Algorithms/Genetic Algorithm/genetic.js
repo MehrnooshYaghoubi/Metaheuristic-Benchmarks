@@ -10,7 +10,7 @@ class GeneticAlgorithm {
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.population = [];
-        // this.fitness = (individual) => (individual.reduce((acc,val)=> acc + (val^2)))
+        this.fitness = (individual) => (individual.reduce((acc,val)=> acc + (val^2)))
         this.fitness = fitness;
     }
 

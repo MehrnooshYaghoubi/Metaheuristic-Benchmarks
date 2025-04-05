@@ -1,21 +1,20 @@
 // Standard PSO algorithm
 
-
 function StandardPSO(populationSize, dimension, lowerBound, upperBound, iterations, fitnessFunction, W, c1, c2) {
     // Initialize the population and velocities
     const population = Array.from({ length: populationSize }, () => {
         return Array.from({ length: dimension }, () => lowerBound + (upperBound - lowerBound) * Math.random());
     });
+        
     const velocities = Array.from({ length: populationSize }, () => {
         return Array.from({ length: dimension }, () => 0)
     });
 
     // Initialize the personal best positions and global best position
-    let gbest = Infinity;
-    const pbest = Array.from({ length: populationSize }, () => {
-        return Array.from({ length: dimension }, () => Infinity);
-    });
-
+    let gbest = population.reduce((best, individual) => 
+        fitnessFunction(individual) < fitnessFunction(best) ? individual : best
+    );
+    const pbest = population;
     for (let i=0 ; i<iterations; i++){
         for (let j = 0; j < populationSize; j++) {
             const fitness = fitnessFunction(population[j]); // Update the personal best position
