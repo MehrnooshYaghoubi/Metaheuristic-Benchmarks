@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
 body {
-    font-family: "Montserrat", sans-serif;
+    color: white;
+}
+
+* {
+    font-family: "Montserrat" !important;
+
 }
