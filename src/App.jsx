@@ -68,13 +68,13 @@ function App() {
                         to="/ga"
                         className="bg-blue-500  text-white rounded-full px-6 py-3 hover:bg-blue-400 transition duration-300 ease-in-out"
                     >
-                        Use MetaSolve Now
+                        Use Genetic Algorithm
                     </NavLink>
                     <NavLink
                         to="/pso"
                         className="text-white border border-blue-400 rounded-full px-6 py-3 ml-4 hover:bg-blue-500  transition duration-300 ease-in-out"
                     >
-                        Talk to an expert
+                        Use Particle Swarm Optimization
                     </NavLink>
                 </div>
             </div>

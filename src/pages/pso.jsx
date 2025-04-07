@@ -3,7 +3,9 @@ import { useEffect } from "react";
 import Header from "../titlebar";
 import { CircleChevronLeft } from "lucide-react";
 import InputBox from "./../components/Inputbox";
+import { useState } from "react";
 import React, { PureComponent } from "react";
+import { StandardPSO } from "../Algorithms/PSO/pso";
 import {
     ScatterChart,
     Scatter,
@@ -15,14 +17,88 @@ import {
 } from "recharts";
 
 export default function PSO() {
-    const data = [
-        { x: 100, y: 200, z: 200 },
-        { x: 120, y: 100, z: 260 },
-        { x: 170, y: 300, z: 400 },
-        { x: 140, y: 250, z: 280 },
-        { x: 150, y: 400, z: 500 },
-        { x: 110, y: 280, z: 200 },
-    ];
+    const [iteration, setIteration] = useState(0);
+    const [positions, setPositions] = useState([]);
+    const [isRunning, setIsRunning] = useState(false);
+
+    const handleStart = () => {
+        const populationSize = 100;
+        const dimension = 2;
+        const lowerBound = -10;
+        const upperBound = 10;
+        const iterations = 100;
+        const fitnessFunction = (x) => x.reduce((sum, xi) => sum + xi * xi, 0);
+        const W = 0.5;
+        const c1 = 1.5;
+        const c2 = 1.5;
+
+        // Initialize population and velocities
+        const population = Array.from({ length: populationSize }, () =>
+            Array.from(
+                { length: dimension },
+                () => lowerBound + (upperBound - lowerBound) * Math.random()
+            )
+        );
+        const velocities = Array.from({ length: populationSize }, () =>
+            Array.from({ length: dimension }, () => 0)
+        );
+
+        let gbest = population.reduce((best, individual) =>
+            fitnessFunction(individual) < fitnessFunction(best)
+                ? individual
+                : best
+        );
+        const pbest = [...population];
+
+        const allPositions = [];
+
+        const runIteration = (currentIteration) => {
+            if (currentIteration >= iterations) {
+                setIsRunning(false);
+                return;
+            }
+
+            // Track positions for visualization
+            const iterationPositions = population.map((particle) => ({
+                x: particle[0],
+                y: particle[1],
+            }));
+            allPositions.push(iterationPositions);
+
+            // Update pbest and gbest
+            for (let j = 0; j < populationSize; j++) {
+                const fitness = fitnessFunction(population[j]);
+                if (fitness < fitnessFunction(pbest[j])) {
+                    pbest[j] = [...population[j]];
+                }
+
+                if (fitness < fitnessFunction(gbest)) {
+                    gbest = [...population[j]];
+                }
+            }
+
+            // Update velocities and positions
+            for (let j = 0; j < populationSize; j++) {
+                for (let k = 0; k < dimension; k++) {
+                    const r1 = Math.random();
+                    const r2 = Math.random();
+                    velocities[j][k] =
+                        W * velocities[j][k] +
+                        c1 * r1 * (pbest[j][k] - population[j][k]) +
+                        c2 * r2 * (gbest[k] - population[j][k]);
+                    population[j][k] += velocities[j][k];
+                }
+            }
+
+            // Update state and schedule the next iteration
+            setPositions([...allPositions]);
+            setIteration(currentIteration + 1);
+            setTimeout(() => runIteration(currentIteration + 1), 100); // Adjust delay for speed
+        };
+
+        setIsRunning(true);
+        runIteration(0);
+    };
     useEffect(() => {
         const threeScript = document.createElement("script");
         threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
@@ -102,7 +178,11 @@ export default function PSO() {
                                 parameter="Number of Iterations"
                             />
                             <div className="flex justify-end mt-5">
-                                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
+                                <button
+                                    onClick={handleStart}
+                                    disabled={isRunning}
+                                    className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out"
+                                >
                                     Start
                                 </button>
                                 <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
@@ -114,6 +194,8 @@ export default function PSO() {
                     <div className="pl-15 w-[50%]">
                         <ResponsiveContainer width="100%" height={400}>
                             <ScatterChart
+                                width={600}
+                                height={400}
                                 margin={{
                                     top: 20,
                                     right: 20,
@@ -122,20 +204,12 @@ export default function PSO() {
                                 }}
                             >
                                 <CartesianGrid />
-                                <XAxis
-                                    type="number"
-                                    dataKey="x"
-                                    name="stature"
-                                />
-                                <YAxis
-                                    type="number"
-                                    dataKey="y"
-                                    name="weight"
-                                />
+                                <XAxis type="number" dataKey="x" name="X" />
+                                <YAxis type="number" dataKey="y" name="Y" />
                                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                                 <Scatter
-                                    name="A school"
-                                    data={data}
+                                    name="Particles"
+                                    data={positions[iteration]}
                                     fill="#8884d8"
                                 />
                             </ScatterChart>
