@@ -14,12 +14,10 @@ export default function PSO() {
       "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js";
     vantaScript.async = true;
     document.body.appendChild(vantaScript);
-
-    // Initialize Vanta.BIRDS after the scripts are loaded
     const setVanta = () => {
       if (window.VANTA) {
         window.VANTA.BIRDS({
-          el: document.querySelector("main"), // Target the main element
+          el: document.querySelector("main"),
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -50,8 +48,8 @@ export default function PSO() {
 
   return (
     <main className="flex flex-col items-center justify-center h-screen font-[montserrat] text-center">
-      <h3 className="font-bold text-3xl text-blue-600 mb-6">
-        Particle Swarm Optimization
+      <h3 className="text-[70px] font-semibold my-7 leading-[1.15] bg-gradient-to-b from-blue-500  to-white text-transparent bg-clip-text">
+        Particle Swarm <br /> Optimization
       </h3>
       <ul className="list-none text-center space-y-4">
         <li className="text-lg text-gray-700 hover:text-blue-500 transition">

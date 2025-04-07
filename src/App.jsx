@@ -1,5 +1,10 @@
 import { NavLink } from "react-router";
 import { useEffect } from "react";
+import { Minus, Square, X } from "lucide-react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+
+// when using `"withGlobalTauri": true`, you may use
+// const { getCurrentWindow } = window.__TAURI__.window;
 
 function App() {
   useEffect(() => {
@@ -51,9 +56,14 @@ function App() {
     };
   }, []);
 
+  const appWindow = getCurrentWindow();
+
   return (
     <main className="flex flex-col items-center h-screen text-center font-[Montserrat] ">
-      <header className="flex w-full justify-between mb-[150px] py-5 px-10 border-b-1 border-gray-800 solid">
+      <header
+        data-tauri-drag-region
+        className="flex w-full justify-between mb-[150px] py-3 pl-10 pr-4 border-b-1 border-gray-800 solid select-none"
+      >
         <div className="flex">
           <img
             src="./icon.svg "
@@ -62,7 +72,26 @@ function App() {
           />
           <h3>MetaSlove</h3>
         </div>
-        <NavLink>Documents</NavLink>
+        <div className="flex items-center justify-around">
+          <button
+            className="mr-4 hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"
+            onClick={() => appWindow.minimize()}
+          >
+            <Minus size={16} />
+          </button>
+          <button
+            className="mr-4 hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"
+            onClick={() => appWindow.toggleMaximize()}
+          >
+            <Square size={15} />
+          </button>
+          <button onClick={() => appWindow.close}>
+            <X
+              size={16}
+              className=" hover:text-red-400 transition duration-300 ease-in-out cursor-pointer"
+            />
+          </button>
+        </div>
       </header>
       <h3 className="py-2 px-4 rounded-full border border-gray-200 solid">
         MetaSolve secures $20M Series B to reshape the future of algorithmic
