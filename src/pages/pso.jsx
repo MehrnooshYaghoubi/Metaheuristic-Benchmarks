@@ -1,5 +1,8 @@
 import { NavLink } from "react-router";
 import { useEffect } from "react";
+import Header from "../titlebar";
+import { useState } from "react";
+import { CircleChevronLeft } from "lucide-react";
 
 export default function PSO() {
   useEffect(() => {
@@ -25,9 +28,9 @@ export default function PSO() {
           minWidth: 200.0,
           scale: 1.0,
           scaleMobile: 1.0,
-          backgroundColor: 0x0, // Black background
-          color1: 0x2658, // Custom color 1
-          color2: 0x2e819c, // Custom color 2
+          backgroundColor: 0x0, 
+          color1: 0x2658,
+          color2: 0x2e819c,
         });
       }
     };
@@ -36,7 +39,6 @@ export default function PSO() {
       vantaScript.onload = setVanta;
     };
 
-    // Cleanup Vanta effect on component unmount
     return () => {
       if (window.VANTA && window.VANTA.current) {
         window.VANTA.current.destroy();
@@ -47,27 +49,66 @@ export default function PSO() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen font-[montserrat] text-center">
-      <h3 className="text-[70px] font-semibold my-7 leading-[1.15] bg-gradient-to-b from-blue-500  to-white text-transparent bg-clip-text">
-        Particle Swarm <br /> Optimization
-      </h3>
-      <ul className="list-none text-center space-y-4">
-        <li className="text-lg text-gray-700 hover:text-blue-500 transition">
-          Particle Swarm Optimization
-        </li>
-        <li className="text-lg text-gray-700 hover:text-blue-500 transition">
-          Particle Swarm Optimization
-        </li>
-        <li className="text-lg text-gray-700 hover:text-blue-500 transition">
-          Particle Swarm Optimization
-        </li>
-      </ul>
-      <NavLink
-        to="/"
-        className="mt-8 px-6 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-      >
-        Back
-      </NavLink>
+    <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
+      <Header />
+      <div className="relative w-full h-full flex flex-col items-center justify-center">
+        <div className="flex w-[98%] h-[98%] -z-1 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+          <div className="flex flex-col h-full w-[50%]">
+            <div className="text-left">
+              <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
+                <NavLink className="mr-2" to="/">
+                  <CircleChevronLeft />
+                </NavLink>
+                Particle Swarm Optimization (PSO)
+              </h2>
+              <p className="text-lg text-white mb-4 text-justify">
+                Particle Swarm Optimization (PSO) is a computational method used
+                for optimization problems. It is inspired by the social behavior
+                of birds and fish, where individuals in a group (or swarm)
+                communicate and collaborate to find optimal solutions.
+              </p>
+            </div>
+            <div className="flex flex-col">
+              <InputBox logo="f" parameter="Target function" />
+              <InputBox logo="f" parameter="Target function" />
+              <InputBox logo="f" parameter="Target function" />
+              <InputBox logo="f" parameter="Target function" />
+              <InputBox logo="f" parameter="Target function" />
+              <div className="flex justify-end mt-5">
+                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
+                  Next
+                </button>
+                <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="h-full w-[50%]"></div>
+        </div>
+      </div>
     </main>
+  );
+}
+
+function InputBox({ logo, parameter }) {
+  return (
+    <div className="flex items-center mt-7">
+      <div className="flex items-end h-full">
+        <h3>{parameter}</h3>
+        <label className="bg-cyan-300 text-black ml-3 py-3 px-5 rounded-full">
+          {logo}
+        </label>
+      </div>
+
+      <div className="ml-5 flex flex-col items-start w-full">
+        <p>Enter The Value Here:</p>
+        <input
+          type="text"
+          placeholder="Type something..."
+          className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
+        />
+      </div>
+    </div>
   );
 }
