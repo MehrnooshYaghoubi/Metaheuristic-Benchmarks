@@ -59,7 +59,7 @@ export default function GeneticAlgorithm() {
         <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
             <Header />
             <div className="relative w-full h-full flex flex-col items-center justify-center">
-                <div className="flex w-[98%] h-[98%] backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+                <div className="flex w-[98%] h-[98%] -z-10 backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
                     <div className="flex flex-col h-full w-[50%]">
                         <div className="text-left">
                             <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
@@ -75,6 +75,48 @@ export default function GeneticAlgorithm() {
                                 crossover, and mutation, efficiently searching
                                 complex problem spaces for optimal results.
                             </p>
+                        </div>
+                        <div className="grid grid-cols-2 grid-rows-4 gap-2">
+                            <InputBox
+                                logo="f"
+                                parameter="Enter your fitness function (min/max):"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Set population size:"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Choose selection method:"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Select crossover type: "
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Set crossover probability:"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Choose mutation operator:"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Set mutation probability:"
+                            />
+                            <InputBox
+                                logo="f"
+                                parameter="Choose termination criteria:"
+                            />
+                        </div>
+                        <div className="flex justify-end mt-5">
+                            <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors mr-2">
+                                Next
+                            </button>
+                            <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
+                                Next
+                            </button>
                         </div>
                     </div>
                     <div className="h-full w-[50%]"></div>
@@ -94,11 +136,11 @@ function InputBox({ logo, parameter }) {
             </div>
 
             <div className="ml-5 flex flex-col items-start w-full">
-                <p className="text-white">{parameter}</p>
+                <p>{parameter}</p>
                 <input
                     type="text"
                     placeholder="Type something..."
-                    className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
                 />
             </div>
         </div>

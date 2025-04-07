@@ -70,7 +70,7 @@ export default function PSO() {
         <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
             <Header />
             <div className="relative w-full h-full flex flex-col items-center justify-center">
-                <div className="flex items-center w-[98%] h-[98%] backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+                <div className="flex w-[98%] h-[98%] -z-1 backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
                     <div className="flex flex-col h-full w-[50%]">
                         <div className="text-left">
                             <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
@@ -90,13 +90,10 @@ export default function PSO() {
                         </div>
                         <div className="flex flex-col">
                             <InputBox logo="f" parameter="Target function" />
-                            <InputBox logo="W" parameter="Inertia Weight" />
-                            <InputBox logo="C1" parameter="Cognitive Co" />
-                            <InputBox logo="C2" parameter="Social Co" />
-                            <InputBox
-                                logo="N"
-                                parameter="Number Of Iterations"
-                            />
+                            <InputBox logo="f" parameter="Target function" />
+                            <InputBox logo="f" parameter="Target function" />
+                            <InputBox logo="f" parameter="Target function" />
+                            <InputBox logo="f" parameter="Target function" />
                             <div className="flex justify-end mt-5">
                                 <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
                                     Next
@@ -107,42 +104,7 @@ export default function PSO() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-[50%] pl-15">
-                        <ResponsiveContainer width="100%" height={600}>
-                            <ScatterChart
-                                margin={{
-                                    top: 20,
-                                    right: 20,
-                                    bottom: 20,
-                                    left: 20,
-                                }}
-                            >
-                                <CartesianGrid />
-                                <XAxis
-                                    type="number"
-                                    dataKey="x"
-                                    name="stature"
-                                    stroke="oklch(82.8% 0.111 230.318)"
-                                />
-                                <YAxis
-                                    yAxisId="left"
-                                    type="number"
-                                    dataKey="y"
-                                    name="weight"
-                                    stroke="oklch(80.9% 0.105 251.813)"
-                                />
-
-                                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                                <Scatter
-                                    yAxisId="left"
-                                    name="A school"
-                                    data={data01}
-                                    stroke="oklch(82.8% 0.111 230.318)"
-                                    fill="oklch(93.2% 0.032 255.585)"
-                                />
-                            </ScatterChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <div className="h-full w-[50%]"></div>
                 </div>
             </div>
         </main>
@@ -159,7 +121,7 @@ function InputBox({ logo, parameter }) {
             </div>
 
             <div className="ml-5 flex flex-col items-start w-full">
-                <p>Enter The Value Here:</p>
+                <p>{parameter}</p>
                 <input
                     type="text"
                     placeholder="Type something..."
