@@ -1,5 +1,8 @@
 import { NavLink } from "react-router";
 import { useEffect } from "react";
+import Header from "../titlebar";
+import { useState } from "react";
+import { CircleChevronLeft } from "lucide-react";
 
 export default function GeneticAlgorithm() {
   useEffect(() => {
@@ -40,36 +43,78 @@ export default function GeneticAlgorithm() {
     };
 
     return () => {
-      if (window.VANTA && window.VANTA.current) {
+      if (window.VANTA?.current) {
         window.VANTA.current.destroy();
       }
-      document.body.removeChild(threeScript);
-      document.body.removeChild(vantaScript);
+      if (document.body.contains(threeScript)) {
+        document.body.removeChild(threeScript);
+      }
+      if (document.body.contains(vantaScript)) {
+        document.body.removeChild(vantaScript);
+      }
     };
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen font-[montserrat] text-center">
-      <h3 className="font-bold text-4xl text-purple-700 mb-6">
-        Genetic Algorithm
-      </h3>
-      <ul className="list-none text-center space-y-4">
-        <li className="text-lg text-gray-800 hover:text-purple-600 transition">
-          Selection
-        </li>
-        <li className="text-lg text-gray-800 hover:text-purple-600 transition">
-          Crossover
-        </li>
-        <li className="text-lg text-gray-800 hover:text-purple-600 transition">
-          Mutation
-        </li>
-      </ul>
-      <NavLink
-        to="/"
-        className="mt-8 px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition"
-      >
-        Back
-      </NavLink>
+    <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
+      <Header />
+      <div className="relative w-full h-full flex flex-col items-center justify-center">
+        <div className="flex w-[98%] h-[98%] -z-10 backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+          <div className="flex flex-col h-full w-[50%]">
+            <div className="text-left">
+              <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
+                <NavLink className="mr-2" to="/">
+                  <CircleChevronLeft />
+                </NavLink>
+                Genetic Algorithm
+              </h2>
+              <p className="text-lg text-white mb-4 text-justify">
+              Genetic Algorithms are optimization methods inspired by natural evolution.  
+              They evolve solutions (chromosomes) using selection, crossover, and mutation,  
+              efficiently searching complex problem spaces for optimal results.  
+            </p>
+            </div>
+            <div className="flex flex-col">
+              <InputBox logo="f" parameter="Population" />
+              <InputBox logo="f" parameter="Population" />
+              <InputBox logo="f" parameter="Population" />
+              <InputBox logo="f" parameter="Population" />
+              <InputBox logo="f" parameter="Population" />
+              <div className="flex justify-end mt-5">
+                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
+                  Next
+                </button>
+                <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="h-full w-[50%]"></div>
+        </div>
+      </div>
     </main>
+  );
+}
+
+function InputBox({ logo, parameter }) {
+  return (
+    <div className="flex items-center mt-7">
+      <div className="flex items-end h-full">
+        <h3 className="text-white">{parameter}</h3>
+        <label className="bg-cyan-300 text-black ml-3 py-3 px-5 rounded-full">
+          {logo}
+        </label>
+      </div>
+
+      <div className="ml-5 flex flex-col items-start w-full">
+        <p className="text-white">Enter The Value Here:</p>
+        <input
+          type="text"
+          placeholder="Type something..."
+          className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
   );
 }

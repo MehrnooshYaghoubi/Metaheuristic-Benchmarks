@@ -52,7 +52,7 @@ export default function PSO() {
     <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
       <Header />
       <div className="relative w-full h-full flex flex-col items-center justify-center">
-        <div className="flex w-[98%] h-[98%] -z-1 backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+        <div className="flex w-[98%] h-[98%] -z-1 backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
           <div className="flex flex-col h-full w-[50%]">
             <div className="text-left">
               <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
