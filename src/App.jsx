@@ -5,14 +5,12 @@ import Header from "./titlebar";
 function App() {
     useEffect(() => {
         const threeScript = document.createElement("script");
-        threeScript.src =
-            "https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"; // Use the local path to the three.min.js file
+        threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
         threeScript.async = true;
         document.body.appendChild(threeScript);
 
         const vantaScript = document.createElement("script");
-        vantaScript.src =
-            "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.dots.min.js"; // Use the local path to the vanta.dots.min.js file
+        vantaScript.src = "./Utils/vanta.dots.min.js"; // Use the local path to the vanta.dots.min.js file
         vantaScript.async = true;
         document.body.appendChild(vantaScript);
 

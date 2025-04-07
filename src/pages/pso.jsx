@@ -2,6 +2,7 @@ import { NavLink } from "react-router";
 import { useEffect } from "react";
 import Header from "../titlebar";
 import { CircleChevronLeft } from "lucide-react";
+import InputBox from "./../components/Inputbox";
 import React, { PureComponent } from "react";
 import {
     ScatterChart,
@@ -14,16 +15,22 @@ import {
 } from "recharts";
 
 export default function PSO() {
+    const data = [
+        { x: 100, y: 200, z: 200 },
+        { x: 120, y: 100, z: 260 },
+        { x: 170, y: 300, z: 400 },
+        { x: 140, y: 250, z: 280 },
+        { x: 150, y: 400, z: 500 },
+        { x: 110, y: 280, z: 200 },
+    ];
     useEffect(() => {
         const threeScript = document.createElement("script");
-        threeScript.src =
-            "https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js";
+        threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
         threeScript.async = true;
         document.body.appendChild(threeScript);
 
         const vantaScript = document.createElement("script");
-        vantaScript.src =
-            "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js";
+        vantaScript.src = "./Utils/vanta.birds.min.js"; // Use the local path to the vanta.birds.min.js file
         vantaScript.async = true;
         document.body.appendChild(vantaScript);
         const setVanta = () => {
@@ -57,20 +64,11 @@ export default function PSO() {
         };
     }, []);
 
-    const data01 = [
-        { x: 100, y: 200, z: 200 },
-        { x: 120, y: 100, z: 260 },
-        { x: 170, y: 300, z: 400 },
-        { x: 140, y: 250, z: 280 },
-        { x: 150, y: 400, z: 500 },
-        { x: 110, y: 280, z: 200 },
-    ];
-
     return (
         <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
             <Header />
             <div className="relative w-full h-full flex flex-col items-center justify-center">
-                <div className="flex w-[98%] h-[98%] -z-1 backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+                <div className="flex items-center w-[98%] h-[98%] backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
                     <div className="flex flex-col h-full w-[50%]">
                         <div className="text-left">
                             <h2 className="font-semibold text-4xl text-white mb-6 flex items-center">
@@ -89,45 +87,62 @@ export default function PSO() {
                             </p>
                         </div>
                         <div className="flex flex-col">
-                            <InputBox logo="f" parameter="Target function" />
-                            <InputBox logo="f" parameter="Target function" />
-                            <InputBox logo="f" parameter="Target function" />
-                            <InputBox logo="f" parameter="Target function" />
-                            <InputBox logo="f" parameter="Target function" />
+                            <InputBox logo="F" parameter="Target function" />
+                            <InputBox logo="W1" parameter="Inertia Weight:" />
+                            <InputBox
+                                logo="C1"
+                                parameter="Cognitive Coefficient"
+                            />
+                            <InputBox
+                                logo="C2"
+                                parameter="Social Coefficient"
+                            />
+                            <InputBox
+                                logo="N"
+                                parameter="Number of Iterations"
+                            />
                             <div className="flex justify-end mt-5">
-                                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
-                                    Next
+                                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
+                                    Start
                                 </button>
-                                <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
-                                    Next
+                                <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
+                                    Stop
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div className="h-full w-[50%]"></div>
+                    <div className="pl-15 w-[50%]">
+                        <ResponsiveContainer width="100%" height={400}>
+                            <ScatterChart
+                                margin={{
+                                    top: 20,
+                                    right: 20,
+                                    bottom: 20,
+                                    left: 20,
+                                }}
+                            >
+                                <CartesianGrid />
+                                <XAxis
+                                    type="number"
+                                    dataKey="x"
+                                    name="stature"
+                                />
+                                <YAxis
+                                    type="number"
+                                    dataKey="y"
+                                    name="weight"
+                                />
+                                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                                <Scatter
+                                    name="A school"
+                                    data={data}
+                                    fill="#8884d8"
+                                />
+                            </ScatterChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
             </div>
         </main>
-    );
-}
-
-function InputBox({ logo, parameter }) {
-    return (
-        <div className="flex items-center mt-7">
-            <div className="flex items-end h-full">
-                <label className="bg-cyan-300 text-black ml-3 py-3 px-5 rounded-full">
-                    {logo}
-                </label>
-            </div>
-
-            <div className="ml-5 flex flex-col items-start w-full">
-                <p>{parameter}</p>
-                <input
-                    type="text"
-                    placeholder="Type something..."
-                    className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
-                />
-            </div>
-        </div>
     );
 }
