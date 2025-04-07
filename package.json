@@ -18,6 +18,7 @@
     "react-dom": "^18.3.1",
     "react-router": "^7.4.1",
     "react-router-dom": "^7.5.0",
+    "recharts": "^2.15.2",
     "tailwindcss": "^4.1.2"
   },
   "devDependencies": {
