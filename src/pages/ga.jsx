@@ -69,25 +69,52 @@ export default function GeneticAlgorithm() {
                 Genetic Algorithm
               </h2>
               <p className="text-lg text-white mb-4 text-justify">
-              Genetic Algorithms are optimization methods inspired by natural evolution.  
-              They evolve solutions (chromosomes) using selection, crossover, and mutation,  
-              efficiently searching complex problem spaces for optimal results.  
-            </p>
+                Genetic Algorithms are optimization methods inspired by natural evolution.  
+                They evolve solutions (chromosomes) using selection, crossover, and mutation,  
+                efficiently searching complex problem spaces for optimal results.  
+              </p>
             </div>
-            <div className="flex flex-col">
-              <InputBox logo="f" parameter="Population" />
-              <InputBox logo="f" parameter="Population" />
-              <InputBox logo="f" parameter="Population" />
-              <InputBox logo="f" parameter="Population" />
-              <InputBox logo="f" parameter="Population" />
-              <div className="flex justify-end mt-5">
-                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
-                  Next
-                </button>
-                <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
-                  Next
-                </button>
-              </div>
+            <div className="grid grid-cols-2 grid-rows-4 gap-2">
+              <InputBox
+                logo="f"
+                parameter="Enter your fitness function (min/max):"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set population size:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Choose selection method:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Select crossover type: "
+              />
+              <InputBox
+                logo="f"
+                parameter="Set crossover probability:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Choose mutation operator:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set mutation probability:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Choose termination criteria:"
+              />
+            </div>
+            <div className="flex justify-end mt-5">
+              <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors mr-2">
+                Next
+              </button>
+              <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
+                Next
+              </button>
             </div>
           </div>
           <div className="h-full w-[50%]"></div>
@@ -101,18 +128,17 @@ function InputBox({ logo, parameter }) {
   return (
     <div className="flex items-center mt-7">
       <div className="flex items-end h-full">
-        <h3 className="text-white">{parameter}</h3>
         <label className="bg-cyan-300 text-black ml-3 py-3 px-5 rounded-full">
           {logo}
         </label>
       </div>
 
       <div className="ml-5 flex flex-col items-start w-full">
-        <p className="text-white">Enter The Value Here:</p>
+        <p>{parameter}</p>
         <input
           type="text"
           placeholder="Type something..."
-          className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
         />
       </div>
     </div>

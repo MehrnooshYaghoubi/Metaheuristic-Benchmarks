@@ -68,20 +68,47 @@ export default function PSO() {
                 communicate and collaborate to find optimal solutions.
               </p>
             </div>
-            <div className="flex flex-col">
-              <InputBox logo="f" parameter="Target function" />
-              <InputBox logo="f" parameter="Target function" />
-              <InputBox logo="f" parameter="Target function" />
-              <InputBox logo="f" parameter="Target function" />
-              <InputBox logo="f" parameter="Target function" />
-              <div className="flex justify-end mt-5">
-                <button className="mr-3 bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
-                  Next
-                </button>
-                <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md">
-                  Next
-                </button>
-              </div>
+            <div className="grid grid-cols-2 grid-rows-4 gap-2">
+              <InputBox
+                logo="f"
+                parameter="Enter objective function :"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set number of particles :"
+              />
+              <InputBox
+                logo="f"
+                parameter="Choose how to initialize particles:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set c1 (personal best influence):"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set c2 (global best influence): "
+              />
+              <InputBox
+                logo="f"
+                parameter="Set inertia weight (0.4-0.9)"
+              />
+              <InputBox
+                logo="f"
+                parameter="Set max particle velocity:"
+              />
+              <InputBox
+                logo="f"
+                parameter="Choose stopping criteria:"
+              />
+            </div>
+            <div className="flex justify-end mt-5">
+              <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors mr-2">
+                Next
+              </button>
+              <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md hover:bg-[#b8c7e8] transition-colors">
+                Next
+              </button>
             </div>
           </div>
           <div className="h-full w-[50%]"></div>
@@ -95,14 +122,13 @@ function InputBox({ logo, parameter }) {
   return (
     <div className="flex items-center mt-7">
       <div className="flex items-end h-full">
-        <h3>{parameter}</h3>
         <label className="bg-cyan-300 text-black ml-3 py-3 px-5 rounded-full">
           {logo}
         </label>
       </div>
 
       <div className="ml-5 flex flex-col items-start w-full">
-        <p>Enter The Value Here:</p>
+        <p>{parameter}</p>
         <input
           type="text"
           placeholder="Type something..."
