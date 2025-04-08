@@ -31,73 +31,20 @@ export default function PSO() {
         const W = 0.5;
         const c1 = 1.5;
         const c2 = 1.5;
-
-        // Initialize population and velocities
-        const population = Array.from({ length: populationSize }, () =>
-            Array.from(
-                { length: dimension },
-                () => lowerBound + (upperBound - lowerBound) * Math.random()
-            )
+        StandardPSO(
+            populationSize,
+            dimension,
+            lowerBound,
+            upperBound,
+            iterations,
+            fitnessFunction,
+            W,
+            c1,
+            c2,
+            setPositions
         );
-        const velocities = Array.from({ length: populationSize }, () =>
-            Array.from({ length: dimension }, () => 0)
-        );
-
-        let gbest = population.reduce((best, individual) =>
-            fitnessFunction(individual) < fitnessFunction(best)
-                ? individual
-                : best
-        );
-        const pbest = [...population];
-
-        const allPositions = [];
-
-        const runIteration = (currentIteration) => {
-            if (currentIteration >= iterations) {
-                setIsRunning(false);
-                return;
-            }
-
-            // Track positions for visualization
-            const iterationPositions = population.map((particle) => ({
-                x: particle[0],
-                y: particle[1],
-            }));
-            allPositions.push(iterationPositions);
-
-            // Update pbest and gbest
-            for (let j = 0; j < populationSize; j++) {
-                const fitness = fitnessFunction(population[j]);
-                if (fitness < fitnessFunction(pbest[j])) {
-                    pbest[j] = [...population[j]];
-                }
-
-                if (fitness < fitnessFunction(gbest)) {
-                    gbest = [...population[j]];
-                }
-            }
-
-            // Update velocities and positions
-            for (let j = 0; j < populationSize; j++) {
-                for (let k = 0; k < dimension; k++) {
-                    const r1 = Math.random();
-                    const r2 = Math.random();
-                    velocities[j][k] =
-                        W * velocities[j][k] +
-                        c1 * r1 * (pbest[j][k] - population[j][k]) +
-                        c2 * r2 * (gbest[k] - population[j][k]);
-                    population[j][k] += velocities[j][k];
-                }
-            }
-
-            // Update state and schedule the next iteration
-            setPositions([...allPositions]);
-            setIteration(currentIteration + 1);
-            setTimeout(() => runIteration(currentIteration + 1), 100); // Adjust delay for speed
-        };
 
         setIsRunning(true);
-        runIteration(0);
     };
     useEffect(() => {
         const threeScript = document.createElement("script");
@@ -204,12 +151,22 @@ export default function PSO() {
                                 }}
                             >
                                 <CartesianGrid />
-                                <XAxis type="number" dataKey="x" name="X" />
-                                <YAxis type="number" dataKey="y" name="Y" />
+                                <XAxis
+                                    type="number"
+                                    dataKey="x"
+                                    name="X"
+                                    domain={[-10, 10]}
+                                />
+                                <YAxis
+                                    type="number"
+                                    dataKey="y"
+                                    name="Y"
+                                    domain={[-10, 10]}
+                                />
                                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                                 <Scatter
                                     name="Particles"
-                                    data={positions[iteration]}
+                                    data={positions}
                                     fill="#8884d8"
                                 />
                             </ScatterChart>
