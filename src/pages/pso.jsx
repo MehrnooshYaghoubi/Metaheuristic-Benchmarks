@@ -25,12 +25,12 @@ export default function PSO() {
     ];
     useEffect(() => {
         const threeScript = document.createElement("script");
-        threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
+        threeScript.src = "./Utils/three.min.js"; 
         threeScript.async = true;
         document.body.appendChild(threeScript);
 
         const vantaScript = document.createElement("script");
-        vantaScript.src = "./Utils/vanta.birds.min.js"; // Use the local path to the vanta.birds.min.js file
+        vantaScript.src = "./Utils/vanta.birds.min.js";
         vantaScript.async = true;
         document.body.appendChild(vantaScript);
         const setVanta = () => {
