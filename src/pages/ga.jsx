@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 import { useEffect } from "react";
 import Header from "../titlebar";
 import { CircleChevronLeft } from "lucide-react";
-import InputBox from "./../components/Inputbox";
+import { InputBox } from "./../components/Inputbox";
 
 export default function GeneticAlgorithm() {
     useEffect(() => {
