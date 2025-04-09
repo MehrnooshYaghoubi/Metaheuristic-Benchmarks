@@ -33,7 +33,7 @@ export async function StandardPSO(
     const pbest = population;
 
     for (let i = 0; i < iterations; i++) {
-        await sleep(400);
+        await sleep(400); // for the matter of visualization
         const iterationPositions = population.map((particle) => ({
             x: particle[0],
             y: particle[1],
