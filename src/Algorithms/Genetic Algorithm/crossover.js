@@ -2,7 +2,7 @@
 // 1. Crossover for Binary Numbers
 // ================================
 // One-point crossover for binary representations
-function onePointCrossover(parent1, parent2) {
+function singlePointCrossover(parent1, parent2) {
     const point = Math.floor(Math.random() * (parent1.length - 1)) + 1;
     const child1 = [...parent1.slice(0, point), ...parent2.slice(point)];
     const child2 = [...parent2.slice(0, point), ...parent1.slice(point)];
@@ -196,8 +196,8 @@ function cycleRecombination(parent1, parent2) {
 
 export function crossover(method, parent1, parent2) {
     switch (method) {
-        case "onePoint":
-            return onePointCrossover(parent1, parent2);
+        case "singlePoint":
+            return singlePointCrossover(parent1, parent2);
         case "twoPoint":
             return twoPointCrossover(parent1, parent2);
         case "uniform":
