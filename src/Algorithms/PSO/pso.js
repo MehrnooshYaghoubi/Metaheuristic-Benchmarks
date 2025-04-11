@@ -66,27 +66,3 @@ export async function StandardPSO(
     console.log({ gbest });
     return gbest;
 }
-
-// let populationSize = 100;
-// let dimension = 2;
-// let lowerBound = -10;
-// let upperBound = 10;
-// let iterations = 1000;
-// let fitnessFunction = (x) => {
-//     return x.reduce((sum, xi) => sum + xi * xi, 0);
-// };
-// let W = 0.5;
-// let c1 = 1.5;
-// let c2 = 1.5;
-// const bestPosition = StandardPSO(
-//     populationSize,
-//     dimension,
-//     lowerBound,
-//     upperBound,
-//     iterations,
-//     fitnessFunction,
-//     W,
-//     c1,
-//     c2
-// );
-// console.log("Best position: ", bestPosition);

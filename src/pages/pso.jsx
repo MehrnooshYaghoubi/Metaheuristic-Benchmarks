@@ -235,7 +235,10 @@ export default function PSO() {
                                 >
                                     Start
                                 </button>
-                                <button className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
+                                <button
+                                    onClick={() => setIsRunning(false)}
+                                    className=" bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out"
+                                >
                                     Stop
                                 </button>
                             </div>

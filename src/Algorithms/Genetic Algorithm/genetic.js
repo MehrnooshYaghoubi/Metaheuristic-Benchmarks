@@ -1,17 +1,16 @@
-import { selection } from "./selection";
-import { crossover } from "./crossover";
-import { mutation } from "./mutation";
-import { createPopulation } from "./initialization";
-import { replacement } from "./replacement";
+import { selection } from "./selection.js";
+import { crossover } from "./crossover.js";
+import { mutation } from "./mutation.js";
+import { createPopulation } from "./initialization.js";
+import { replacement } from "./replacement.js";
+import { stopCondition } from "./stop_condition.js";
 
 class GeneticAlgorithm {
-    constructor(populationSize, mutationRate, crossoverRate, fitness) {
+    constructor(populationSize, mutationRate, crossoverRate) {
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.population = [];
-        this.fitness = (individual) => (individual.reduce((acc,val)=> acc + (val^2)))
-        this.fitness = fitness;
     }
 
     run(
@@ -19,28 +18,75 @@ class GeneticAlgorithm {
         selectionMethod,
         crossoverMethod,
         mutationMethod,
-        replacementMethod
+        replacementMethod,
+        geneLength,
+        representation,
+        lowerBound,
+        upperBound
     ) {
-        this.evaluateFitness(fitnessFunction);
-        const parents = this.selectParents(selectionMethod);
-        const offspring = [];
-        for (let i = 0; i < parents.length; i += 2) {
-            if (Math.random() < this.crossoverRate) {
-                const [child1, child2] = this.crossover(
-                    parents[i],
-                    parents[i + 1],
-                    crossoverMethod
-                );
-                offspring.push(child1, child2);
-            } else {
-                offspring.push(parents[i], parents[i + 1]);
+        this.population = createPopulation(
+            this.populationSize,
+            geneLength,
+            representation,
+            { lowerBound: lowerBound, upperBound: upperBound }
+        );
+        let generation = 0;
+
+        while (true) {
+            generation++;
+            this.population = selection(
+                this.population,
+                fitnessFunction,
+                selectionMethod
+            );
+            const offspring = crossover(
+                this.population,
+                crossoverMethod,
+                this.crossoverRate
+            );
+
+            this.population = mutation(
+                offspring,
+                mutationMethod,
+                this.mutationRate
+            );
+            this.population = replacement(
+                this.population,
+                replacementMethod,
+                fitnessFunction
+            );
+
+            const stop = stopCondition(
+                generation,
+                this.population,
+                fitnessFunction,
+                this.populationSize
+            );
+
+            if (stop) {
+                break;
             }
         }
-        offspring.forEach((individual) => {
-            if (Math.random() < this.mutationRate) {
-                this.mutate(individual, mutationMethod);
-            }
-        });
-        this.population = this.replacePopulation(replacementMethod);
+        return this.population;
     }
 }
+
+function test() {
+    const ga = new GeneticAlgorithm(100, 0.01, 0.7);
+    const fitnessFunction = (individual) => {
+        return individual.reduce((acc, gene) => acc + gene, 0);
+    };
+    const selectionMethod = "tournament";
+    const crossoverMethod = "singlePoint";
+    const mutationMethod = "bitFlip";
+    const replacementMethod = "elitism";
+    const result = ga.run(
+        fitnessFunction,
+        selectionMethod,
+        crossoverMethod,
+        mutationMethod,
+        replacementMethod
+    );
+    console.log(result);
+}
+test();

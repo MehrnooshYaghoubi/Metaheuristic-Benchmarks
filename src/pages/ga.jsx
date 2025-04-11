@@ -117,9 +117,31 @@ export default function GeneticAlgorithm() {
                             </button>
                         </div>
                     </div>
-                    <div className="h-full w-[50%]"></div>
+                    {/* charts and visualization */}
+
+                    <div className="h-full w-[50%] pl-20 flex justify-center items-center flex-col">
+                        <h3 className="font-medium text-lg mb-5">
+                            List of chromosomes:
+                        </h3>
+                        <div className="flex justify-start  max-h-[90%] flex-wrap">
+                            {Array.from({ length: 50 }, (_, index) => (
+                                <Chromosome genes={["A", "B", "C", "D", "E"]} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
+    );
+}
+
+function Chromosome({ genes }) {
+    return (
+        <ul className="flex items-center border border-gray-300 rounded-2xl w-fit py-2 px-4 mb-3 ml-5 h-fit">
+            {genes &&
+                genes.map((value, index) => (
+                    <li className={index != 0 ? "ml-3" : ""}>{value}</li>
+                ))}
+        </ul>
     );
 }
