@@ -4,7 +4,6 @@ import { mutation } from "./mutation.js";
 import { createPopulation } from "./initialization.js";
 import { replacement } from "./replacement.js";
 import { stopCondition } from "./stop_condition.js";
-
 class GeneticAlgorithm {
     constructor(populationSize, mutationRate, crossoverRate) {
         this.populationSize = populationSize;
@@ -13,7 +12,7 @@ class GeneticAlgorithm {
         this.population = [];
     }
 
-    run(
+    run({
         fitnessFunction,
         selectionMethod,
         crossoverMethod,
@@ -22,14 +21,15 @@ class GeneticAlgorithm {
         geneLength,
         representation,
         lowerBound,
-        upperBound
-    ) {
+        upperBound,
+    }) {
         this.population = createPopulation(
             this.populationSize,
             geneLength,
             representation,
-            { lowerBound: lowerBound, upperBound: upperBound }
+            { lowerBound, upperBound }
         );
+<<<<<<< HEAD
         let generation = [];
 
         while (true) {
@@ -54,17 +54,62 @@ class GeneticAlgorithm {
                 );
 
                 const stop = stopCondition(
+=======
+
+        let generation = 0;
+
+        while (true) {
+            generation++;
+
+            // Selection
+            this.population = selection(
+                this.population,
+                fitnessFunction,
+                selectionMethod
+            );
+
+            // Crossover
+            const offspring = crossover(
+                this.population,
+                crossoverMethod,
+                this.crossoverRate
+            );
+
+            // Mutation
+            this.population = mutation(
+                offspring,
+                mutationMethod,
+                this.mutationRate
+            );
+
+            // Replacement
+            this.population = replacement(
+                this.population,
+                replacementMethod,
+                fitnessFunction
+            );
+
+            // Stop Condition
+            if (
+                stopCondition(
+>>>>>>> 644edc48d30f4f668afc95f18e4ffbf698134aed
                     generation,
                     this.population,
                     fitnessFunction,
                     this.populationSize
+<<<<<<< HEAD
                 );
             }
 
             if (stop) {
+=======
+                )
+            ) {
+>>>>>>> 644edc48d30f4f668afc95f18e4ffbf698134aed
                 break;
             }
         }
+
         return this.population;
     }
 }
@@ -75,7 +120,7 @@ function test() {
         return individual.reduce((acc, gene) => acc + gene, 0);
     };
     const selectionMethod = "tournament";
-    const crossoverMethod = "singlePoint";
+    const crossoverMethod = "simple";
     const mutationMethod = "bitFlip";
     const replacementMethod = "elitism";
     const result = ga.run(

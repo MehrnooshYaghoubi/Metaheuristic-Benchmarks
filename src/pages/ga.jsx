@@ -7,12 +7,12 @@ import { InputBox } from "./../components/Inputbox";
 export default function GeneticAlgorithm() {
     useEffect(() => {
         const threeScript = document.createElement("script");
-        threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
+        threeScript.src = "./Utils/three.min.js";
         threeScript.async = true;
         document.body.appendChild(threeScript);
 
         const vantaScript = document.createElement("script");
-        vantaScript.src = "./Utils/vanta.net.min.js"; // Use the local path to the vanta.dots.min.js file
+        vantaScript.src = "./Utils/vanta.net.min.js"; 
         vantaScript.async = true;
         document.body.appendChild(vantaScript);
 

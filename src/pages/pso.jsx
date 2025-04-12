@@ -97,12 +97,12 @@ export default function PSO() {
     };
     useEffect(() => {
         const threeScript = document.createElement("script");
-        threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
+        threeScript.src = "./Utils/three.min.js"; 
         threeScript.async = true;
         document.body.appendChild(threeScript);
 
         const vantaScript = document.createElement("script");
-        vantaScript.src = "./Utils/vanta.birds.min.js"; // Use the local path to the vanta.birds.min.js file
+        vantaScript.src = "./Utils/vanta.birds.min.js";
         vantaScript.async = true;
         document.body.appendChild(vantaScript);
         const setVanta = () => {
@@ -246,15 +246,42 @@ export default function PSO() {
                     </div>
                     {/* chart is here: */}
                     <div className="pl-15 w-[50%]">
-                        <div className="text-left ml-15 mb-10">
-                            <h3 className="font-medium text-lg">
-                                Each Time Velocity Is Updated Via This Formula:
-                            </h3>
-                            <Latex>
-                                {`\\(v_{ij}(t+1) = wv_i(t) +
-                                        c_1r_1(y_{ij}(t) - x_{ij}(t)) + c_2r_2(\\hat
-                                        {y}_j(t)-x_{ij}(t))\\)`}
-                            </Latex>
+                        <div className="space-y-8 mb-7 ml-15">
+                        <h3 className="font-semibold text-lg text-white text-left" >
+                            Algorithm Parameters Are Updated Using These Formulas:
+                        </h3>
+                            {/* Position Update Formula */}
+                            <div className="text-left">
+                                <div className="text-lg">
+                                    <Latex>
+                                        {`\\(x_{ij}(t+1) = x_{ij}(t) + v_{ij}(t+1)\\)`}
+                                    </Latex>
+                                </div>
+                                <p className="text-gray-600 mt-2">
+                                    Where <Latex>{`\\(x_{ij}(t)\\)`}</Latex> is the current position and 
+                                    <Latex>{`\\(v_{ij}(t+1)\\)`}</Latex> is the updated velocity.
+                                </p>
+                            </div>
+
+                            {/* Velocity Update Formula */}
+                            <div className="text-left">
+                                <div className="text-lg">
+                                    <Latex>
+                                        {`\\(v_{ij}(t+1) = w \\cdot v_{ij}(t) + c_1r_1(y_{ij}(t) - x_{ij}(t)) + c_2r_2(\\hat{y}_j(t) - x_{ij}(t))\\)`}
+                                    </Latex>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 mt-3 text-sm text-gray-600">
+                                    <div>
+                                        <p><Latex>{`\\(w\\)`}</Latex>: Inertia weight</p>
+                                        <p><Latex>{`\\(v_{ij}(t)\\)`}</Latex>: Current velocity</p>
+                                    </div>
+                                    <div>
+                                        <p><Latex>{`\\(c_1, c_2\\)`}</Latex>: Acceleration coefficients</p>
+                                        <p><Latex>{`\\(r_1, r_2\\)`}</Latex>: Random numbers ∈ [0,1]</p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <ResponsiveContainer width="100%" height={400}>
                             <ScatterChart

@@ -1,7 +1,5 @@
 function generationalReplacement(oldPopulation, offspring) {
-    /**
-     * Replaces the entire old population with the offspring.
-     */
+
     return offspring;
 }
 
@@ -11,18 +9,14 @@ function elitismReplacement(
     fitnessFunc,
     elitismCount = 1
 ) {
-    /**
-     * Replaces the old population with the offspring but keeps the best `elitismCount` individuals from the old population.
-     */
+
     const combinedPopulation = [...oldPopulation, ...offspring];
     combinedPopulation.sort((a, b) => fitnessFunc(b) - fitnessFunc(a));
     return combinedPopulation.slice(0, oldPopulation.length);
 }
 
 function steadyStateReplacement(oldPopulation, offspring, replacementCount) {
-    /**
-     * Replaces only `replacementCount` individuals in the old population with the offspring.
-     */
+
     const newPopulation = [...oldPopulation];
     for (let i = 0; i < replacementCount; i++) {
         if (i < offspring.length) {
@@ -30,7 +24,7 @@ function steadyStateReplacement(oldPopulation, offspring, replacementCount) {
         }
     }
     return newPopulation;
-}
+} 
 
 function tournamentReplacement(
     oldPopulation,
@@ -38,9 +32,7 @@ function tournamentReplacement(
     fitnessFunc,
     tournamentSize = 3
 ) {
-    /**
-     * Uses tournament selection to decide which individuals (from old population and offspring) survive to the next generation.
-     */
+
     const combinedPopulation = [...oldPopulation, ...offspring];
     const newPopulation = [];
     for (let i = 0; i < oldPopulation.length; i++) {
@@ -62,9 +54,7 @@ function tournamentReplacement(
 }
 
 function fitnessBasedReplacement(oldPopulation, offspring, fitnessFunc) {
-    /**
-     * Replaces the worst individuals in the old population with the offspring.
-     */
+
     const combinedPopulation = [...oldPopulation, ...offspring];
     combinedPopulation.sort((a, b) => fitnessFunc(b) - fitnessFunc(a));
     return combinedPopulation.slice(0, oldPopulation.length);

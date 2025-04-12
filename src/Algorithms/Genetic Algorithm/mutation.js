@@ -5,7 +5,7 @@
 function bit_flip_mutation(individual, mutation_rate) {
     for (let i = 0; i < individual.length; i++) {
         if (Math.random() < mutation_rate) {
-            individual[i] = individual[i] === 0 ? 1 : 0; // Flip the bit
+            individual[i] = individual[i] === 0 ? 1 : 0; 
         }
     }
     return individual;
@@ -14,7 +14,7 @@ function bit_flip_mutation(individual, mutation_rate) {
 function complementary_mutation(individual, mutation_rate, min, max) {
     for (let i = 0; i < individual.length; i++) {
         if (Math.random() < mutation_rate) {
-            individual[i] = min + max - individual[i]; // Complement the value
+            individual[i] = min + max - individual[i]; 
         }
     }
     return individual;
@@ -24,7 +24,6 @@ function swap_mutation(individual, mutation_rate) {
     for (let i = 0; i < individual.length; i++) {
         if (Math.random() < mutation_rate) {
             const j = Math.floor(Math.random() * individual.length);
-            // Swap the two elements
             const temp = individual[i];
             individual[i] = individual[j];
             individual[j] = temp;
@@ -61,7 +60,7 @@ function scramble_mutation(individual, mutation_rate) {
                 end = temp;
             }
             const temp = individual.slice(start, end + 1);
-            temp.sort(() => Math.random() - 0.5); // Shuffle the slice
+            temp.sort(() => Math.random() - 0.5);
             individual =
                 individual.slice(0, start) + temp + individual.slice(end + 1);
         }
@@ -80,7 +79,7 @@ function inversion_mutation(individual, mutation_rate) {
                 end = temp;
             }
             const temp = individual.slice(start, end + 1);
-            temp.reverse(); // Reverse the slice
+            temp.reverse();
             individual =
                 individual.slice(0, start) + temp + individual.slice(end + 1);
         }
