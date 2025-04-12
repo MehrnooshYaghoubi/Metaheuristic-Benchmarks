@@ -125,7 +125,7 @@ export default function GeneticAlgorithm() {
                         </h3>
                         <div className="flex justify-start  max-h-[90%] flex-wrap">
                             {Array.from({ length: 50 }, (_, index) => (
-                                <Chromosome genes={["A", "B", "C", "D", "E"]} />
+                                <Chromosome genes={[1, 2, 3, 4, 5, 6]} />
                             ))}
                         </div>
                     </div>

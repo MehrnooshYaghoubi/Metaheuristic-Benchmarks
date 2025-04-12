@@ -30,38 +30,36 @@ class GeneticAlgorithm {
             representation,
             { lowerBound: lowerBound, upperBound: upperBound }
         );
-        let generation = 0;
+        let generation = [];
 
         while (true) {
-            generation++;
-            this.population = selection(
-                this.population,
-                fitnessFunction,
-                selectionMethod
-            );
-            const offspring = crossover(
-                this.population,
-                crossoverMethod,
-                this.crossoverRate
-            );
+            generation.push(this.population);
+            for (let i = 0; i < crossoverRate * this.population.length; i++) {
+                const [parent1, parent2] = (this.population = selection(
+                    this.population,
+                    fitnessFunction,
+                    selectionMethod
+                ));
+                const offspring = crossover(crossoverMethod, parent1, parent2);
 
-            this.population = mutation(
-                offspring,
-                mutationMethod,
-                this.mutationRate
-            );
-            this.population = replacement(
-                this.population,
-                replacementMethod,
-                fitnessFunction
-            );
+                this.population = mutation(
+                    offspring,
+                    mutationMethod,
+                    this.mutationRate
+                );
+                this.population = replacement(
+                    this.population,
+                    replacementMethod,
+                    fitnessFunction
+                );
 
-            const stop = stopCondition(
-                generation,
-                this.population,
-                fitnessFunction,
-                this.populationSize
-            );
+                const stop = stopCondition(
+                    generation,
+                    this.population,
+                    fitnessFunction,
+                    this.populationSize
+                );
+            }
 
             if (stop) {
                 break;

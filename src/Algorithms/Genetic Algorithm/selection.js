@@ -1,9 +1,13 @@
 function random_selection(population) {
-    const randomIndex = Math.floor(Math.random() * population.length);
-    return population[randomIndex];
+    let randomIndex = Math.floor(Math.random() * population.length);
+    let randomIndex2;
+    do {
+        randomIndex2 = Math.floor(Math.random() * population.length);
+    } while (randomIndex2 === randomIndex);
+    return [population[randomIndex], population[randomIndex2]];
 }
 
-function proportional_selection(population, fitness) {
+function roulette_wheel_selection(population, fitness) {
     const fitness_of_inviduals = population.map((indivual) =>
         fitness(indivual)
     );
@@ -21,11 +25,13 @@ function proportional_selection(population, fitness) {
             return accumulator;
         }
     );
-    const random_value = Math.random();
-    const selected_index = cumulative_probabilities.findIndex(
-        (probability) => probability >= random_value
+    const random_values = Array.from({ length: 2 }, () => Math.random());
+    const selected_indices = random_values.map((random_value) =>
+        cumulative_probabilities.findIndex(
+            (probability) => probability >= random_value
+        )
     );
-    return population[selected_index];
+    return selected_indices.map((index) => population[index]);
 }
 
 function rank_based_selection(population, fitness) {
@@ -48,26 +54,30 @@ function rank_based_selection(population, fitness) {
         accumulator.push(lastValue + currentValue.rank);
         return accumulator;
     });
-    const random_value = Math.random();
-    const selected_index = cumulative_rank.findIndex(
-        (rank) => rank >= random_value
+    const randomValues = [Math.random(), Math.random()];
+    const selectedIndices = randomValues.map((value) =>
+        cumulative_rank.findIndex((rank) => rank >= value)
     );
-    return population[selected_index];
+    return selectedIndices;
 }
 
 function tournament_selection(population, fitness) {
     const tournament_size = 3;
-    const selected_individuals = [];
-    for (let i = 0; i < tournament_size; i++) {
-        const random_index = Math.floor(Math.random() * population.length);
-        selected_individuals.push(population[random_index]);
-    }
-    const best_individual = selected_individuals.reduce((best, current) => {
-        if (fitness(current) > fitness(best)) {
-            return fitness(current);
+    result = [];
+    for (let i = 0; i <= 1; i++) {
+        const selected_individuals = [];
+        for (let i = 0; i < tournament_size; i++) {
+            const random_index = Math.floor(Math.random() * population.length);
+            selected_individuals.push(population[random_index]);
         }
-    });
-    return best_individual;
+        const best_individual = selected_individuals.reduce((best, current) => {
+            if (fitness(current) > fitness(best)) {
+                return fitness(current);
+            }
+        });
+        result.push(best_individual);
+    }
+    return result;
 }
 
 function truncation_selection(population, fitness, fitness_threshold) {
@@ -76,11 +86,24 @@ function truncation_selection(population, fitness, fitness_threshold) {
         const fitness_b = fitness(population.indexOf(b));
         return fitness_a - fitness_b;
     });
+
+    //Select the top N%
     const selected_individuals = sorted_population.slice(
         0,
         Math.floor(population.length / fitness_threshold)
     );
-    return selected_individuals;
+
+    // Randomly pick one from top
+
+    const random_indices = Array.from({ length: 2 }, () =>
+        Math.floor(Math.random() * selected_individuals.length)
+    );
+
+    const selected_result = random_indices.map(
+        (index) => selected_individuals[index]
+    );
+
+    return selected_result;
 }
 
 export function selection(
@@ -92,8 +115,8 @@ export function selection(
     switch (selection_method) {
         case "random":
             return random_selection(population);
-        case "proportional":
-            return proportional_selection(population, fitness);
+        case "roulette_wheel":
+            return roulette_wheel_selection(population, fitness);
         case "rank_based":
             return rank_based_selection(population, fitness);
         case "tournament":
