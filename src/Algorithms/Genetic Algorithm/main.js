@@ -16,7 +16,15 @@ export class Genetic {
     terminationCriteria,
     dataType,
     mutationType,
-    replacementType
+    replacementType,
+    geneLength = 20,
+    lowerBound = -10.0,
+    upperBound = 10.0,
+    maxGenerations = 100,
+    fitnessThreshold = 0.01,
+    stagnationLimit = 10,
+    timeLimit = 60000,
+    convergenceThreshold = 0.001
   ) {
     this.populationSize = populationSize;
     this.mutationRate = mutationRate;
@@ -29,14 +37,23 @@ export class Genetic {
     this.dataType = dataType;
     this.mutationType = mutationType;
     this.replacementType = replacementType;
-    this.geneLength = 20;
+    this.geneLength = geneLength;
+    this.upperBound = upperBound;
+    this.lowerBound = lowerBound;
+    this.maxGenerations = maxGenerations;
+    this.fitnessThreshold = fitnessThreshold;
+    this.stagnationLimit = stagnationLimit;
+    this.timeLimit = timeLimit;
+    this.convergenceThreshold = convergenceThreshold;
   }
-  runAlgorithm() {
+  async runAlgorithm() {
     this.population = createPopulation(
       this.populationSize,
       this.geneLength,
-      this.dataType
+      this.dataType,
+      { lowerBound: this.lowerBound, upperBound: this.upperBound }
     );
+
     let generationCount = 0;
     const startTime = Date.now();
     let bestFitnessHistory = [];
@@ -45,26 +62,22 @@ export class Genetic {
     while (true) {
       let newGeneration = [];
 
-      // Generate new population with exactly the same size
       while (newGeneration.length < this.population.length) {
         if (Math.random() < this.crossoverRate) {
-          // Select parents
           let [dad, mom] = selection(
             this.population,
             this.fitnessFunction,
             this.selectionType
           );
-          // Perform crossover
-          let offspring = crossover(this.crossoverType, dad, mom);
-          offspring = offspring.offspring;
-          // Apply mutation on offspring
-          offspring = offspring.map((child) => {
-            return Math.random() < this.mutationRate
-              ? mutation(child, this.mutationRate, this.mutationType)
-              : child;
-          });
 
-          // Add offspring to newGeneration but don't exceed population size
+          let offspring = crossover(this.crossoverType, dad, mom).offspring;
+
+          offspring = offspring.map((child) =>
+            Math.random() < this.mutationRate
+              ? mutation(child, this.mutationRate, this.mutationType)
+              : child
+          );
+
           for (const child of offspring) {
             if (newGeneration.length < this.population.length) {
               newGeneration.push(child);
@@ -73,14 +86,12 @@ export class Genetic {
             }
           }
         } else {
-          // No crossover: copy random individual to new generation
           let randomInd =
             this.population[Math.floor(Math.random() * this.population.length)];
           newGeneration.push(randomInd);
         }
       }
 
-      // Replace old population with new generation
       this.population = replacement(
         this.population,
         newGeneration,
@@ -89,15 +100,6 @@ export class Genetic {
       );
 
       generationCount++;
-
-      console.log(
-        `Generation ${generationCount}: Population Size = ${this.population.length}`
-      );
-      console.log(
-        `Best Fitness in Generation ${generationCount}: ${bestFitness}`
-      );
-      console.log("Sample individual:", this.population[0]);
-      console.log("Fitness:", this.fitnessFunction(this.population[0]));
 
       const currentBest = this.population.reduce((best, ind) => {
         const fit = this.fitnessFunction(ind);
@@ -116,16 +118,20 @@ export class Genetic {
           this.population,
           startTime,
           {
-            maxGenerations: 400,
-            fitnessThreshold: 9,
-            stagnationLimit: 20,
-            timeLimit: 30000,
-            convergenceThreshold: 1,
+            maxGenerations: this.maxGenerations,
+            fitnessThreshold: this.fitnessThreshold,
+            stagnationLimit: this.stagnationLimit,
+            timeLimit: this.timeLimit,
+            convergenceThreshold: this.convergenceThreshold,
           }
         )
       ) {
-        console.log("Stopping condition met.");
         break;
+      }
+
+      // Let the UI update every few generations
+      if (generationCount % 5 === 0) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
       }
     }
   }

@@ -3,9 +3,20 @@ import "katex/dist/katex.min.css";
 import { forwardRef } from "react";
 
 export const InputBox = forwardRef(
-  ({ logo, parameter, inputType = "Text", options = {}, placeholder }, ref) => {
+  (
+    {
+      logo,
+      parameter,
+      inputType = "Text",
+      options = {},
+      placeholder,
+      defaultVal,
+      onChange,
+    },
+    ref
+  ) => {
     return (
-      <div className="flex items-center mt-3">
+      <div className="flex items-center  mt-3">
         {/* <div className="flex items-end h-full">
           <label className="bg-cyan-300 text-black w-[50px] h-[50px] flex justify-center items-center rounded-full">
             <Latex>${logo}$</Latex>
@@ -13,7 +24,7 @@ export const InputBox = forwardRef(
         </div> */}
 
         <div className="ml-5 flex flex-col items-start w-full">
-          <p>{parameter}</p>
+          <p className="text-start text-sm">{parameter}</p>
           {inputType === "Select" ? (
             <select
               ref={ref}
@@ -29,7 +40,9 @@ export const InputBox = forwardRef(
             <input
               ref={ref}
               type={inputType}
+              onChange={onChange}
               placeholder={placeholder}
+              defaultValue={defaultVal}
               className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
             />
           )}

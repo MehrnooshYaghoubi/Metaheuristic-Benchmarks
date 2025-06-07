@@ -1,4 +1,4 @@
-import { data, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import Header from "../titlebar";
 import { CircleChevronLeft } from "lucide-react";
@@ -17,6 +17,14 @@ export default function GeneticAlgorithm() {
   const crossoverProbability = useRef(null);
   const replacementType = useRef(null);
   const dataType = useRef(null);
+  const geneLength = useRef(null);
+  const upperBound = useRef(null);
+  const lowerBound = useRef(null);
+  const maxGenerations = useRef(null);
+  const fitnessTreshold = useRef(null);
+  const stagnationLimit = useRef(null);
+  const timeLimit = useRef(null);
+  const convergenceThreshold = useRef(null);
   const [pop, setPop] = useState([]);
   const [bestFitness, setBestFitness] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -69,7 +77,7 @@ export default function GeneticAlgorithm() {
     };
   }, []);
 
-  const startAlgo = () => {
+  const startAlgo = async () => {
     if (isRunning) {
       alert("Algorithm is already running. Please wait for it to finish.");
       return;
@@ -85,7 +93,31 @@ export default function GeneticAlgorithm() {
     const crossoverProbabilityValue = crossoverProbability.current.value;
     const dataTypeValue = dataType.current.value;
     const replacementTypeValue = replacementType.current.value;
+    const geneLengthValue = geneLength.current.value;
+    const upperBoundValue = upperBound.current.value;
+    const lowerBoundValue = lowerBound.current.value;
+    const maxGenerationsValue = maxGenerations.current.value;
+    const fitnessThresholdValue = fitnessTreshold.current.value;
+    const stagnationLimitValue = stagnationLimit.current.value;
+    const timeLimitValue = timeLimit.current.value;
+    const convergenceThresholdValue = convergenceThreshold.current.value;
 
+    if (
+      isNaN(geneLengthValue) ||
+      isNaN(upperBoundValue) ||
+      isNaN(lowerBoundValue) ||
+      isNaN(maxGenerationsValue) ||
+      isNaN(fitnessThresholdValue) ||
+      isNaN(stagnationLimitValue) ||
+      isNaN(timeLimitValue) ||
+      isNaN(convergenceThresholdValue)
+    ) {
+      alert(
+        "Gene length, upper bound, lower bound, max generations, fitness threshold, stagnation limit, time limit, and convergence threshold must be numbers."
+      );
+      setIsRunning(false);
+      return;
+    }
     if (
       !fitnessFunctionValue ||
       !populationSizeValue ||
@@ -182,6 +214,17 @@ export default function GeneticAlgorithm() {
         return;
       }
     }
+    if (crossoverProbability > 1 || crossoverProbabilityValue < 0) {
+      alert("Crossover probability must be between 0 and 1.");
+      setIsRunning(false);
+      return;
+    }
+    if (mutationProbabilityValue > 1 || mutationProbabilityValue < 0) {
+      alert("Mutation probability must be between 0 and 1.");
+      setIsRunning(false);
+      return;
+    }
+
     if (dataTypeValue === "Real Number") {
       if (
         !(
@@ -245,10 +288,15 @@ export default function GeneticAlgorithm() {
       };
     } else if (fitnessFunctionValue === "Traveling Salesman Problem") {
       // Example cities represented as coordinates
-      const cities = Array.from({ length: 20 }, (_, i) => ({
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-      }));
+      const cities = Array.from(
+        { length: parseInt(geneLengthValue) },
+        (_, i) => ({
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+        })
+      );
+
+      console.log("Cities:", cities);
 
       // Euclidean distance between two cities by index
       function distance(cityAIndex, cityBIndex) {
@@ -286,10 +334,18 @@ export default function GeneticAlgorithm() {
       terminationCriteriaValue,
       dataTypeValue,
       mutationOperatorValue,
-      replacementTypeValue
+      replacementTypeValue,
+      geneLengthValue,
+      parseFloat(upperBoundValue),
+      parseFloat(lowerBoundValue),
+      parseInt(maxGenerationsValue),
+      parseFloat(fitnessThresholdValue),
+      parseFloat(stagnationLimitValue),
+      parseInt(timeLimitValue),
+      parseFloat(convergenceThresholdValue)
     );
 
-    gnt.runAlgorithm();
+    await gnt.runAlgorithm();
 
     setPop(gnt.top10());
     setBestFitness(gnt.bestfit());
@@ -316,7 +372,7 @@ export default function GeneticAlgorithm() {
                 spaces for optimal results.
               </p>
             </div>
-            <div className="grid grid-cols-2 grid-rows-4 gap-2">
+            <div className="grid grid-cols-4 grid-rows-5 gap-2">
               <InputBox
                 logo="f"
                 parameter="Enter Data Type"
@@ -326,7 +382,7 @@ export default function GeneticAlgorithm() {
               />
               <InputBox
                 logo="f"
-                parameter="Enter your fitness function (min/max):"
+                parameter="Enter fitness function:"
                 inputType="Select"
                 options={[
                   "Sum of squares",
@@ -340,6 +396,7 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Set population size:"
                 ref={populationSize}
+                defaultVal={100}
               />
               <InputBox
                 logo="f"
@@ -374,6 +431,7 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Set crossover probability:"
                 ref={crossoverProbability}
+                defaultVal={0.7}
               />
               <InputBox
                 logo="f"
@@ -393,6 +451,7 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Set mutation probability:"
                 ref={mutationProbability}
+                defaultVal={0.01}
               />
               <InputBox
                 logo="f"
@@ -420,6 +479,54 @@ export default function GeneticAlgorithm() {
                 ]}
                 ref={replacementType}
               />
+              <InputBox
+                logo="f"
+                parameter="Gene length"
+                ref={geneLength}
+                defaultVal={20}
+              />
+              <InputBox
+                logo="f"
+                parameter="Lower Bound"
+                ref={lowerBound}
+                defaultVal={10}
+              />
+              <InputBox
+                logo="f"
+                parameter="Upper Bound"
+                ref={upperBound}
+                defaultVal={10}
+              />
+              <InputBox
+                logo="f"
+                parameter="Max Generations"
+                ref={maxGenerations}
+                defaultVal={100}
+              />
+              <InputBox
+                logo="f"
+                parameter="fitnessThreshold"
+                ref={fitnessTreshold}
+                defaultVal={0.01}
+              />
+              <InputBox
+                logo="f"
+                parameter="Stagnation Limit"
+                ref={stagnationLimit}
+                defaultVal={0.01}
+              />
+              <InputBox
+                logo="f"
+                parameter="Time Limit (ms)"
+                ref={timeLimit}
+                defaultVal={60000}
+              />
+              <InputBox
+                logo="f"
+                parameter="Convergence Threshold"
+                ref={convergenceThreshold}
+                defaultVal={0.001}
+              />
             </div>
             <div className="flex justify-end mt-5">
               <button
@@ -428,33 +535,27 @@ export default function GeneticAlgorithm() {
               >
                 Start
               </button>
-              <button className="bg-[#CAD7F7] text-black py-2 px-8 rounded-md cursor-pointer hover:bg-[#CAD7F7]/80 transition duration-300 ease-in-out">
-                Stop
-              </button>
             </div>
           </div>
           {/* charts and visualization */}
 
           <div className="h-full w-[50%] pl-20 flex justify-center items-center flex-col">
-            {!isRunning ? (
-              <>
-                <h3 className="font-medium text-lg mb-5">
-                  List of top 10 chromosomes:
-                </h3>
-                <div className="flex justify-center  max-h-[90%] flex-wrap">
-                  {pop.length != 0 &&
-                    pop.map((gene, index) => <Chromosome genes={gene} />)}
-                </div>
-                <h3 className="font-medium text-lg my-5">
-                  Best Fitness Score: {bestFitness}
-                </h3>
-              </>
-            ) : (
+            <h3 className="font-medium text-lg mb-5">
+              List of top 10 chromosomes:
+            </h3>
+            <div className="flex justify-center  max-h-[90%] flex-wrap">
+              {pop.length != 0 &&
+                pop.map((gene, index) => <Chromosome genes={gene} />)}
+            </div>
+            <h3 className="font-medium text-lg my-5">
+              Best Fitness Score: {bestFitness}
+            </h3>
+            {isRunning ? (
               <div className="flex flex-col items-center justify-center">
-                <h3 className="mb-4 font-bold">Loading...</h3>
-                <PacmanLoader color="white" />
+                <h3 className="mb-4 font-bold">Running...</h3>
+                <PacmanLoader color="white" className="mr-15" />
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
