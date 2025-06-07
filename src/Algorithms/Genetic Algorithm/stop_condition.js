@@ -88,18 +88,18 @@ export function stopCondition(
      * Check if the stopping condition is met based on the selected method.
      */
     switch (method) {
-        case "maxGenerations":
+        case "Max Generations":
             return maxGenerationsStop(
                 currentGeneration,
                 options.maxGenerations
             );
-        case "fitnessThreshold":
+        case "Fitness Threshold Stop":
             return fitnessThresholdStop(bestFitness, options.fitnessThreshold);
-        case "stagnation":
+        case "Stagnation Limit":
             return stagnationStop(bestFitnessHistory, options.stagnationLimit);
-        case "timeLimit":
+        case "Time Limit":
             return timeLimitStop(startTime, options.timeLimit);
-        case "populationConvergence":
+        case "Population Convergence":
             return populationConvergenceStop(
                 population,
                 options.convergenceThreshold

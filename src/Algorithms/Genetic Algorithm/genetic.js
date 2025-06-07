@@ -29,7 +29,6 @@ class GeneticAlgorithm {
             representation,
             { lowerBound, upperBound }
         );
-<<<<<<< HEAD
         let generation = [];
 
         while (true) {
@@ -54,58 +53,14 @@ class GeneticAlgorithm {
                 );
 
                 const stop = stopCondition(
-=======
-
-        let generation = 0;
-
-        while (true) {
-            generation++;
-
-            // Selection
-            this.population = selection(
-                this.population,
-                fitnessFunction,
-                selectionMethod
-            );
-
-            // Crossover
-            const offspring = crossover(
-                this.population,
-                crossoverMethod,
-                this.crossoverRate
-            );
-
-            // Mutation
-            this.population = mutation(
-                offspring,
-                mutationMethod,
-                this.mutationRate
-            );
-
-            // Replacement
-            this.population = replacement(
-                this.population,
-                replacementMethod,
-                fitnessFunction
-            );
-
-            // Stop Condition
-            if (
-                stopCondition(
->>>>>>> 644edc48d30f4f668afc95f18e4ffbf698134aed
                     generation,
                     this.population,
                     fitnessFunction,
                     this.populationSize
-<<<<<<< HEAD
                 );
             }
 
             if (stop) {
-=======
-                )
-            ) {
->>>>>>> 644edc48d30f4f668afc95f18e4ffbf698134aed
                 break;
             }
         }

@@ -64,33 +64,33 @@ export function replacement(
     oldPopulation,
     offspring,
     fitnessFunc,
-    method = "generational",
+    method = "Generational",
     options = {}
 ) {
     switch (method) {
-        case "generational":
+        case "Generational Replacement":
             return generationalReplacement(oldPopulation, offspring);
-        case "elitism":
+        case "Elitism":
             return elitismReplacement(
                 oldPopulation,
                 offspring,
                 fitnessFunc,
                 options.elitismCount
             );
-        case "steady-state":
+        case "Steady State Replacement":
             return steadyStateReplacement(
                 oldPopulation,
                 offspring,
                 options.replacementCount
             );
-        case "tournament":
+        case "Tournament Replacement":
             return tournamentReplacement(
                 oldPopulation,
                 offspring,
                 fitnessFunc,
                 options.tournamentSize
             );
-        case "fitness-based":
+        case "Fitness Based Replacement":
             return fitnessBasedReplacement(
                 oldPopulation,
                 offspring,
