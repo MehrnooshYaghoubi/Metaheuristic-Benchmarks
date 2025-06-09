@@ -49,27 +49,3 @@ export function createPopulation(
     throw new Error("Invalid representation!!!!!");
   }
 }
-
-// test
-// const populationSize = 5;
-// const geneLength = 15;
-
-// const permutationPopulation = createPopulation(
-//     populationSize,
-//     geneLength,
-//     "permutation"
-// );
-
-// console.log("Permutation-based Population:");
-// permutationPopulation.forEach((individual, index) => {
-//     console.log(`Individual ${index + 1}:`, individual);
-// });
-
-// console.log("\nValidation:");
-// permutationPopulation.forEach((individual, index) => {
-//     const isValid =
-//         individual.length === geneLength &&
-//         new Set(individual).size === geneLength &&
-//         individual.every((gene) => gene >= 1 && gene <= geneLength);
-//     console.log(`Individual ${index + 1} is ${isValid ? "valid" : "invalid"}`);
-// });

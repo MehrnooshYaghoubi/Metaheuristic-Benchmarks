@@ -73,9 +73,13 @@ export class Genetic {
           let offspring = crossover(this.crossoverType, dad, mom).offspring;
 
           offspring = offspring.map((child) =>
-            Math.random() < this.mutationRate
-              ? mutation(child, this.mutationRate, this.mutationType)
-              : child
+            mutation(
+              child,
+              this.mutationRate,
+              this.mutationType,
+              this.lowerBound,
+              this.upperBound
+            )
           );
 
           for (const child of offspring) {
@@ -147,7 +151,6 @@ export class Genetic {
       return this.fitnessFunction(b) - this.fitnessFunction(a);
     });
     replica = replica.slice(0, 10);
-    console.log({ replica });
     return replica;
   }
   bestfit() {
@@ -157,18 +160,3 @@ export class Genetic {
     }, -Infinity);
   }
 }
-
-// const gn = new Genetic(
-//     100, // population size
-//     0.01, // mutation rate
-//     0.7, // crossover rate
-//     (individual) => [...individual].reduce((sum, gene) => sum + Number(gene), 0),
-//     "singlePoint", // crossover type
-//     "tournament", // selection type
-//     "maxGenerations", // termination criteria
-//     "binary", // data type
-//     "bit_flip_mutation", // mutation type
-//     "elitism" // replacement type
-// );
-
-// gn.runAlgorithm();

@@ -28,6 +28,7 @@ export default function GeneticAlgorithm() {
   const [pop, setPop] = useState([]);
   const [bestFitness, setBestFitness] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [currentDataType, setCurrentDataType] = useState("Binary");
 
   useEffect(() => {
     const threeScript = document.createElement("script");
@@ -240,9 +241,14 @@ export default function GeneticAlgorithm() {
 
         return;
       }
-      if (!(mutationOperatorValue === "Complementary Mutation")) {
+      if (
+        !(
+          mutationOperatorValue === "Complementary Mutation" ||
+          mutationOperatorValue === "Gaussian Mutation"
+        )
+      ) {
         alert(
-          "For Real Number data type, please select a valid mutation operator (Complementary Mutation)."
+          "For Real Number data type, please select a valid mutation operator (Complementary Mutation, Gaussian Mutation)."
         );
         setIsRunning(false);
 
@@ -263,7 +269,7 @@ export default function GeneticAlgorithm() {
     let fitnessFunctionFunction;
     if (fitnessFunctionValue === "Sum of squares") {
       fitnessFunctionFunction = (individual) => {
-        return individual.reduce((sum, gene) => sum + Math.pow(gene, 2), 0);
+        return -individual.reduce((sum, gene) => sum + Math.pow(gene, 2), 0);
       };
     } else if (fitnessFunctionValue === "Rosenbrock") {
       fitnessFunctionFunction = (individual) => {
@@ -273,18 +279,18 @@ export default function GeneticAlgorithm() {
             100 * Math.pow(individual[i + 1] - Math.pow(individual[i], 2), 2) +
             Math.pow(1 - individual[i], 2);
         }
-        return sum;
+        return -sum; // Negate for minimization
       };
     } else if (fitnessFunctionValue === "Rastrigin") {
       fitnessFunctionFunction = (individual) => {
-        return (
+        return -(
           10 * individual.length +
           individual.reduce(
             (sum, gene) =>
               sum + (Math.pow(gene, 2) - 10 * Math.cos(2 * Math.PI * gene)),
             0
           )
-        );
+        ); // Negate for minimization
       };
     } else if (fitnessFunctionValue === "Traveling Salesman Problem") {
       // Example cities represented as coordinates
@@ -295,8 +301,6 @@ export default function GeneticAlgorithm() {
           y: Math.random() * 100,
         })
       );
-
-      console.log("Cities:", cities);
 
       // Euclidean distance between two cities by index
       function distance(cityAIndex, cityBIndex) {
@@ -348,7 +352,7 @@ export default function GeneticAlgorithm() {
     await gnt.runAlgorithm();
 
     setPop(gnt.top10());
-    setBestFitness(gnt.bestfit());
+    setBestFitness(-gnt.bestfit());
     setIsRunning(false);
   };
 
@@ -378,6 +382,7 @@ export default function GeneticAlgorithm() {
                 parameter="Enter Data Type"
                 inputType="Select"
                 options={["Binary", "Permutation", "Real Number"]}
+                onChange={() => setCurrentDataType(dataType.current.value)}
                 ref={dataType}
               />
               <InputBox
@@ -415,16 +420,17 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Select crossover type: "
                 inputType="Select"
-                options={[
-                  "Single Point",
-                  "Two Point",
-                  "Uniform",
-                  "Simple Crossover",
-                  "Simple Arithmetic Crossover",
-                  "Whole Arithmetic Crossover",
-                  "Order Crossover",
-                  "Cycle Recombination",
-                ]}
+                options={
+                  currentDataType === "Binary"
+                    ? ["Single Point", "Two Point", "Uniform"]
+                    : currentDataType === "Permutation"
+                    ? ["Order Crossover", "Cycle Recombination"]
+                    : [
+                        "Simple Crossover",
+                        "Simple Arithmetic Crossover",
+                        "Whole Arithmetic Crossover",
+                      ]
+                }
                 ref={crossoverType}
               />
               <InputBox
@@ -437,14 +443,18 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Choose mutation operator:"
                 inputType="Select"
-                options={[
-                  "Bit Flip Mutation",
-                  "Complementary Mutation",
-                  "Swap Mutation",
-                  "Insert Mutation",
-                  "Scramble Mutation",
-                  "Inversion Mutation",
-                ]}
+                options={
+                  currentDataType === "Binary"
+                    ? ["Bit Flip Mutation"]
+                    : currentDataType === "Permutation"
+                    ? [
+                        "Swap Mutation",
+                        "Insert Mutation",
+                        "Scramble Mutation",
+                        "Inversion Mutation",
+                      ]
+                    : ["Complementary Mutation", "Gaussian Mutation"]
+                }
                 ref={mutationOperator}
               />
               <InputBox
@@ -489,7 +499,7 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Lower Bound"
                 ref={lowerBound}
-                defaultVal={10}
+                defaultVal={-10}
               />
               <InputBox
                 logo="f"

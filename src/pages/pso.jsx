@@ -14,7 +14,11 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  LineChart,
+  Line,
+  Legend,
 } from "recharts";
+
 import Latex from "react-latex-next";
 import "./../../node_modules/katex/dist/katex.min.css";
 
@@ -32,6 +36,9 @@ export default function PSO() {
   const cognitiveRef = useRef(null);
   const socialRef = useRef(null);
   const numOfIterationsRef = useRef(null);
+  const [isWrandom, setWrandom] = useState(false);
+  const [gBest, setGBest] = useState(null);
+  const [data, setData] = useState([]);
 
   const handleStart = async () => {
     setIsRunning(true);
@@ -70,7 +77,7 @@ export default function PSO() {
       return;
     }
 
-    const fitnessFunction = (x) => {
+    const fitnessFunction = async (x) => {
       switch (targetFunctionRef.current.value) {
         case "Sum of squares":
           return x.reduce((sum, val) => sum + val ** 2, 0);
@@ -104,7 +111,7 @@ export default function PSO() {
       c2,
     });
 
-    let result = StandardPSO(
+    let result = await StandardPSO(
       populationSize,
       dimension,
       lowerBound,
@@ -114,12 +121,15 @@ export default function PSO() {
       W,
       c1,
       c2,
-      setPositions
+      setPositions,
+      isWrandom,
+      0.726,
+      setData
     );
     // result = [result[0].toFixed(5), result[1]?.toFixed(5) || 0];
 
-    setOptimalValue(result.join(", "));
-
+    setGBest(result.gbest.map((e) => e.toFixed(5)).join(", "));
+    setOptimalValue(result.bestFitness.toFixed(5));
     setIsRunning(false);
   };
   useEffect(() => {
@@ -167,7 +177,7 @@ export default function PSO() {
     <main className="flex flex-col items-center justify-start h-screen font-[montserrat] text-center">
       <Header />
       <div className="relative w-full h-full flex flex-col items-center justify-center">
-        <div className="flex items-center w-[98%] h-[98%] backdrop-blur-md bg-black/5 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
+        <div className="flex items-center w-[98%] h-[98%] backdrop-blur-xl bg-black/10 border border-white/20 rounded-2xl shadow-lg p-8 text-white">
           {/* inputs are here */}
           <div className="flex flex-col h-full w-[50%]">
             <div className="text-left">
@@ -228,6 +238,7 @@ export default function PSO() {
                 parameter="Inertia Weight:"
                 placeholder="Enter a number"
                 inputType="number"
+                disabled={isWrandom}
                 ref={inertiaWeightRef}
                 defaultVal={0.729}
               />
@@ -254,6 +265,18 @@ export default function PSO() {
                 inputType="number"
                 parameter="Number of Iterations"
               />
+              <div className="ml-5 flex items-center">
+                <input
+                  type="checkbox"
+                  name=""
+                  id=""
+                  className="mr-2"
+                  onChange={(e) => setWrandom(e.target.checked)}
+                />
+                <p className="text-start text-sm">
+                  Random W (With Logistic Map)
+                </p>
+              </div>
               <div className="flex justify-end mt-5 self-center-safe">
                 <button
                   onClick={handleStart}
@@ -267,50 +290,28 @@ export default function PSO() {
           </div>
           {/* chart is here: */}
           <div className="pl-15 w-[50%]">
-            <div className="space-y-8 mb-7 ml-15">
-              <h3 className="font-semibold text-lg text-white text-left">
-                Algorithm Parameters Are Updated Using These Formulas:
-              </h3>
-              {/* Position Update Formula */}
-              <div className="text-left">
-                <div className="text-lg">
-                  <Latex>{`\\(x_{ij}(t+1) = x_{ij}(t) + v_{ij}(t+1)\\)`}</Latex>
-                </div>
-                <p className="text-gray-600 mt-2">
-                  Where <Latex>{`\\(x_{ij}(t)\\)`}</Latex> is the current
-                  position and
-                  <Latex>{`\\(v_{ij}(t+1)\\)`}</Latex> is the updated velocity.
-                </p>
-              </div>
-
-              {/* Velocity Update Formula */}
-              <div className="text-left">
-                <div className="text-lg">
-                  <Latex>
-                    {`\\(v_{ij}(t+1) = w \\cdot v_{ij}(t) + c_1r_1(y_{ij}(t) - x_{ij}(t)) + c_2r_2(\\hat{y}_j(t) - x_{ij}(t))\\)`}
-                  </Latex>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mt-3 text-sm text-gray-600">
-                  <div>
-                    <p>
-                      <Latex>{`\\(w\\)`}</Latex>: Inertia weight
-                    </p>
-                    <p>
-                      <Latex>{`\\(v_{ij}(t)\\)`}</Latex>: Current velocity
-                    </p>
-                  </div>
-                  <div>
-                    <p>
-                      <Latex>{`\\(c_1, c_2\\)`}</Latex>: Acceleration
-                      coefficients
-                    </p>
-                    <p>
-                      <Latex>{`\\(r_1, r_2\\)`}</Latex>: Random numbers ∈ [0,1]
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div className="w-full h-70">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={data}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid />
+                  <XAxis dataKey="iteration" label="Best Fitness" />
+                  <YAxis dataKey="best" label="iteration" />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="best" stroke="#82ca9d" />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
+
             {dimension <= 2 ? (
               <ResponsiveContainer width="100%" height={400}>
                 <ScatterChart
@@ -346,10 +347,16 @@ export default function PSO() {
 
             <div
               className={
-                optimalValue ? "flex justify-center items-center" : "hidden"
+                optimalValue
+                  ? "flex flex-col justify-center items-center"
+                  : "hidden"
               }
             >
-              <h3 className="font-semibold">Optimal Answer:</h3>
+              <h3 className="font-semibold">GBEST Answer:</h3>
+              <div className="text- ml-4 font-medium text-blue-300">
+                <span>( {gBest} )</span>
+              </div>
+              <h3 className="font-semibold mt-5">Optimal Answer:</h3>
               <div className="text-lg ml-4 font-medium text-blue-300">
                 <span>( {optimalValue} )</span>
               </div>

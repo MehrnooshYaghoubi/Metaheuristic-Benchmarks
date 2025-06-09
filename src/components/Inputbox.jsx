@@ -12,6 +12,7 @@ export const InputBox = forwardRef(
       placeholder,
       defaultVal,
       onChange,
+      disabled = false,
     },
     ref
   ) => {
@@ -23,12 +24,13 @@ export const InputBox = forwardRef(
           </label>
         </div> */}
 
-        <div className="ml-5 flex flex-col items-start w-full">
+        <div className="ml-5 flex flex-col items-center justify-center w-full">
           <p className="text-start text-sm">{parameter}</p>
           {inputType === "Select" ? (
             <select
               ref={ref}
               className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
+              onChange={onChange}
             >
               {options.map((option, index) => (
                 <option key={index} value={option} className="text-black">
@@ -43,7 +45,10 @@ export const InputBox = forwardRef(
               onChange={onChange}
               placeholder={placeholder}
               defaultValue={defaultVal}
-              className="w-full border border-gray-50 rounded-xl px-4 py-2 mt-2"
+              disabled={disabled}
+              className={`w-full border border-gray-50 rounded-xl px-4 py-2 mt-2 ${
+                disabled ? "text-gray-400 cursor-not-allowed" : "text-white"
+              }`}
             />
           )}
         </div>
