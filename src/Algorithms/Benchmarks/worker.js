@@ -26,6 +26,8 @@ import {
   schafferN3,
   schafferN4,
   threeHumpCamel,
+  trid,
+  xinSheYangN3,
 } from "./main.js";
 
 // Map benchmark names to functions
