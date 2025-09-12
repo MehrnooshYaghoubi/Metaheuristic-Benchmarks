@@ -16,6 +16,11 @@ export function bohachevskyN1(vec) {
   );
 }
 
+export function booth(vec) {
+  const [x, y] = vec; // 2D only
+  return (x + 2 * y - 7) ** 2 + (2 * x + y - 5) ** 2;
+}
+
 export function sumOfSquares(x) {
   return x.reduce((acc, xi) => acc + xi * xi, 0);
 }
@@ -43,6 +48,16 @@ export function matyas(vec) {
 export function schwefel220(vec) {
   return vec.reduce((acc, xi) => acc + Math.abs(xi), 0);
 }
+
+export function Zakharov(vec) {
+  const n = vec.length;
+
+  const sumOfSquares = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  const weightedSum = vec.reduce((acc, xi, i) => acc + 0.5 * (i + 1) * xi, 0);
+
+  return sumOfSquares + weightedSum ** 2 + weightedSum ** 4;
+}
+
 
 // Multimodal
 
