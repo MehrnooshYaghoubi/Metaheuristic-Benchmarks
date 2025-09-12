@@ -295,3 +295,101 @@ export function carromTable(vec) {
   );
 }
 
+export function crossInTray(vec) {
+  const [x, y] = vec; // 2D only
+  const term = Math.abs(
+    Math.sin(x) *
+      Math.sin(y) *
+      Math.exp(Math.abs(100 - Math.sqrt(x ** 2 + y ** 2) / Math.PI))
+  );
+  return -0.0001 * Math.pow(term + 1, 0.1);
+}
+
+
+export function easom(vec) {
+  const [x, y] = vec; // 2D only
+  return -Math.cos(x) * Math.cos(y) * Math.exp((-(x - Math.PI)) ** 2 - (-(y - Math.PI)) ** 2);
+}
+
+export function eggCrate(vec) {
+  const [x, y] = vec; // 2D only
+  return x ** 2 + y ** 2 + 25 * (Math.sin(x) ** 2 + Math.sin(y) ** 2);
+}
+
+export function elAttarVidyasagarDutta(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    (x ** 2 + y - 10) ** 2 +
+    (x + y ** 2 - 7) ** 2 +
+    (x ** 2 + y ** 3 - 1) ** 2
+  );
+}
+
+export function forrester(x) {
+  return Math.pow(6 * x - 2, 2) * Math.sin(12 * x - 4);
+}
+
+export function gramacyLee(x) {
+  return Math.sin(10 * Math.PI * x) / (2 * x) + Math.pow(x - 1, 4);
+}
+
+export function himmelblau(vec) {
+  const [x, y] = vec; // 2D only
+  return (x ** 2 + y - 11) ** 2 + (x + y ** 2 - 7) ** 2;
+}
+
+export function holderTable(vec) {
+  const [x, y] = vec; // 2D only
+  return -Math.abs(
+    Math.sin(x) *
+      Math.cos(y) *
+      Math.exp(Math.abs(1 - Math.sqrt(x ** 2 + y ** 2) / Math.PI))
+  );
+}
+
+export function keane(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    -Math.sin(x - y) ** 2 *
+    Math.sin(x + y) ** 2 /
+    Math.sqrt(x ** 2 + y ** 2)
+  );
+}
+
+export function mccormick(vec) {
+  const [x, y] = vec; // 2D only
+  return Math.sin(x + y) + (x - y) ** 2 - 1.5 * x + 2.5 * y + 1;
+}
+
+export function periodic(vec) {
+  const sumOfSines = vec.reduce((acc, xi) => acc + Math.sin(xi) ** 2, 0);
+  const sumOfSquares = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  return 1 + sumOfSines - 0.1 * Math.exp(-sumOfSquares);
+}
+
+export function qing(vec) {
+  return vec.reduce((acc, xi, i) => acc + (xi ** 2 - (i + 1)) ** 2, 0);
+}
+
+export function quartic(vec) {
+  return vec.reduce((acc, xi, i) => acc + (i + 1) * xi ** 4, 0) + Math.random();
+}
+
+export function rastrigin(vec) {
+  const n = vec.length;
+  return (
+    10 * n +
+    vec.reduce((acc, xi) => acc + (xi ** 2 - 10 * Math.cos(2 * Math.PI * xi)), 0)
+  );
+}
+
+export function rosenbrock(vec, a = 1, b = 100) {
+  return vec
+    .slice(0, -1)
+    .reduce(
+      (acc, xi, i) =>
+        acc + b * (vec[i + 1] - xi ** 2) ** 2 + (a - xi) ** 2,
+      0
+    );
+}
+
