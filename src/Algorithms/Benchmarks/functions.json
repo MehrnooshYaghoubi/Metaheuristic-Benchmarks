@@ -626,56 +626,56 @@
       },
       {
         "name": "Schwefel 2.20",
-        "formula": "",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\sum_{i=1}^n |x_i|",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
         "differentiability": "non-differentiable",
         "separability": "separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Schwefel 2.21",
-        "formula": "",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\sum_{i=1}^n |x_i|",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
         "differentiability": "non-differentiable",
         "separability": "separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
 
       {
         "name": "Schwefel 2.22",
-        "formula": "",
+        "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^{n}|x_i|+\\prod_{i=1}^{n}|x_i|",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
         "differentiability": "non-differentiable",
         "separability": "separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100,100] ,
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Schwefel 2.23",
-        "formula": "",
+        "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^{n}x_i^{10}",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
         "differentiability": "differentiable",
         "separability": "separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-10, 10],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Schwefel",
@@ -740,7 +740,7 @@
         "separability": "separable",
         "input_domain": [-5.12, 5.12],
         "global_minima": "0",
-        "minimizer": "(0,…,0"
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Styblinski-Tank",
