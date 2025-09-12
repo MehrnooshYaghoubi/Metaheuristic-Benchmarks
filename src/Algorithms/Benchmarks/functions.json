@@ -131,7 +131,7 @@
         "minimizer": "(-1.58214,-3.13024)"
       },
       {
-        "name": "Bohachevsky N. 1 Function",
+        "name": "Bohachevsky N. 1",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -144,7 +144,7 @@
         "minimizer": ""
       },
       {
-        "name": "Bohachevsky N. 2 Function",
+        "name": "Bohachevsky N. 2",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "",
@@ -157,7 +157,7 @@
         "minimizer": ""
       },
       {
-        "name": "Booth Function",
+        "name": "Booth",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -170,7 +170,7 @@
         "minimizer": ""
       },
       {
-        "name": "Brent Function",
+        "name": "Brent",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "",
@@ -183,7 +183,7 @@
         "minimizer": ""
       },
       {
-        "name": "Brown Function",
+        "name": "Brown",
         "formula": "",
         "dimensionality": "n-dimensional",
         "continuity": "",
@@ -196,7 +196,7 @@
         "minimizer": ""
       },
       {
-        "name": "Bukin N. 6 Function",
+        "name": "Bukin N. 6",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -209,7 +209,7 @@
         "minimizer": ""
       },
       {
-        "name": "Carrom Table Function",
+        "name": "Carrom Table",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "",
@@ -222,7 +222,7 @@
         "minimizer": ""
       },
       {
-        "name": "Cross-in-Tray Function",
+        "name": "Cross-in-Tray",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -235,7 +235,7 @@
         "minimizer": ""
       },
       {
-        "name": "Deckkers-Aarts Function",
+        "name": "Deckkers-Aarts",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -248,7 +248,7 @@
         "minimizer": ""
       },
       {
-        "name": "Drop-Wave Function",
+        "name": "Drop-Wave",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -261,7 +261,7 @@
         "minimizer": ""
       },
       {
-        "name": "Easom Function",
+        "name": "Easom",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -274,7 +274,7 @@
         "minimizer": ""
       },
       {
-        "name": "Egg Crate Function",
+        "name": "Egg Crate",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -287,7 +287,7 @@
         "minimizer": ""
       },
       {
-        "name": "El-Attar-Vidyasagar-Dutta Function",
+        "name": "El-Attar-Vidyasagar-Dutta",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -300,7 +300,7 @@
         "minimizer": ""
       },
       {
-        "name": "Exponential Function",
+        "name": "Exponential",
         "formula": "",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
@@ -313,7 +313,7 @@
         "minimizer": ""
       },
       {
-        "name": "Forrester Function",
+        "name": "Forrester",
         "formula": "",
         "dimensionality": "1-dimensional",
         "continuity": "continuous",
@@ -326,7 +326,7 @@
         "minimizer": ""
       },
       {
-        "name": "Goldstein-Price Function",
+        "name": "Goldstein-Price",
         "formula": "",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
@@ -339,7 +339,7 @@
         "minimizer": ""
       },
       {
-        "name": "Gramacy & Lee Function",
+        "name": "Gramacy & Lee",
         "formula": "",
         "dimensionality": "1-dimensional",
         "continuity": "continuous",
@@ -352,7 +352,7 @@
         "minimizer": ""
       },
       {
-        "name": "Griewank Function",
+        "name": "Griewank",
         "formula": "",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
@@ -364,6 +364,6 @@
         "global_minima": "",
         "minimizer": ""
       }
-
-    ]
-  }
+        ]
+    }
+    
