@@ -58,7 +58,32 @@ export function Zakharov(vec) {
   return sumOfSquares + weightedSum ** 2 + weightedSum ** 4;
 }
 
+export function brown(vec) {
+  const n = vec.length;
+  let sum = 0;
 
+  for (let i = 0; i < n - 1; i++) {
+    const xi = vec[i];
+    const xi1 = vec[i + 1];
+    sum += Math.pow(xi ** 2, xi1 ** 2 + 1) + Math.pow(xi1 ** 2, xi ** 2 + 1);
+  }
+
+  return sum;
+}
+
+export function exponential(vec) {
+  const sumOfSquares = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  return -Math.exp(-0.5 * sumOfSquares);
+}
+
+export function griewank(vec) {
+  const n = vec.length;
+
+  const sum = vec.reduce((acc, xi) => acc + xi ** 2 / 4000, 0);
+  const product = vec.reduce((acc, xi, i) => acc * Math.cos(xi / Math.sqrt(i + 1)), 1);
+
+  return 1 + sum - product;
+}
 // Multimodal
 
 export function bird(vec) {
