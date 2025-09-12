@@ -1,4 +1,4 @@
-// unimodals
+// ------- unimodals ------- 
 
 export function ackleyN2(vec) {
   const [x, y] = vec; // destructure array
@@ -144,7 +144,7 @@ export function threeHumpCamel(vec) {
   return 2 * x ** 2 - 1.05 * x ** 4 + (x ** 6) / 6 + x * y + y ** 2;
 }
 
-// Multimodal
+//  ------- Multimodal ------- 
 
 export function ackley(vec, a = 20, b = 0.2, c = 2 * Math.PI) {
   const n = vec.length;
@@ -284,3 +284,14 @@ export function wolfe(vec) {
   const [x, y, z] = vec; // 3D only
   return 43 * Math.pow(x * x + y * y - x * y, 0.75) + z;
 }
+
+export function carromTable(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    -1 / 30 *
+    Math.exp(2 * Math.abs(1 - Math.sqrt(x ** 2 + y ** 2) / Math.PI)) *
+    Math.cos(x) ** 2 *
+    Math.cos(y) ** 2
+  );
+}
+
