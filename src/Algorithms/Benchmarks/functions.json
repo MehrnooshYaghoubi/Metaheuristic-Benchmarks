@@ -506,7 +506,7 @@
         "input_domain": [-500, 500],
         "global_minima": "0",
         "minimizer": "(\\sqrt{i}, ..., \\sqrt{i})"
-      }
+      },
       {
         "name": "Quartic",
         "formula": "f(\\mathbf{x})=f(x_1,...,x_n)=\\sum_{i=1}^{n}ix_i^4+\\text{random}[0,1)",
