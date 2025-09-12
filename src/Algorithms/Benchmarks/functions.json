@@ -561,68 +561,68 @@
       },
       {
         "name": "Salomon",
-        "formula": "",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=1-cos(2\\pi\\sqrt{\\sum_{i=1}^{D}x_i^2})+0.1\\sqrt{\\sum_{i=1}^{D}x_i^2}",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Schaffer N. 1",
-        "formula": "",
+        "formula": "f(x, y)=0.5 + \\frac{sin^2(x^2+y^2)^2-0.5}{(1+0.001(x^2+y^2))^2}",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Schaffer N. 2",
-        "formula": "",
+        "formula": "f(x, y)=0.5 + \\frac{sin^2(x^2-y^2)-0.5}{(1+0.001(x^2+y^2))^2}",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0.0",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Schaffer N. 3",
-        "formula": "",
+        "formula": "f(x, y)=0.5 + \\frac{sin^2(cos(|x^2-y^2|))-0.5}{(1+0.001(x^2+y^2))^2}",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0.00156685",
+        "minimizer": "(0,1.253115)"
       },
       {
         "name": "Schaffer N. 4",
-        "formula": "",
+        "formula": "f(x, y)=0.5 + \\frac{cos^2(sin(|x^2-y^2|))-0.5}{(1+0.001(x^2+y^2))^2}",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100, 100],
+        "global_minima": "0.292579",
+        "minimizer": "(0,1.253115)"
       },
       {
         "name": "Schwefel 2.20",
@@ -726,7 +726,7 @@
         "differentiability": "differentiable",
         "separability": "non-separable",
         "input_domain": [-10, 10],
-        "global_minima": "−186.7309.",
+        "global_minima": "-186.7309.",
         "minimizer": "not specified"
       },
       {
