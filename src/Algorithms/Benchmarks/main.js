@@ -144,6 +144,20 @@ export function threeHumpCamel(vec) {
   return 2 * x ** 2 - 1.05 * x ** 4 + (x ** 6) / 6 + x * y + y ** 2;
 }
 
+export function trid(vec) {
+  const sum1 = vec.reduce((acc, xi) => acc + (xi - 1) ** 2, 0);
+  const sum2 = vec.slice(1).reduce((acc, xi, i) => acc + xi * vec[i], 0);
+  return sum1 - sum2;
+}
+
+export function xinSheYangN3(vec, beta = 15, m = 5) {
+  const sum1 = vec.reduce((acc, xi) => acc + (xi / beta) ** (2 * m), 0);
+  const sum2 = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  const product = vec.reduce((acc, xi) => acc * Math.cos(xi) ** 2, 1);
+
+  return Math.exp(-sum1) - 2 * Math.exp(-sum2) * product;
+}
+
 //  ------- Multimodal ------- 
 
 export function ackley(vec, a = 20, b = 0.2, c = 2 * Math.PI) {
@@ -391,5 +405,79 @@ export function rosenbrock(vec, a = 1, b = 100) {
         acc + b * (vec[i + 1] - xi ** 2) ** 2 + (a - xi) ** 2,
       0
     );
+}
+
+export function schwefel(vec) {
+  const d = vec.length;
+  return (
+    418.9829 * d -
+    vec.reduce((acc, xi) => acc + xi * Math.sin(Math.sqrt(Math.abs(xi))), 0)
+  );
+}
+
+export function shubert3(vec) {
+  return vec.reduce(
+    (acc, xi) =>
+      acc +
+      Array.from({ length: 5 }, (_, j) => j + 1).reduce(
+        (innerAcc, j) => innerAcc + j * Math.sin((j + 1) * xi + j),
+        0
+      ),
+    0
+  );
+}
+
+export function shubertN4(vec) {
+  return vec.reduce(
+    (acc, xi) =>
+      acc +
+      Array.from({ length: 5 }, (_, j) => j + 1).reduce(
+        (innerAcc, j) => innerAcc + j * Math.cos((j + 1) * xi + j),
+        0
+      ),
+    0
+  );
+}
+
+export function shubert(vec) {
+  return vec.reduce(
+    (acc, xi) =>
+      acc *
+      Array.from({ length: 5 }, (_, j) => j + 1).reduce(
+        (innerAcc, j) => innerAcc + Math.cos((j + 1) * xi + j),
+        0
+      ),
+    1
+  );
+}
+
+export function styblinskiTank(vec) {
+  return (
+    0.5 *
+    vec.reduce((acc, xi) => acc + (xi ** 4 - 16 * xi ** 2 + 5 * xi), 0)
+  );
+}
+
+export function xinSheYang(vec, epsilon = 1) {
+  return vec.reduce((acc, xi, i) => acc + epsilon * Math.abs(xi) ** (i + 1), 0);
+}
+
+export function xinSheYangN2(vec) {
+  const sumAbs = vec.reduce((acc, xi) => acc + Math.abs(xi), 0);
+  const sumSin = vec.reduce((acc, xi) => acc + Math.sin(xi ** 2), 0);
+  return sumAbs * Math.exp(-sumSin);
+}
+
+export function xinSheYangN4(vec) {
+  const sumSinSquared = vec.reduce((acc, xi) => acc + Math.sin(xi) ** 2, 0);
+  const sumSquares = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  const sumSinRoot = vec.reduce(
+    (acc, xi) => acc + Math.sin(Math.sqrt(Math.abs(xi))) ** 2,
+    0
+  );
+
+  return (
+    (sumSinSquared - Math.exp(-sumSquares)) * Math.exp(-sumSinRoot)
+  );
 }
 
