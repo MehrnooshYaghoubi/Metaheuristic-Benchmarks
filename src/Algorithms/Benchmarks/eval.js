@@ -11,17 +11,26 @@ export function meanAndVariance(vec) {
   return { mean, variance };
 }
 
-/**
- * Save a JavaScript object to a JSON file
- * @param {string} filePath - path to the JSON file
- * @param {object} obj - JavaScript object to save
- */
-// export async function saveObjectToJSON(filePath, obj) {
-//   try {
-//     const jsonData = JSON.stringify(obj, null, 2); // pretty-print with 2-space indentation
-//     await writeFile(filePath, jsonData, "utf-8");
-//     console.log(`Object saved to ${filePath}`);
-//   } catch (err) {
-//     console.error("Error writing JSON file:", err);
-//   }
-// }
+export function toScientific(num, precision = 6, asObject = false) {
+  if (typeof num !== "number" || !isFinite(num)) {
+    throw new Error("Input must be a finite number");
+  }
+
+  // Handle 0 separately
+  if (num === 0) {
+    return asObject ? { mantissa: 0, exponent: 0 } : "0";
+  }
+
+  // Compute exponent in base 10
+  const exponent = Math.floor(Math.log10(Math.abs(num)));
+
+  // Normalize mantissa
+  const mantissa = +(num / Math.pow(10, exponent)).toPrecision(precision);
+
+  if (asObject) {
+    return { mantissa, exponent };
+  }
+
+  // Return formatted string
+  return `${mantissa}×10^${exponent}`;
+}

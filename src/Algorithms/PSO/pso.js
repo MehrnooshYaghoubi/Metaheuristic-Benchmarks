@@ -146,6 +146,8 @@ export async function StandardPSO(
   return { gbest, bestFitness: gbestFitness, fitnessCalls: fitnessCallCount };
 }
 
+import fs from "fs/promises";
+
 async function Benchmarks() {
   const benchmark_list = [
     bohachevskyN1,
@@ -166,9 +168,18 @@ async function Benchmarks() {
 
   let results = {};
 
+  console.log("🚀 Starting benchmarks...");
+
+  const globalStart = Date.now();
+
   for (let modal of benchmark_list) {
-    for (let i = 0; i < 20; i++) {
-      const result = await StandardPSO(
+    console.log(`\n=== Running benchmark: ${modal.name} ===`);
+    const modalStart = Date.now();
+
+    // Create 20 concurrent PSO runs
+    const promises = Array.from({ length: 20 }, (_, i) => {
+      const runStart = Date.now();
+      return StandardPSO(
         50,
         30,
         -10,
@@ -180,17 +191,47 @@ async function Benchmarks() {
         1.42,
         null,
         false
-      );
-      console.log(`unimodal: ${modal.name} result: ${result.bestFitness}`);
-      if (results[modal.name] == null || results[modal.name] == undefined)
-        results[modal.name] = [];
-      results[modal.name].push(result.bestFitness);
-    }
+      ).then((result) => {
+        const elapsed = ((Date.now() - runStart) / 1000).toFixed(2);
+        console.log(
+          `🏃 Run ${i + 1}/20 for ${modal.name}: bestFitness=${
+            result.bestFitness
+          } (took ${elapsed}s)`
+        );
+        return result;
+      });
+    });
+
+    // Wait for all runs to finish
+    const innerResults = await Promise.all(promises);
+
+    // Store results
+    results[modal.name] = innerResults.map((r) => r.bestFitness);
+
+    // Compute stats
+    const stats = meanAndVariance(results[modal.name]);
+    console.log(
+      `📊 Finished ${modal.name} | Mean: ${stats.mean.toFixed(
+        5
+      )}, Variance: ${stats.variance.toFixed(5)}`
+    );
+
+    // Update JSON after each modal
+    const jsonData = JSON.stringify(
+      { ...results, [modal.name]: stats },
+      null,
+      2
+    );
+    await fs.writeFile("data.json", jsonData, "utf-8");
+    console.log(`💾 Updated data.json with results for ${modal.name}`);
+
+    const modalElapsed = ((Date.now() - modalStart) / 1000).toFixed(2);
+    console.log(`⏱️  Total time for ${modal.name}: ${modalElapsed}s`);
   }
 
-  for (let key in results) {
-    results[key] = meanAndVariance(results[key]);
-  }
-
-  await saveObjectToJSON("data.json", results);
+  const totalElapsed = ((Date.now() - globalStart) / 1000).toFixed(2);
+  console.log(
+    `\n✅ All benchmarks completed! Total elapsed time: ${totalElapsed}s`
+  );
 }
+Benchmarks();

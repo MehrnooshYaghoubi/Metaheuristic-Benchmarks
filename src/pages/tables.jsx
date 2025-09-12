@@ -1,6 +1,6 @@
 import { ReactTabulator } from "react-tabulator";
-import "react-tabulator/lib/styles.css"; // default Tabulator theme
-import "react-tabulator/css/tabulator_midnight.min.css"; // optional dark theme
+import "tabulator-tables/dist/css/tabulator.min.css"; // Tabulator core styles (v5)
+import "tabulator-tables/dist/css/tabulator_midnight.min.css"; // Optional simple theme
 import Header from "../titlebar";
 import "./table_style.css";
 import { useRef, useState, useEffect } from "react";
@@ -15,7 +15,7 @@ window.jspdf = window.jspdf || {};
 window.jspdf.jsPDF = jsPDF;
 import katex from "katex";
 import "katex/dist/katex.min.css";
-
+import { toScientific } from "../Algorithms/Benchmarks/eval";
 console.log(main_data);
 const data1 = main_data.functions.filter((item) => item.modality == "unimodal");
 
@@ -23,10 +23,13 @@ const function_columns = [
   {
     title: "Function",
     field: "name",
+    resizable: true,
   },
   {
     title: "Dimensionality",
     field: "dimensionality",
+    resizable: true,
+
     formatter: (cell) => {
       const value = cell.getValue();
       let newValue = value.split("-")[0];
@@ -36,6 +39,8 @@ const function_columns = [
   },
   {
     title: "Continuity",
+    resizable: true,
+
     field: "continuity",
     formatter: (cell) => {
       const value = cell.getValue();
@@ -48,6 +53,8 @@ const function_columns = [
   },
   {
     title: "Convexity",
+    resizable: true,
+
     field: "convexity",
     formatter: (cell) => {
       const value = cell.getValue();
@@ -60,6 +67,8 @@ const function_columns = [
   },
   {
     title: "Differentiability",
+    resizable: true,
+
     field: "differentiability",
     formatter: (cell) => {
       const value = cell.getValue();
@@ -73,6 +82,8 @@ const function_columns = [
   {
     title: "Separability",
     field: "separability",
+    resizable: true,
+
     formatter: (cell) => {
       const value = cell.getValue();
       if (value === "separable") {
@@ -86,36 +97,48 @@ const function_columns = [
     title: "Input Domain",
     field: "input_domain",
     resizable: true,
+
     formatter: (cell) => {
       const value = cell.getValue();
 
-      if (!Array.isArray(value) || value.length !== 2) {
-        return "";
-      }
-      if (Array.isArray(value[0])) {
-        for (let i = 0; i < value.length; i++) {
-          if (!Array.isArray(value[i]) || value[i].length !== 2) {
-            return "";
-          }
-        }
-        // generate LaTeX string for multiple dimensions
-        latex = value
-          .map((v, i) => `x_${i + 1} ∈ [${v.join(", ")}]`)
-          .join(", ");
-      }
+      console.log({ value });
 
-      // generate LaTeX string
-      const latex = `\\text{For } x_i \\in [${value.join(", ")}]`;
+      let latex = "";
+      if (Array.isArray(value[0])) {
+        // 2D array → stringify and remove outer []
+        latex = JSON.stringify(value).slice(1, -1);
+      } else {
+        // 1D array → normal stringify
+        latex = JSON.stringify(value);
+      }
+      console.log({ latex });
 
       // convert LaTeX to HTML
-      const html = katex.renderToString(latex, { throwOnError: false });
+      const html = katex.renderToString(latex, {
+        throwOnError: false,
+      });
 
       // **return HTML string** directly
       return html;
     },
   },
-  { title: "Global Minimum", field: "global_minimum" },
   {
+    title: "Global Minimum",
+    resizable: true,
+    field: "global_minima",
+    formatter: (cell) => {
+      const value = cell.getValue();
+      if (value === "") return "";
+      console.log({ value });
+      if (isNaN(parseFloat(value)))
+        return katex.renderToString(value, { throwOnError: false });
+      let val = toScientific(parseFloat(value), 6);
+      return katex.renderToString(val, { throwOnError: false });
+    },
+  },
+  {
+    resizable: true,
+
     title: "Minimizer",
     field: "minimizer",
     formatter: (cell) => {
@@ -153,11 +176,33 @@ export default function BenchmarkTable() {
     // Convert Tabulator data → rows
     const rows = table.current
       .getData()
-      .map((row) => [row.name, row.mean, row.variance]);
+      .map((row) => [
+        row.name,
+        row.dimensionality,
+        row.continuity,
+        row.convexity,
+        row.differentiability,
+        row.separability,
+        row.input_domain,
+        row.global_minima,
+        row.minimizer,
+      ]);
 
     // Use autoTable directly
     autoTable(doc, {
-      head: [["Name", "Mean", "Variance"]],
+      head: [
+        [
+          "Name",
+          "Dimensionality",
+          "Continuity",
+          "Convexity",
+          "Differentiability",
+          "Separability",
+          "Input Domain",
+          "Global Minimum",
+          "Minimizer",
+        ],
+      ],
       body: rows,
     });
 
@@ -212,12 +257,12 @@ export default function BenchmarkTable() {
         <ReactTabulator
           data={data1}
           columns={function_columns}
-          layout="fitDataFill"
+          layout="fitDataStretch"
           options={{
-            resizableColumns: true,
-            pagination: "true",
+            pagination: true,
             paginationSize: 20,
-            moveableColumns: true,
+            movableColumns: true,
+            resizableColumns: true,
           }}
           onRef={(r) => setTable(r)} // capture Tabulator instance here
         />
