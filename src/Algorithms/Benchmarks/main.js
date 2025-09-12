@@ -49,6 +49,21 @@ export function schwefel220(vec) {
   return vec.reduce((acc, xi) => acc + Math.abs(xi), 0);
 }
 
+export function schwefel221(vec) {
+  return Math.max(...vec.map(xi => Math.abs(xi)));
+}
+
+export function schwefel222(vec) {
+  const sum = vec.reduce((acc, xi) => acc + Math.abs(xi), 0);
+  const product = vec.reduce((acc, xi) => acc * Math.abs(xi), 1);
+  return sum + product;
+}
+
+export function schwefel223(vec) {
+  return vec.reduce((acc, xi) => acc + xi ** 10, 0);
+}
+
+
 export function Zakharov(vec) {
   const n = vec.length;
 
@@ -119,7 +134,16 @@ export function schafferN3(vec) {
   return 0.5 + (Math.sin(Math.cos(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
 }
 
+export function schafferN4(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x ** 2 + y ** 2;
+  return 0.5 + (Math.cos(Math.sin(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+}
 
+export function threeHumpCamel(vec) {
+  const [x, y] = vec; // 2D only
+  return 2 * x ** 2 - 1.05 * x ** 4 + (x ** 6) / 6 + x * y + y ** 2;
+}
 
 // Multimodal
 
