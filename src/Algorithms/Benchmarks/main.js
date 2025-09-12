@@ -84,6 +84,43 @@ export function griewank(vec) {
 
   return 1 + sum - product;
 }
+
+export function leon(vec) {
+  const [x, y] = vec; // 2D only
+  return 100 * (y - x ** 3) ** 2 + (1 - x) ** 2;
+}
+
+export function powellSum(vec) {
+  return vec.reduce((acc, xi, i) => acc + Math.abs(xi) ** (i + 2), 0);
+}
+
+
+export function ridge(vec, d = 1, alpha = 2) {
+  const x1 = vec[0];
+  const sumOfSquares = vec.slice(1).reduce((acc, xi) => acc + xi ** 2, 0);
+  return x1 + d * Math.pow(sumOfSquares, alpha);
+}
+
+export function schafferN1(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x ** 2 + y ** 2;
+  return 0.5 + (Math.sin(r2) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+}
+
+export function schafferN2(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x ** 2 + y ** 2;
+  return 0.5 + (Math.sin(x ** 2 - y ** 2) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+}
+
+export function schafferN3(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x ** 2 + y ** 2;
+  return 0.5 + (Math.sin(Math.cos(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+}
+
+
+
 // Multimodal
 
 export function bird(vec) {
