@@ -9,7 +9,7 @@
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "not specified",
-        "input_domain": "[−32,32]",
+        "input_domain": [-32,32],
         "global_minima": "0",
         "minimizer": "(0,…,0)"
       },
@@ -22,8 +22,8 @@
         "convexity": "convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "[−32,32]",
-        "global_minima": "−200",
+        "input_domain": [-32,32],
+        "global_minima": "-200",
         "minimizer": "(0,0)"
       },
       {
@@ -35,88 +35,100 @@
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "[−32,32]",
-        "global_minima": "−195.629028238419",
-        "minimizer": "(±0.682584587365898,−0.36075325513719)"
+        "input_domain": [-32,32],
+        "global_minima": "-195.629028238419",
+        "minimizer": "(±0.682584587365898,-0.36075325513719)"
       },
       {
         "name": "Ackley N. 4",
-        "formula": "",
+        "formula": "f(\\textbf{x})=\\sum_{i=1}^{n-1}\\left( e^{-0.2}\\sqrt{x_i^2+x_{i+1}^2} + 3\\left( cos(2x_i) + sin(2x_{i+1}) \\right) \\right)",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "[−35,35]",
-        "global_minima": "−4.590101633799122",
-        "minimizer": "(−1.51,−0.755)"
+        "input_domain": [-35, 35],
+        "global_minima": "-4.590101633799122",
+        "minimizer": "(-1.51,-0.755)"
       },
       {
         "name": "Adjiman",
+        "formula": "f(x, y)=cos(x)sin(y) - \\frac{x}{y^2+1}",
         "dimensionality": "2-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [[-1, 2], [-1, 1]],
+        "global_minima": "-2.02181",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Alpine N. 1",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n) = \\sum{i=1}^{n}|x_i sin(x_i)+0.1x_i|",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [0,10],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Alpine N. 2",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n) = \\prod_{i=1}^{n}\\sqrt{x_i}sin(x_i)",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [0,10],
+        "global_minima": "2.808^n",
+        "minimizer": "(7.917,…,7.917)"
       },
       {
         "name": "Bartels Conn",
+        "formula": "f(x,y)=|x^2 + y^2 + xy| + |sin(x)| + |cos(y)|",
         "dimensionality": "2-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "non-differentiable",
         "separability": "non-separable",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [[-500,500], [-500,500]],
+        "global_minima": "1",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Beale",
+        "formula": "f(x, y) = (1.5-x+xy)^2+(2.25-x+xy^2)^2+(2.625-x+xy^3)^2",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "not specified",
         "separability": "not specified",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [-4.5,4.5],
+        "global_minima": "0",
+        "minimizer": "(3,0.5)"
       },
       {
         "name": "Bird",
+        "formula": "f(x, y) = sin(x)e^{(1-cos(y))^2}+cos(y)e^{(1-sin(x))^2}+(x-y)^2",
         "dimensionality": "2-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "not specified",
-        "global_minima": "not specified"
+        "input_domain": [-6.28318530718, 6.28318530718],
+        "global_minima": "-106.764537",
+        "minimizer": "(-1.58214,-3.13024)"
       }
     ]
   }
