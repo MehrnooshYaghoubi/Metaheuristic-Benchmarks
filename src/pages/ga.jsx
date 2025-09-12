@@ -231,7 +231,8 @@ export default function GeneticAlgorithm() {
         !(
           crossoverTypeValue === "Simple Crossover" ||
           crossoverTypeValue === "Simple Arithmetic Crossover" ||
-          crossoverTypeValue === "Whole Arithmetic Crossover"
+          crossoverTypeValue === "Whole Arithmetic Crossover" ||
+          crossoverTypeValue === "BL-x"
         )
       ) {
         alert(
@@ -272,25 +273,24 @@ export default function GeneticAlgorithm() {
         return -individual.reduce((sum, gene) => sum + Math.pow(gene, 2), 0);
       };
     } else if (fitnessFunctionValue === "Rosenbrock") {
-      fitnessFunctionFunction = (individual) => {
+      fitnessFunctionFunction = (ind) => {
         let sum = 0;
-        for (let i = 0; i < individual.length - 1; i++) {
-          sum +=
-            100 * Math.pow(individual[i + 1] - Math.pow(individual[i], 2), 2) +
-            Math.pow(1 - individual[i], 2);
+        for (let i = 0; i < ind.length - 1; i++) {
+          sum += 100 * (ind[i + 1] - ind[i] ** 2) ** 2 + (1 - ind[i]) ** 2;
         }
-        return -sum; // Negate for minimization
+        // Shift so all are non-negative
+        return 1 / (1 + sum); // in (0,1], best → 1
       };
     } else if (fitnessFunctionValue === "Rastrigin") {
       fitnessFunctionFunction = (individual) => {
-        return -(
-          10 * individual.length +
-          individual.reduce(
-            (sum, gene) =>
-              sum + (Math.pow(gene, 2) - 10 * Math.cos(2 * Math.PI * gene)),
-            0
-          )
-        ); // Negate for minimization
+        const n = individual.length;
+        let sum = 0;
+        for (let i = 0; i < n; i++) {
+          const x = individual[i];
+          sum += x * x - A * Math.cos(2 * Math.PI * x);
+        }
+        const rastrigin = A * n + sum;
+        return 1 / (1 + rastrigin); // in (0,1], higher = better
       };
     } else if (fitnessFunctionValue === "Traveling Salesman Problem") {
       // Example cities represented as coordinates
@@ -352,7 +352,7 @@ export default function GeneticAlgorithm() {
     await gnt.runAlgorithm();
 
     setPop(gnt.top10());
-    setBestFitness(-gnt.bestfit());
+    setBestFitness(-gnt.bestfit().toExponential());
     setIsRunning(false);
   };
 
@@ -376,13 +376,14 @@ export default function GeneticAlgorithm() {
                 spaces for optimal results.
               </p>
             </div>
-            <div className="grid grid-cols-4 grid-rows-5 gap-2">
+            <div className="grid grid-cols-4 grid-rows-5 gap-3 items-stretch">
               <InputBox
                 logo="f"
                 parameter="Enter Data Type"
                 inputType="Select"
                 options={["Binary", "Permutation", "Real Number"]}
                 onChange={() => setCurrentDataType(dataType.current.value)}
+                className={"self-end"}
                 ref={dataType}
               />
               <InputBox
@@ -395,6 +396,7 @@ export default function GeneticAlgorithm() {
                   "Rastrigin",
                   "Traveling Salesman Problem",
                 ]}
+                className={"self-end"}
                 ref={fitnessFunction}
               />
               <InputBox
@@ -402,6 +404,7 @@ export default function GeneticAlgorithm() {
                 parameter="Set population size:"
                 ref={populationSize}
                 defaultVal={100}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
@@ -414,6 +417,7 @@ export default function GeneticAlgorithm() {
                   "Tournament",
                   "Truncation",
                 ]}
+                className={"self-end"}
                 ref={selectionMethod}
               />
               <InputBox
@@ -429,15 +433,18 @@ export default function GeneticAlgorithm() {
                         "Simple Crossover",
                         "Simple Arithmetic Crossover",
                         "Whole Arithmetic Crossover",
+                        "BL-x",
                       ]
                 }
                 ref={crossoverType}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
                 parameter="Set crossover probability:"
                 ref={crossoverProbability}
                 defaultVal={0.7}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
@@ -455,6 +462,7 @@ export default function GeneticAlgorithm() {
                       ]
                     : ["Complementary Mutation", "Gaussian Mutation"]
                 }
+                className={"self-end"}
                 ref={mutationOperator}
               />
               <InputBox
@@ -462,6 +470,7 @@ export default function GeneticAlgorithm() {
                 parameter="Set mutation probability:"
                 ref={mutationProbability}
                 defaultVal={0.01}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
@@ -475,6 +484,7 @@ export default function GeneticAlgorithm() {
                   "Population Convergence",
                 ]}
                 ref={terminationCriteria}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
@@ -488,15 +498,18 @@ export default function GeneticAlgorithm() {
                   "Fitness Based Replacement",
                 ]}
                 ref={replacementType}
+                className={"self-end"}
               />
               <InputBox
                 logo="f"
                 parameter="Gene length"
                 ref={geneLength}
+                className={"self-end"}
                 defaultVal={20}
               />
               <InputBox
                 logo="f"
+                className={"self-end"}
                 parameter="Lower Bound"
                 ref={lowerBound}
                 defaultVal={-10}
@@ -505,16 +518,19 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Upper Bound"
                 ref={upperBound}
+                className={"self-end"}
                 defaultVal={10}
               />
               <InputBox
                 logo="f"
                 parameter="Max Generations"
+                className={"self-end"}
                 ref={maxGenerations}
                 defaultVal={100}
               />
               <InputBox
                 logo="f"
+                className={"self-end"}
                 parameter="fitnessThreshold"
                 ref={fitnessTreshold}
                 defaultVal={0.01}
@@ -522,12 +538,14 @@ export default function GeneticAlgorithm() {
               <InputBox
                 logo="f"
                 parameter="Stagnation Limit"
+                className={"self-end"}
                 ref={stagnationLimit}
                 defaultVal={0.01}
               />
               <InputBox
                 logo="f"
                 parameter="Time Limit (ms)"
+                className={"self-end"}
                 ref={timeLimit}
                 defaultVal={60000}
               />
@@ -535,6 +553,7 @@ export default function GeneticAlgorithm() {
                 logo="f"
                 parameter="Convergence Threshold"
                 ref={convergenceThreshold}
+                className={"self-end"}
                 defaultVal={0.001}
               />
             </div>

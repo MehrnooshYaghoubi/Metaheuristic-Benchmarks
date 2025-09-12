@@ -1,3 +1,38 @@
+import { meanAndVariance } from "../Benchmarks/eval.js";
+import {
+  ackleyN2,
+  bird,
+  bohachevskyN1,
+  brent,
+  deckkersAarts,
+  dropWave,
+  goldsteinPrice,
+  happyCat,
+  leviN13,
+  matyas,
+  salomon,
+  schwefel220,
+  sphere,
+  wolfe,
+} from "../Benchmarks/main.js";
+
+import { writeFile } from "fs/promises";
+
+/**
+ * Save a JavaScript object to a JSON file
+ * @param {string} filePath - path to the JSON file
+ * @param {object} obj - JavaScript object to save
+ */
+export async function saveObjectToJSON(filePath, obj) {
+  try {
+    const jsonData = JSON.stringify(obj, null, 2); // pretty-print with 2-space indentation
+    await writeFile(filePath, jsonData, "utf-8");
+    console.log(`Object saved to ${filePath}`);
+  } catch (err) {
+    console.error("Error writing JSON file:", err);
+  }
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -10,13 +45,12 @@ function logisticMap(seed, r = 3.99, iterations = 1) {
   }
   return x;
 }
-
 export async function StandardPSO(
   populationSize,
   dimension,
   lowerBound,
   upperBound,
-  iterations,
+  maxFitnessCalls, // stop when fitness function is called this many times
   fitnessFunction, // async function
   W,
   c1,
@@ -38,13 +72,17 @@ export async function StandardPSO(
   );
 
   const pbest = population.map((p) => [...p]);
-
   let gbest = population[0];
+
+  let fitnessCallCount = 0;
   let gbestFitness = await fitnessFunction(gbest);
+  fitnessCallCount++;
 
   for (let i = 1; i < population.length; i++) {
+    if (fitnessCallCount >= maxFitnessCalls) break;
     const fitness = await fitnessFunction(population[i]);
-    const currentBestFitness = await fitnessFunction(gbest);
+    fitnessCallCount++;
+    const currentBestFitness = gbestFitness; // already computed
     if (fitness < currentBestFitness) {
       gbest = [...population[i]];
       gbestFitness = fitness;
@@ -54,12 +92,16 @@ export async function StandardPSO(
   let logisticState = Wseed;
   const yieldEvery = 50; // yield every 50 iterations
   let data = [];
-  for (let iter = 0; iter < iterations; iter++) {
-    const iterationPositions = population.map((particle) => ({
-      x: particle[0],
-      y: particle[1] || 0,
-    }));
-    setPositionState(iterationPositions);
+
+  // Main loop continues until fitness call limit is reached
+  while (fitnessCallCount < maxFitnessCalls) {
+    if (setPositionState) {
+      const iterationPositions = population.map((particle) => ({
+        x: particle[0],
+        y: particle[1] || 0,
+      }));
+      setPositionState(iterationPositions);
+    }
 
     const inertiaWeights = randomW
       ? Array.from({ length: dimension }, () => {
@@ -69,15 +111,21 @@ export async function StandardPSO(
       : Array(dimension).fill(W);
 
     for (let j = 0; j < populationSize; j++) {
+      if (fitnessCallCount >= maxFitnessCalls) break;
+
       const currentFitness = await fitnessFunction(population[j]);
+      fitnessCallCount++;
+
       const pbestFitness = await fitnessFunction(pbest[j]);
+      fitnessCallCount++;
+
       if (currentFitness < pbestFitness) {
         pbest[j] = [...population[j]];
-      }
 
-      if (currentFitness < gbestFitness) {
-        gbest = [...population[j]];
-        gbestFitness = currentFitness;
+        if (currentFitness < gbestFitness) {
+          gbest = [...population[j]];
+          gbestFitness = currentFitness;
+        }
       }
     }
 
@@ -98,19 +146,69 @@ export async function StandardPSO(
           Math.min(upperBound, population[j][k])
         );
       }
-
-      if (iter % yieldEvery === 0) {
-        // can change frequency here
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      }
     }
+
     data.push({
-      best: await fitnessFunction(gbest),
-      iteration: iter + 1,
+      best: gbestFitness,
+      fitnessCalls: fitnessCallCount,
     });
-    console.log(data);
+
     setData(data);
+
+    if (fitnessCallCount % yieldEvery === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
   }
 
-  return { gbest, bestFitness: gbestFitness };
+  return { gbest, bestFitness: gbestFitness, fitnessCalls: fitnessCallCount };
 }
+
+async function Benchmarks() {
+  const benchmark_list = [
+    bohachevskyN1,
+    ackleyN2,
+    sphere,
+    brent,
+    dropWave,
+    matyas,
+    schwefel220,
+    bird,
+    deckkersAarts,
+    goldsteinPrice,
+    happyCat,
+    leviN13,
+    salomon,
+    wolfe,
+  ];
+
+  let results = {};
+
+  for (let modal of benchmark_list) {
+    for (let i = 0; i < 20; i++) {
+      const result = await StandardPSO(
+        50,
+        30,
+        -10,
+        10,
+        40000,
+        modal,
+        0.74,
+        1.42,
+        1.42,
+        null,
+        false
+      );
+      console.log(`unimodal: ${modal.name} result: ${result.bestFitness}`);
+      if (results[modal.name] == null || results[modal.name] == undefined)
+        results[modal.name] = [];
+      results[modal.name].push(result.bestFitness);
+    }
+  }
+
+  for (let key in results) {
+    results[key] = meanAndVariance(results[key]);
+  }
+
+  await saveObjectToJSON("data.json", results);
+}
+Benchmarks();

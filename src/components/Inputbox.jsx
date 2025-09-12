@@ -13,19 +13,20 @@ export const InputBox = forwardRef(
       defaultVal,
       onChange,
       disabled = false,
+      className = "",
     },
     ref
   ) => {
     return (
-      <div className="flex items-center  mt-3">
+      <div className={`flex items-center h-fit ${className}`}>
         {/* <div className="flex items-end h-full">
           <label className="bg-cyan-300 text-black w-[50px] h-[50px] flex justify-center items-center rounded-full">
             <Latex>${logo}$</Latex>
           </label>
         </div> */}
 
-        <div className="ml-5 flex flex-col items-center justify-center w-full">
-          <p className="text-start text-sm">{parameter}</p>
+        <div className="flex flex-col justify-center">
+          <p className="text-start text-[12px]">{parameter}</p>
           {inputType === "Select" ? (
             <select
               ref={ref}

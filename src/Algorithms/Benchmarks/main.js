@@ -1,0 +1,104 @@
+// unimodals
+
+export function ackleyN2(vec) {
+  const [x, y] = vec; // destructure array
+  return -200 * Math.exp(-0.2 * Math.sqrt(x * x + y * y));
+}
+
+export function bohachevskyN1(vec) {
+  const [x, y] = vec; // only 2D version
+  return (
+    x * x +
+    2 * y * y -
+    0.3 * Math.cos(3 * Math.PI * x) -
+    0.4 * Math.cos(4 * Math.PI * y) +
+    0.7
+  );
+}
+
+export function sumOfSquares(x) {
+  return x.reduce((acc, xi) => acc + xi * xi, 0);
+}
+
+export function sphere(vec) {
+  return vec.reduce((acc, xi) => acc + xi * xi, 0);
+}
+
+export function brent(vec) {
+  const [x, y] = vec; // 2D only
+  return (x + 10) * (x + 10) + (y + 10) * (y + 10) + Math.exp(-x * x - y);
+}
+
+export function dropWave(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x * x + y * y;
+  return -1 + Math.cos(12 * Math.sqrt(r2)) / (0.5 * r2 + 2);
+}
+
+export function matyas(vec) {
+  const [x, y] = vec; // 2D only
+  return 0.26 * (x * x + y * y) - 0.48 * x * y;
+}
+
+export function schwefel220(vec) {
+  return vec.reduce((acc, xi) => acc + Math.abs(xi), 0);
+}
+
+// Multimodal
+
+export function bird(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    Math.sin(x) * Math.exp((1 - Math.cos(y)) ** 2) +
+    Math.cos(y) * Math.exp((1 - Math.sin(x)) ** 2) +
+    (x - y) ** 2
+  );
+}
+export function deckkersAarts(vec) {
+  const [x, y] = vec; // 2D only
+  const r2 = x * x + y * y;
+  return 105 * x * x + y * y - r2 * r2 + 10 - 5 * r2 ** 4;
+}
+
+export function goldsteinPrice(vec) {
+  const [x, y] = vec; // 2D only
+
+  const part1 =
+    1 +
+    (x + y + 1) ** 2 *
+      (19 - 14 * x + 3 * x ** 2 - 14 * y + 6 * x * y + 3 * y ** 2);
+  const part2 =
+    30 +
+    (2 * x - 3 * y) ** 2 *
+      (18 - 32 * x + 12 * x ** 2 + 4 * y - 36 * x * y + 27 * y ** 2);
+
+  return part1 * part2;
+}
+
+export function happyCat(vec, alpha = 0.25) {
+  const n = vec.length;
+  const norm2 = vec.reduce((acc, xi) => acc + xi * xi, 0);
+  const sum = vec.reduce((acc, xi) => acc + xi, 0);
+
+  return Math.pow(norm2 - n, alpha) + (1 / n) * (0.5 * norm2 + sum) + 0.5;
+}
+
+export function leviN13(vec) {
+  const [x, y] = vec; // 2D only
+
+  return (
+    Math.sin(3 * Math.PI * x) ** 2 +
+    (x - 1) ** 2 * (1 + Math.sin(3 * Math.PI * y) ** 2) +
+    (y - 1) ** 2 * (1 + Math.sin(2 * Math.PI * y) ** 2)
+  );
+}
+
+export function salomon(vec) {
+  const norm = Math.sqrt(vec.reduce((acc, xi) => acc + xi * xi, 0));
+  return 1 - Math.cos(2 * Math.PI * norm) + 0.1 * norm;
+}
+
+export function wolfe(vec) {
+  const [x, y, z] = vec; // 3D only
+  return 43 * Math.pow(x * x + y * y - x * y, 0.75) + z;
+}

@@ -114,6 +114,27 @@ function wholeArithmeticCrossover(parent1, parent2, { alpha = 0.5 } = {}) {
   };
 }
 
+//BL-x
+function blxAlphaCrossover(parent1, parent2, alpha = 0.5) {
+  const child1 = [];
+  const child2 = [];
+
+  for (let i = 0; i < parent1.length; i++) {
+    const cMin = Math.min(parent1[i], parent2[i]);
+    const cMax = Math.max(parent1[i], parent2[i]);
+    const d = cMax - cMin;
+
+    const lower = cMin - alpha * d;
+    const upper = cMax + alpha * d;
+
+    // uniform random between lower and upper
+    child1.push(lower + Math.random() * (upper - lower));
+    child2.push(lower + Math.random() * (upper - lower));
+  }
+
+  return { offspring: [child1, child2] };
+}
+
 // ==============================
 // 2. Crossover for Permutation
 // ==============================
@@ -225,6 +246,8 @@ export function crossover(method, parent1, parent2) {
       return simpleArithmeticCrossover(parent1, parent2);
     case "Whole Arithmetic Crossover":
       return wholeArithmeticCrossover(parent1, parent2);
+    case "BL-x":
+      return blxAlphaCrossover(parent1, parent2);
     case "Order Crossover":
       return orderCrossover(parent1, parent2);
     case "Cycle Recombination":

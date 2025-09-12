@@ -19,10 +19,11 @@ function bit_flip_mutation(individual, mutation_rate) {
 //   }
 //   return individual;
 // }
-function complementary_mutation(individual, mutation_rate, min, max) {
+
+function complementaryMutationAsymmetric(individual, mutationRate, min, max) {
   const midpoint = (min + max) / 2;
   for (let i = 0; i < individual.length; i++) {
-    if (Math.random() < mutation_rate) {
+    if (Math.random() < mutationRate) {
       individual[i] = 2 * midpoint - individual[i]; // reflect around midpoint
       // Clip to bounds:
       if (individual[i] < min) individual[i] = min;
@@ -32,10 +33,10 @@ function complementary_mutation(individual, mutation_rate, min, max) {
   return individual;
 }
 
-function complementaryMutationAsymmetric(individual, mutationRate, min, max) {
+function complementary_mutation(individual, mutation_rate, min, max) {
   const midpoint = (min + max) / 2;
   for (let i = 0; i < individual.length; i++) {
-    if (Math.random() < mutationRate) {
+    if (Math.random() < mutation_rate) {
       individual[i] = 2 * midpoint - individual[i]; // reflect around midpoint
       // Clip to bounds:
       if (individual[i] < min) individual[i] = min;

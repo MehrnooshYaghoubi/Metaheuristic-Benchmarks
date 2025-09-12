@@ -1,0 +1,58 @@
+{
+  "bohachevskyN1": {
+    "mean": 0,
+    "variance": 0
+  },
+  "ackleyN2": {
+    "mean": -200,
+    "variance": 0
+  },
+  "sphere": {
+    "mean": 4.5191050841191775e-7,
+    "variance": 6.111009957269615e-13
+  },
+  "brent": {
+    "mean": 8.194012623990515e-40,
+    "variance": 0
+  },
+  "dropWave": {
+    "mean": -1.491605138450382,
+    "variance": 2.465190328815662e-33
+  },
+  "matyas": {
+    "mean": 2.5136364148305196e-35,
+    "variance": 2.587523788661508e-69
+  },
+  "schwefel220": {
+    "mean": 5.200190352866245,
+    "variance": 53.438099406024186
+  },
+  "bird": {
+    "mean": -106.76453674926479,
+    "variance": 5.9574775562290815e-28
+  },
+  "deckkersAarts": {
+    "mean": -8000029390,
+    "variance": 0
+  },
+  "goldsteinPrice": {
+    "mean": -1939996788.1207738,
+    "variance": 1.6768808563938365e-13
+  },
+  "happyCat": {
+    "mean": 0.9579645120614222,
+    "variance": 1.3418312846802967
+  },
+  "leviN13": {
+    "mean": 1.3497838043956716e-31,
+    "variance": 0
+  },
+  "salomon": {
+    "mean": 0.5348748819630094,
+    "variance": 0.06227463469276303
+  },
+  "wolfe": {
+    "mean": -10,
+    "variance": 0
+  }
+}

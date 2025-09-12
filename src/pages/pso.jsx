@@ -126,10 +126,11 @@ export default function PSO() {
       0.726,
       setData
     );
-    // result = [result[0].toFixed(5), result[1]?.toFixed(5) || 0];
+
+    console.log(result);
 
     setGBest(result.gbest.map((e) => e.toFixed(5)).join(", "));
-    setOptimalValue(result.bestFitness.toFixed(5));
+    setOptimalValue(result.bestFitness.toExponential());
     setIsRunning(false);
   };
   useEffect(() => {
