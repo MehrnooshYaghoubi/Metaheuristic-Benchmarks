@@ -132,29 +132,29 @@
       },
       {
         "name": "Bohachevsky N. 1",
-        "formula": "",
+        "formula": "f(x, y) = x^2 + 2y^2 -0.3cos(3\\pi x)-0.4cos(4\\pi y)+0.7",
         "dimensionality": "2-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
-        "differentiability": "",
-        "separability": "",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "differentiability": "not specified",
+        "separability": "not specified",
+        "input_domain": [-100,100],
+        "global_minima": "0",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Bohachevsky N. 2",
-        "formula": "",
+        "formula": "f(x, y)=x^2 + 2y^2 -0.3cos(3\\pi x)cos(4\\pi y)+0.3",
         "dimensionality": "2-dimensional",
-        "continuity": "",
+        "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-100,100],
+        "global_minima": "0",
+        "minimizer": "(0,0)"
       },
       {
         "name": "Booth",
@@ -835,42 +835,42 @@
       },
       {
         "name": "Xin-She Yang N. 3",
-        "formula": "",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n) =exp(-\\sum_{i=1}^{n}(x_i / \\beta)^{2m}) - 2exp(-\\sum_{i=1}^{n}x_i^2) \\prod_{i=1}^{n}cos^ 2(x_i) ",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "unimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-6.28318530718, 6.28318530718],
+        "global_minima": "-1",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Xin-She Yang N. 4",
-        "formula": "",
+        "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\left(\\sum_{i=1}^{n}sin^2(x_i)-e^{-\\sum_{i=1}^{n}x_i^2}\\right)e^{-\\sum_{i=1}^{n}{sin^2\\sqrt{|x_i|}}}",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "non-differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-10, 10],
+        "global_minima": "-1",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Zakharov",
-        "formula": "",
+        "formula": "f(\\textbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^n x_i^{2}+(\\sum_{i=1}^n 0.5ix_i)^2 + (\\sum_{i=1}^n 0.5ix_i)^4",
         "dimensionality": "n-dimensional",
         "continuity": "continuous",
         "modality": "unimodal",
         "convexity": "convex",
         "differentiability": "not specified",
         "separability": "not specified",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-5,10],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       }
     ]
 }
