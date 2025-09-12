@@ -125,13 +125,42 @@ class ThreadManager {
 async function main() {
   // Your list of algorithms
   const algorithms = [
-    "bohachevskyN1",
     "ackleyN2",
+    "bohachevskyN1",
+    "booth",
+    "sumOfSquares",
     "sphere",
     "brent",
     "dropWave",
     "matyas",
     "schwefel220",
+    "schwefel221",
+    "schwefel222",
+    "schwefel223",
+    "Zakharov",
+    "brown",
+    "exponential",
+    "griewank",
+    "leon",
+    "powellSum",
+    "ridge",
+    "schafferN1",
+    "schafferN2",
+    "schafferN3",
+    "schafferN4",
+    "threeHumpCamel",
+    "trid",
+    "xinSheYangN3",
+    "ackley",
+    "ackleyN3",
+    "ackleyN4",
+    "adjiman",
+    "alpineN1",
+    "alpineN2",
+    "bartelsConn",
+    "beale",
+    "bohachevskyN2",
+    "bukinN6",
     "bird",
     "deckkersAarts",
     "goldsteinPrice",
@@ -139,9 +168,33 @@ async function main() {
     "leviN13",
     "salomon",
     "wolfe",
+    "carromTable",
+    "crossInTray",
+    "easom",
+    "eggCrate",
+    "elAttarVidyasagarDutta",
+    "forrester",
+    "gramacyLee",
+    "himmelblau",
+    "holderTable",
+    "keane",
+    "mccormick",
+    "periodic",
+    "qing",
+    "quartic",
+    "rastrigin",
+    "rosenbrock",
+    "schwefel",
+    "shubert3",
+    "shubertN4",
+    "shubert",
+    "styblinskiTank",
+    "xinSheYang",
+    "xinSheYangN2",
+    "xinSheYangN4",
   ];
 
-  const numberOfThreads = 4; // Set your desired number of threads
+  const numberOfThreads = 8; // Set your desired number of threads
   const workerPath = path.resolve("./worker.js"); // Path to your worker file
   const dataFilePath = "./data.json"; // Path where results will be saved
 
@@ -184,6 +237,7 @@ async function main() {
 main();
 
 import { DataReader } from "./reader_utility.js"; // Update path if needed
+import { json } from "stream/consumers";
 
 async function runTest() {
   console.log("🚀 Starting Multi-Threading Test...\n");
@@ -207,7 +261,7 @@ async function runTest() {
   ];
 
   // Test configuration
-  const numberOfThreads = 4; // Adjust as needed
+  const numberOfThreads = 8; // Adjust as needed
   const workerPath = path.resolve("./worker.js"); // Path to your updated worker
   const dataFilePath = "./data.json"; // Output file
 

@@ -28,17 +28,16 @@ import {
   threeHumpCamel,
   trid,
   xinSheYangN3,
-} from "./main.js";
-
-// Map benchmark names to functions
-const benchmarkMap = {
-  bohachevskyN1,
-  ackleyN2,
-  sphere,
-  brent,
-  dropWave,
-  matyas,
-  schwefel220,
+  ackley,
+  ackleyN3,
+  ackleyN4,
+  adjiman,
+  alpineN1,
+  alpineN2,
+  bartelsConn,
+  beale,
+  bohachevskyN2,
+  bukinN6,
   bird,
   deckkersAarts,
   goldsteinPrice,
@@ -46,9 +45,105 @@ const benchmarkMap = {
   leviN13,
   salomon,
   wolfe,
+  carromTable,
+  crossInTray,
+  easom,
+  eggCrate,
+  elAttarVidyasagarDutta,
+  forrester,
+  gramacyLee,
+  himmelblau,
+  holderTable,
+  keane,
+  mccormick,
+  periodic,
+  qing,
+  quartic,
+  rastrigin,
+  rosenbrock,
+  schwefel,
+  shubert3,
+  shubertN4,
+  shubert,
+  styblinskiTank,
+  xinSheYang,
+  xinSheYangN2,
+  xinSheYangN4,
+} from "./main.js";
+
+// Map benchmark names to functions
+const benchmarkMap = {
+  ackleyN2,
+  bohachevskyN1,
+  booth,
+  sumOfSquares,
+  sphere,
+  brent,
+  dropWave,
+  matyas,
+  schwefel220,
+  schwefel221,
+  schwefel222,
+  schwefel223,
+  Zakharov,
+  brown,
+  exponential,
+  griewank,
+  leon,
+  powellSum,
+  ridge,
+  schafferN1,
+  schafferN2,
+  schafferN3,
+  schafferN4,
+  threeHumpCamel,
+  trid,
+  xinSheYangN3,
+  ackley,
+  ackleyN3,
+  ackleyN4,
+  adjiman,
+  alpineN1,
+  alpineN2,
+  bartelsConn,
+  beale,
+  bohachevskyN2,
+  bukinN6,
+  bird,
+  deckkersAarts,
+  goldsteinPrice,
+  happyCat,
+  leviN13,
+  salomon,
+  wolfe,
+  carromTable,
+  crossInTray,
+  easom,
+  eggCrate,
+  elAttarVidyasagarDutta,
+  forrester,
+  gramacyLee,
+  himmelblau,
+  holderTable,
+  keane,
+  mccormick,
+  periodic,
+  qing,
+  quartic,
+  rastrigin,
+  rosenbrock,
+  schwefel,
+  shubert3,
+  shubertN4,
+  shubert,
+  styblinskiTank,
+  xinSheYang,
+  xinSheYangN2,
+  xinSheYangN4,
 };
 
 import fs from "fs/promises"; // Make sure you import fs
+import { Genetic } from "../Genetic Algorithm/main.js";
 
 // Get assigned benchmarks and thread ID
 const { benchmarks, threadId } = workerData;
@@ -79,37 +174,71 @@ async function appendToDataFile(data) {
   );
 }
 
-async function runBenchmarks(list) {
+async function runBenchmarks(list, algo) {
   const results = {};
   for (let modal of list) {
     const modalResults = [];
     const startTime = Date.now();
 
-    const runs = Array.from({ length: 20 }, (_, i) =>
-      StandardPSO(
-        50,
-        30,
-        -10,
-        10,
-        40000,
-        modal,
-        0.74,
-        1.42,
-        1.42,
-        null,
-        false
-      ).then((res) => {
-        modalResults.push(res.bestFitness);
-        parentPort.postMessage({
-          type: "run",
-          modal: modal.name,
-          run: i + 1,
-          bestFitness: res.bestFitness,
-          threadId: threadId,
+    const runs = Array.from({ length: 20 }, (_, i) => {
+      if (algo == "PSO") {
+        console.log("PSO Algorithm is selected!");
+
+        return StandardPSO(
+          50,
+          30,
+          -10,
+          10,
+          60000,
+          modal,
+          0.74,
+          1.42,
+          1.42,
+          null,
+          false
+        ).then((res) => {
+          modalResults.push(res.bestFitness);
+          parentPort.postMessage({
+            type: "run",
+            modal: modal.name,
+            run: i + 1,
+            bestFitness: res.bestFitness,
+            threadId: threadId,
+          });
+          return res;
         });
-        return res;
-      })
-    );
+      } else if (algo == "Genetic") {
+        console.log("Genetic Algorithm is selected!");
+        const gen = new Genetic(
+          50,
+          0.01,
+          0.75,
+          modal,
+          "BL-x",
+          "Roulette Wheel",
+          "Max Generations",
+          "Real Number",
+          "Gaussian Mutation",
+          "Elitism",
+          50,
+          -10,
+          10,
+          40000
+        );
+
+        return gen.runAlgorithm.then((res) => {
+          modalResults.push(res);
+          parentPort.postMessage({
+            type: "run",
+            modal: modal.name,
+            run: i + 1,
+            bestFitness: res,
+            threadId: threadId,
+          });
+          return res;
+        });
+      }
+    });
 
     await Promise.all(runs);
 
@@ -154,8 +283,7 @@ async function runBenchmarks(list) {
   }
   return results;
 }
-
-runBenchmarks(mappedBenchmarks)
+runBenchmarks(mappedBenchmarks, "Genetic")
   .then((res) => {
     console.log(`Thread ${threadId} completed all benchmarks`);
     parentPort.postMessage({

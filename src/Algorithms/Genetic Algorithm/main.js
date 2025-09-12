@@ -138,6 +138,8 @@ export class Genetic {
         await new Promise((resolve) => setTimeout(resolve, 0));
       }
     }
+
+    return bestFitness;
   }
   top10() {
     let replica = this.population.map((ind) => {
