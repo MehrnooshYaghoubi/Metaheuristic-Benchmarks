@@ -16,23 +16,6 @@ import {
   wolfe,
 } from "../Benchmarks/main.js";
 
-import { writeFile } from "fs/promises";
-
-/**
- * Save a JavaScript object to a JSON file
- * @param {string} filePath - path to the JSON file
- * @param {object} obj - JavaScript object to save
- */
-export async function saveObjectToJSON(filePath, obj) {
-  try {
-    const jsonData = JSON.stringify(obj, null, 2); // pretty-print with 2-space indentation
-    await writeFile(filePath, jsonData, "utf-8");
-    console.log(`Object saved to ${filePath}`);
-  } catch (err) {
-    console.error("Error writing JSON file:", err);
-  }
-}
-
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -211,4 +194,3 @@ async function Benchmarks() {
 
   await saveObjectToJSON("data.json", results);
 }
-Benchmarks();

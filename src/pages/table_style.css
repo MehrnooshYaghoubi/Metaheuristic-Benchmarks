@@ -1,0 +1,89 @@
+/* --- Table Container --- */
+.tabulator {
+  font-size: 16px; /* smoother size than 20px */
+  line-height: 1.5;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #121212;
+  color: #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Header --- */
+.tabulator .tabulator-header {
+  background: #0f0f0f;
+  color: #fff;
+  font-weight: bold;
+  height: 42px;
+  border-bottom: 1px solid #333;
+  letter-spacing: 0.5px;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  background: transparent; /* use gradient from header */
+  border-right: none;
+  padding: 8px;
+}
+
+/* --- Rows --- */
+.tabulator .tabulator-row {
+  background: #181818;
+  transition: background-color 0.2s;
+}
+
+.tabulator .tabulator-row:nth-child(even) {
+  background: #202020;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: #2a2a2a !important;
+}
+
+/* --- Table Body --- */
+.tabulator .tabulator-tableholder {
+  background-color: #121212;
+}
+
+/* --- Footer --- */
+.tabulator-footer {
+  background: #0f0f0f !important;
+  color: #aaa;
+  border-top: 1px solid #333;
+  padding: 8px;
+}
+
+/* --- Pagination Buttons --- */
+.tabulator-paginator button {
+  padding: 6px 12px !important;
+  background-color: #1f1f1f !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  border-radius: 6px !important;
+  margin: 0 3px !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  font-size: 13px !important;
+}
+
+.tabulator-paginator button:hover {
+  background-color: #333 !important;
+  border-color: #666 !important;
+}
+
+.tabulator-paginator button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+/* --- Active Page --- */
+.tabulator-paginator .tabulator-page.active {
+  background-color: #6200ea !important; /* purple accent */
+  border-color: #6200ea !important;
+  color: #fff !important;
+}
+
+.tabulator .tabulator-cell {
+  border-right: rgb(77, 77, 77) 1px solid;
+  border-left: rgb(77, 77, 77) 1px solid;
+}
