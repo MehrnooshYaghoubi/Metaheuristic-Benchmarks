@@ -109,8 +109,7 @@ export function powellSum(vec) {
   return vec.reduce((acc, xi, i) => acc + Math.abs(xi) ** (i + 2), 0);
 }
 
-
-export function ridge(vec, d = 1, alpha = 2) {
+export function ridge(vec, d = 1, alpha = 0.5) {
   const x1 = vec[0];
   const sumOfSquares = vec.slice(1).reduce((acc, xi) => acc + xi ** 2, 0);
   return x1 + d * Math.pow(sumOfSquares, alpha);
@@ -146,6 +145,88 @@ export function threeHumpCamel(vec) {
 }
 
 // Multimodal
+
+export function ackley(vec, a = 20, b = 0.2, c = 2 * Math.PI) {
+  const n = vec.length;
+  const sumOfSquares = vec.reduce((acc, xi) => acc + xi ** 2, 0);
+  const sumOfCos = vec.reduce((acc, xi) => acc + Math.cos(c * xi), 0);
+
+  return (
+    -a * Math.exp(-b * Math.sqrt(sumOfSquares / n)) -
+    Math.exp(sumOfCos / n) +
+    a +
+    Math.exp(1)
+  );
+}
+
+export function ackleyN3(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    -200 * Math.exp(-0.2 * Math.sqrt(x ** 2 + y ** 2)) +
+    5 * Math.exp(Math.cos(3 * x) + Math.sin(3 * y))
+  );
+}
+
+export function ackleyN4(vec) {
+  const n = vec.length;
+  let sum = 0;
+
+  for (let i = 0; i < n - 1; i++) {
+    const xi = vec[i];
+    const xi1 = vec[i + 1];
+    sum +=
+      Math.exp(-0.2) * Math.sqrt(xi ** 2 + xi1 ** 2) +
+      3 * (Math.cos(2 * xi) + Math.sin(2 * xi1));
+  }
+
+  return sum;
+}
+
+export function adjiman(vec) {
+  const [x, y] = vec; // 2D only
+  return Math.cos(x) * Math.sin(y) - x / (y ** 2 + 1);
+}
+
+export function alpineN1(vec) {
+  return vec.reduce((acc, xi) => acc + Math.abs(xi * Math.sin(xi) + 0.1 * xi), 0);
+}
+
+export function alpineN2(vec) {
+  return vec.reduce((acc, xi) => acc * Math.sqrt(xi) * Math.sin(xi), 1);
+}
+
+export function bartelsConn(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    Math.abs(x ** 2 + y ** 2 + x * y) +
+    Math.abs(Math.sin(x)) +
+    Math.abs(Math.cos(y))
+  );
+}
+
+export function beale(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    (1.5 - x + x * y) ** 2 +
+    (2.25 - x + x * y ** 2) ** 2 +
+    (2.625 - x + x * y ** 3) ** 2
+  );
+}
+
+export function bohachevskyN2(vec) {
+  const [x, y] = vec; // 2D only
+  return (
+    x ** 2 +
+    2 * y ** 2 -
+    0.3 * Math.cos(3 * Math.PI * x) * Math.cos(4 * Math.PI * y) +
+    0.3
+  );
+}
+
+export function bukinN6(vec) {
+  const [x, y] = vec; // 2D only
+  return 100 * Math.sqrt(Math.abs(y - 0.01 * x ** 2)) + 0.01 * Math.abs(x + 10);
+}
 
 export function bird(vec) {
   const [x, y] = vec; // 2D only
