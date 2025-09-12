@@ -1,4 +1,4 @@
-// ------- unimodals ------- 
+// ------- unimodals -------
 
 export function ackleyN2(vec) {
   const [x, y] = vec; // destructure array
@@ -50,7 +50,7 @@ export function schwefel220(vec) {
 }
 
 export function schwefel221(vec) {
-  return Math.max(...vec.map(xi => Math.abs(xi)));
+  return Math.max(...vec.map((xi) => Math.abs(xi)));
 }
 
 export function schwefel222(vec) {
@@ -62,7 +62,6 @@ export function schwefel222(vec) {
 export function schwefel223(vec) {
   return vec.reduce((acc, xi) => acc + xi ** 10, 0);
 }
-
 
 export function Zakharov(vec) {
   const n = vec.length;
@@ -95,7 +94,10 @@ export function griewank(vec) {
   const n = vec.length;
 
   const sum = vec.reduce((acc, xi) => acc + xi ** 2 / 4000, 0);
-  const product = vec.reduce((acc, xi, i) => acc * Math.cos(xi / Math.sqrt(i + 1)), 1);
+  const product = vec.reduce(
+    (acc, xi, i) => acc * Math.cos(xi / Math.sqrt(i + 1)),
+    1
+  );
 
   return 1 + sum - product;
 }
@@ -130,18 +132,26 @@ export function schafferN2(vec) {
 export function schafferN3(vec) {
   const [x, y] = vec; // 2D only
   const r2 = x ** 2 + y ** 2;
-  return 0.5 + (Math.sin(Math.cos(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+  return (
+    0.5 +
+    (Math.sin(Math.cos(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) /
+      (1 + 0.001 * r2) ** 2
+  );
 }
 
 export function schafferN4(vec) {
   const [x, y] = vec; // 2D only
   const r2 = x ** 2 + y ** 2;
-  return 0.5 + (Math.cos(Math.sin(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) / (1 + 0.001 * r2) ** 2;
+  return (
+    0.5 +
+    (Math.cos(Math.sin(Math.abs(x ** 2 - y ** 2))) ** 2 - 0.5) /
+      (1 + 0.001 * r2) ** 2
+  );
 }
 
 export function threeHumpCamel(vec) {
   const [x, y] = vec; // 2D only
-  return 2 * x ** 2 - 1.05 * x ** 4 + (x ** 6) / 6 + x * y + y ** 2;
+  return 2 * x ** 2 - 1.05 * x ** 4 + x ** 6 / 6 + x * y + y ** 2;
 }
 
 export function trid(vec) {
@@ -158,7 +168,7 @@ export function xinSheYangN3(vec, beta = 15, m = 5) {
   return Math.exp(-sum1) - 2 * Math.exp(-sum2) * product;
 }
 
-//  ------- Multimodal ------- 
+//  ------- Multimodal -------
 
 export function ackley(vec, a = 20, b = 0.2, c = 2 * Math.PI) {
   const n = vec.length;
@@ -202,7 +212,10 @@ export function adjiman(vec) {
 }
 
 export function alpineN1(vec) {
-  return vec.reduce((acc, xi) => acc + Math.abs(xi * Math.sin(xi) + 0.1 * xi), 0);
+  return vec.reduce(
+    (acc, xi) => acc + Math.abs(xi * Math.sin(xi) + 0.1 * xi),
+    0
+  );
 }
 
 export function alpineN2(vec) {
@@ -302,7 +315,7 @@ export function wolfe(vec) {
 export function carromTable(vec) {
   const [x, y] = vec; // 2D only
   return (
-    -1 / 30 *
+    (-1 / 30) *
     Math.exp(2 * Math.abs(1 - Math.sqrt(x ** 2 + y ** 2) / Math.PI)) *
     Math.cos(x) ** 2 *
     Math.cos(y) ** 2
@@ -319,10 +332,13 @@ export function crossInTray(vec) {
   return -0.0001 * Math.pow(term + 1, 0.1);
 }
 
-
 export function easom(vec) {
   const [x, y] = vec; // 2D only
-  return -Math.cos(x) * Math.cos(y) * Math.exp((-(x - Math.PI)) ** 2 - (-(y - Math.PI)) ** 2);
+  return (
+    -Math.cos(x) *
+    Math.cos(y) *
+    Math.exp((-(x - Math.PI)) ** 2 - (-(y - Math.PI)) ** 2)
+  );
 }
 
 export function eggCrate(vec) {
@@ -333,9 +349,7 @@ export function eggCrate(vec) {
 export function elAttarVidyasagarDutta(vec) {
   const [x, y] = vec; // 2D only
   return (
-    (x ** 2 + y - 10) ** 2 +
-    (x + y ** 2 - 7) ** 2 +
-    (x ** 2 + y ** 3 - 1) ** 2
+    (x ** 2 + y - 10) ** 2 + (x + y ** 2 - 7) ** 2 + (x ** 2 + y ** 3 - 1) ** 2
   );
 }
 
@@ -363,9 +377,8 @@ export function holderTable(vec) {
 
 export function keane(vec) {
   const [x, y] = vec; // 2D only
-  return (
-    -Math.sin(x - y) ** 2 *
-    Math.sin(x + y) ** 2 /
+  return -(
+    (Math.sin(x - y) ** 2 * Math.sin(x + y) ** 2) /
     Math.sqrt(x ** 2 + y ** 2)
   );
 }
@@ -393,7 +406,10 @@ export function rastrigin(vec) {
   const n = vec.length;
   return (
     10 * n +
-    vec.reduce((acc, xi) => acc + (xi ** 2 - 10 * Math.cos(2 * Math.PI * xi)), 0)
+    vec.reduce(
+      (acc, xi) => acc + (xi ** 2 - 10 * Math.cos(2 * Math.PI * xi)),
+      0
+    )
   );
 }
 
@@ -401,8 +417,7 @@ export function rosenbrock(vec, a = 1, b = 100) {
   return vec
     .slice(0, -1)
     .reduce(
-      (acc, xi, i) =>
-        acc + b * (vec[i + 1] - xi ** 2) ** 2 + (a - xi) ** 2,
+      (acc, xi, i) => acc + b * (vec[i + 1] - xi ** 2) ** 2 + (a - xi) ** 2,
       0
     );
 }
@@ -453,8 +468,7 @@ export function shubert(vec) {
 
 export function styblinskiTank(vec) {
   return (
-    0.5 *
-    vec.reduce((acc, xi) => acc + (xi ** 4 - 16 * xi ** 2 + 5 * xi), 0)
+    0.5 * vec.reduce((acc, xi) => acc + (xi ** 4 - 16 * xi ** 2 + 5 * xi), 0)
   );
 }
 
@@ -476,8 +490,5 @@ export function xinSheYangN4(vec) {
     0
   );
 
-  return (
-    (sumSinSquared - Math.exp(-sumSquares)) * Math.exp(-sumSinRoot)
-  );
+  return (sumSinSquared - Math.exp(-sumSquares)) * Math.exp(-sumSinRoot);
 }
-

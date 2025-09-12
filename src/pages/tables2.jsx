@@ -10,85 +10,34 @@ import * as XLSX from "xlsx";
 import { data, NavLink } from "react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import main_data from "./../Algorithms/Benchmarks/functions.json";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 window.XLSX = XLSX;
 window.jspdf = window.jspdf || {};
 window.jspdf.jsPDF = jsPDF;
-import katex from "katex";
-import "katex/dist/katex.min.css";
 
 console.log(main_data);
-const data1 = main_data.functions.filter((item) => item.modality == "unimodal");
+const data1 = main_data.functions.filter(
+  (item) => item.modality == "multimodal"
+);
 
 const function_columns = [
   {
     title: "Function",
     field: "name",
   },
-  {
-    title: "Dimensionality",
-    field: "dimensionality",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      let newValue = value.split("-")[0];
-
-      return katex.renderToString(newValue);
-    },
-  },
-  {
-    title: "Continuity",
-    field: "continuity",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      if (value === "continuous") {
-        return "<span style='color: #36f75d;'>✓</span>";
-      } else if (value === "non-continuous") {
-        return "<span style='color: #f75736;'>✗</span>";
-      }
-    },
-  },
-  {
-    title: "Convexity",
-    field: "convexity",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      if (value === "convex") {
-        return "<span style='color: #36f75d;'>✓</span>";
-      } else if (value === "non-convex") {
-        return "<span style='color: #f75736;'>✗</span>";
-      }
-    },
-  },
-  {
-    title: "Differentiability",
-    field: "differentiability",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      if (value === "differentiable") {
-        return "<span style='color: #36f75d;'>✓</span>";
-      } else if (value === "non-differentiable") {
-        return "<span style='color: #f75736;'>✗</span>";
-      }
-    },
-  },
-  {
-    title: "Separability",
-    field: "separability",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      if (value === "separable") {
-        return "<span style='color: #36f75d;'>✓</span>";
-      } else if (value === "non-separable") {
-        return "<span style='color: #f75736;'>✗</span>";
-      }
-    },
-  },
+  { title: "Dimensionality", field: "dimensionality" },
+  { title: "Continuity", field: "continuity" },
+  { title: "Convexity", field: "convexity" },
+  { title: "Differentiability", field: "differentiability" },
+  { title: "Separability", field: "separability" },
   {
     title: "Input Domain",
     field: "input_domain",
     resizable: true,
     formatter: (cell) => {
       const value = cell.getValue();
-
+      let latex = "";
       if (!Array.isArray(value) || value.length !== 2) {
         return "";
       }
@@ -102,12 +51,10 @@ const function_columns = [
         latex = value
           .map((v, i) => `x_${i + 1} ∈ [${v.join(", ")}]`)
           .join(", ");
+      } else {
+        latex = `\\text{For } x_i \\in [${value.join(", ")}]`;
       }
 
-      // generate LaTeX string
-      const latex = `\\text{For } x_i \\in [${value.join(", ")}]`;
-
-      // convert LaTeX to HTML
       const html = katex.renderToString(latex, { throwOnError: false });
 
       // **return HTML string** directly
@@ -115,18 +62,12 @@ const function_columns = [
     },
   },
   { title: "Global Minimum", field: "global_minimum" },
-  {
-    title: "Minimizer",
-    field: "minimizer",
-    formatter: (cell) => {
-      const value = cell.getValue();
-      return katex.renderToString(value, { throwOnError: false });
-    },
-  },
+  { title: "Minimizer", field: "minimizer" },
 ];
 
-export default function BenchmarkTable() {
+export default function BenchmarkTable2() {
   const [table, setTable] = useState(null);
+  const [page, setPage] = useState(1);
 
   const handleExport = (type) => {
     if (!table) {
@@ -198,10 +139,17 @@ export default function BenchmarkTable() {
         </button>
       </div>
       <div className="px-4 my-4 flex items-center justify-between  gap-4">
-        <h2 className="font-bold text-xl">Unimodal Table</h2>
+        <h2 className="font-bold text-xl">Multimodal Table</h2>
         <div className="flex gap-1">
           <NavLink
-            to="/tables2"
+            to={"/tables"}
+            className="flex items-center gap-1 text-xs cursor-pointer hover:bg-neutral-500 transition duration-200 py-1 rounded-full bg-neutral-800 px-3"
+          >
+            <ArrowLeft size={16} />
+            Previous Table
+          </NavLink>
+          <NavLink
+            to="/tables3"
             className="flex items-center gap-1 text-xs cursor-pointer hover:bg-neutral-500 transition duration-200 py-1 rounded-full bg-neutral-800 px-3"
           >
             Next Table <ArrowRight size={16} />
@@ -214,7 +162,6 @@ export default function BenchmarkTable() {
           columns={function_columns}
           layout="fitDataFill"
           options={{
-            resizableColumns: true,
             pagination: "true",
             paginationSize: 20,
             moveableColumns: true,

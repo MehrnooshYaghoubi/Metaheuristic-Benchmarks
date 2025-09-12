@@ -87,3 +87,7 @@
   border-right: rgb(77, 77, 77) 1px solid;
   border-left: rgb(77, 77, 77) 1px solid;
 }
+
+.tabulator .tabulator-cell:not(:first-child) {
+  text-align: center;
+}
