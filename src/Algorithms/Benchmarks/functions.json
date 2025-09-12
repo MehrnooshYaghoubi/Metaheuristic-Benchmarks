@@ -796,42 +796,42 @@
       },
       {
         "name": "Wolfe",
-        "formula": "",
+        "formula": "f(x, y, z) = \\frac{4}{3}(x^2 + y^2 - xy)^{0.75} + z",
         "dimensionality": "3-dimensional",
         "continuity": "continuous",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": "[0,2]",
+        "global_minima": "0",
+        "minimizer": "(0,0,0)"
       },
       {
         "name": "Xin-She Yang",
-        "formula": "",
+        "formula": "f(\mathbf x)=f(x_1, ...,x_n)=\sum_{i=1}^{n}\epsilon_i|x_i|^i",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "non-differentiable",
         "separability": "separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-5, 5],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Xin-She Yang N. 2",
-        "formula": "",
+        "formula": "f(\mathbf{x})=f(x_1, ..., x_n)=(\sum_{i=1}^{n}|x_i|)exp(-\sum_{i=1}^{n}sin(x_i^2))",
         "dimensionality": "n-dimensional",
         "continuity": "not specified",
         "modality": "multimodal",
         "convexity": "non-convex",
         "differentiability": "non-differentiable",
         "separability": "non-separable",
-        "input_domain": "",
-        "global_minima": "",
-        "minimizer": ""
+        "input_domain": [-6.28318530718, 6.28318530718],
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
       },
       {
         "name": "Xin-She Yang N. 3",
