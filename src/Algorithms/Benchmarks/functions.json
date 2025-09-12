@@ -1,0 +1,122 @@
+{
+    "functions": [
+      {
+        "name": "Ackley",
+        "formula": "f(\\textbf{x}) = f(x_1, ..., x_n)= -a.exp(-b\\sqrt{\\frac{1}{n}\\sum_{i=1}^{n}x_i^2})-exp(\\frac{1}{n}\\sum_{i=1}^{n}cos(cx_i))+ a + exp(1)",
+        "dimensionality": "n-dimensional",
+        "continuity": "continuous",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "not specified",
+        "input_domain": "[−32,32]",
+        "global_minima": "0",
+        "minimizer": "(0,…,0)"
+      },
+      {
+        "name": "Ackley N. 2",
+        "formula": "f(x, y) = -200e^{-0.2\\sqrt{x^2 + y^2}}",
+        "dimensionality": "2-dimensional",
+        "continuity": "not specified",
+        "modality": "unimodal",
+        "convexity": "convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "[−32,32]",
+        "global_minima": "−200",
+        "minimizer": "(0,0)"
+      },
+      {
+        "name": "Ackley N. 3",
+        "formula": "f(x, y) = -200e^{-0.2\\sqrt{x^2 + y^2}} + 5e^{cos(3x) + sin(3y)}",
+        "dimensionality": "2-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "[−32,32]",
+        "global_minima": "−195.629028238419",
+        "minimizer": "(±0.682584587365898,−0.36075325513719)"
+      },
+      {
+        "name": "Ackley N. 4",
+        "formula": "",
+        "dimensionality": "n-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "[−35,35]",
+        "global_minima": "−4.590101633799122",
+        "minimizer": "(−1.51,−0.755)"
+      },
+      {
+        "name": "Adjiman",
+        "dimensionality": "2-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      },
+      {
+        "name": "Alpine N. 1",
+        "dimensionality": "n-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      },
+      {
+        "name": "Alpine N. 2",
+        "dimensionality": "n-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      },
+      {
+        "name": "Bartels Conn",
+        "dimensionality": "2-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "non-differentiable",
+        "separability": "non-separable",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      },
+      {
+        "name": "Beale",
+        "dimensionality": "2-dimensional",
+        "continuity": "continuous",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "not specified",
+        "separability": "not specified",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      },
+      {
+        "name": "Bird",
+        "dimensionality": "2-dimensional",
+        "continuity": "not specified",
+        "modality": "multimodal",
+        "convexity": "non-convex",
+        "differentiability": "differentiable",
+        "separability": "non-separable",
+        "input_domain": "not specified",
+        "global_minima": "not specified"
+      }
+    ]
+  }
