@@ -1,3 +1,5 @@
+import { safeObjective, objectiveToFitness } from "./safe.js";
+
 function random_selection(population) {
   let randomIndex = Math.floor(Math.random() * population.length);
   let randomIndex2;
@@ -6,45 +8,37 @@ function random_selection(population) {
   } while (randomIndex2 === randomIndex);
   return [population[randomIndex], population[randomIndex2]];
 }
+export function roulette_wheel_selection(population, objectiveFn) {
+  // Map objective -> fitness (higher better)
+  const objectives = population.map((ind) => safeObjective(objectiveFn, ind));
+  const fitnesses = objectives.map((obj) => objectiveToFitness(obj));
 
-function roulette_wheel_selection(population, fitness) {
-  const fitness_of_individuals = population.map(fitness);
-  const minFitness = Math.min(...fitness_of_individuals);
-
-  // Shift fitness values to be all positive
-  const shifted_fitness = fitness_of_individuals.map(
-    (fit) => fit - minFitness + 1e-6
-  );
-
-  const sum_of_fitness = shifted_fitness.reduce((acc, val) => acc + val, 0);
-
-  if (sum_of_fitness === 0) {
-    // Fallback: select two random individuals
-    const indices = Array.from({ length: 2 }, () =>
-      Math.floor(Math.random() * population.length)
-    );
-    return indices.map((i) => population[i]);
+  const sum = fitnesses.reduce((a, b) => a + b, 0);
+  if (!isFinite(sum) || sum <= 0) {
+    // fallback: pick two random distinct individuals
+    const a = Math.floor(Math.random() * population.length);
+    let b = Math.floor(Math.random() * population.length);
+    while (b === a) b = Math.floor(Math.random() * population.length);
+    return [population[a], population[b]];
   }
 
-  // Normalize fitness into probabilities
-  const probabilities = shifted_fitness.map((fit) => fit / sum_of_fitness);
+  function pickOne() {
+    let r = Math.random() * sum;
+    for (let i = 0; i < population.length; i++) {
+      r -= fitnesses[i];
+      if (r <= 0) return population[i];
+    }
+    return population[population.length - 1]; // numerical fallback
+  }
 
-  // Build cumulative distribution
-  const cumulative = [];
-  probabilities.reduce((acc, val, i) => {
-    const next = acc + val;
-    cumulative[i] = next;
-    return next;
-  }, 0);
-
-  // Pick one individual based on roulette wheel
-  const pick = () => {
-    const r = Math.random();
-    const index = cumulative.findIndex((p) => p >= r) ?? cumulative.length - 1;
-    return population[index];
-  };
-
-  return [pick(), pick()];
+  let p1 = pickOne();
+  let p2 = pickOne();
+  // ensure two distinct parents (optional)
+  if (p1 === p2) {
+    let idx = Math.floor(Math.random() * population.length);
+    p2 = population[idx];
+  }
+  return [p1, p2];
 }
 
 function rank_based_selection(population, fitness) {
@@ -82,25 +76,23 @@ function rank_based_selection(population, fitness) {
 
   return [pick(), pick()];
 }
-function tournament_selection(population, fitness) {
-  const tournament_size = 3;
-  let result = [];
-  for (let i = 0; i <= 1; i++) {
-    const selected_individuals = [];
-    for (let j = 0; j < tournament_size; j++) {
-      const random_index = Math.floor(Math.random() * population.length);
-      selected_individuals.push(population[random_index]);
+function tournamentSelection(population, objectiveFn, k = 3) {
+  function pick() {
+    let best = null;
+    let bestObj = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < k; i++) {
+      const candidate =
+        population[Math.floor(Math.random() * population.length)];
+      const obj = safeObjective(objectiveFn, candidate);
+      if (obj < bestObj) {
+        bestObj = obj;
+        best = candidate;
+      }
     }
-
-    const best_individual = selected_individuals.reduce((best, current) => {
-      return fitness(current) > fitness(best) ? current : best;
-    });
-
-    result.push(best_individual);
+    return best;
   }
-  return result;
+  return [pick(), pick()];
 }
-
 function truncation_selection(population, fitness, fitness_threshold = 0.5) {
   // Pair individuals with their fitness
   const fitness_population = population.map((ind) => ({
@@ -141,7 +133,7 @@ export function selection(
     case "Rank Base":
       return rank_based_selection(population, fitness);
     case "Tournament":
-      return tournament_selection(population, fitness);
+      return tournamentSelection(population, fitness);
     case "Truncation":
       return truncation_selection(population, fitness, fitness_threshold);
     default:

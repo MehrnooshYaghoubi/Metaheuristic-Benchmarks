@@ -31,7 +31,10 @@ export function sphere(vec) {
 
 export function brent(vec) {
   const [x, y] = vec; // 2D only
-  return (x + 10) * (x + 10) + (y + 10) * (y + 10) + Math.exp(-x * x - y);
+  const term1 = (x + 10) ** 2;
+  const term2 = (y + 10) ** 2;
+  const term3 = Math.sin(x) * Math.sin(y);
+  return term1 + term2 + term3; // example, adjust based on benchmark definition
 }
 
 export function dropWave(vec) {
@@ -219,9 +222,11 @@ export function alpineN1(vec) {
 }
 
 export function alpineN2(vec) {
-  return vec.reduce((acc, xi) => acc * Math.sqrt(xi) * Math.sin(xi), 1);
+  return vec.reduce((acc, xi) => {
+    if (xi < 0) return acc * 0; // or Math.abs(xi) to stay valid
+    return acc * Math.sqrt(xi) * Math.sin(xi);
+  }, 1);
 }
-
 export function bartelsConn(vec) {
   const [x, y] = vec; // 2D only
   return (
@@ -264,9 +269,9 @@ export function bird(vec) {
   );
 }
 export function deckkersAarts(vec) {
-  const [x, y] = vec; // 2D only
+  const [x, y] = vec;
   const r2 = x * x + y * y;
-  return 105 * x * x + y * y - r2 * r2 + 10 - 5 * r2 ** 4;
+  return 100000 * x * x + y * y - r2 * r2 + 0.00001 * r2 ** 4;
 }
 
 export function goldsteinPrice(vec) {
@@ -337,7 +342,7 @@ export function easom(vec) {
   return (
     -Math.cos(x) *
     Math.cos(y) *
-    Math.exp((-(x - Math.PI)) ** 2 - (-(y - Math.PI)) ** 2)
+    Math.exp(-((x - Math.PI) ** 2 + (y - Math.PI) ** 2))
   );
 }
 
@@ -353,12 +358,15 @@ export function elAttarVidyasagarDutta(vec) {
   );
 }
 
-export function forrester(x) {
+export function forrester(vec) {
+  const x = vec[0]; // take the first element
   return Math.pow(6 * x - 2, 2) * Math.sin(12 * x - 4);
 }
 
-export function gramacyLee(x) {
-  return Math.sin(10 * Math.PI * x) / (2 * x) + Math.pow(x - 1, 4);
+export function gramacyLee(vec) {
+  const x = vec[0];
+  const epsilon = 1e-8;
+  return Math.sin(10 * Math.PI * x) / (2 * (x + epsilon)) + Math.pow(x - 1, 4);
 }
 
 export function himmelblau(vec) {

@@ -13,7 +13,7 @@ export function meanAndVariance(vec) {
 
 export function toScientific(num, precision = 6, asObject = false) {
   if (typeof num !== "number" || !isFinite(num)) {
-    throw new Error("Input must be a finite number");
+    return "-";
   }
 
   // Handle 0 separately

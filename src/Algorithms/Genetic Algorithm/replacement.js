@@ -1,3 +1,5 @@
+import { safeObjective } from "./safe.js";
+
 function generationalReplacement(oldPopulation, offspring) {
   return offspring;
 }
@@ -5,12 +7,18 @@ function generationalReplacement(oldPopulation, offspring) {
 function elitismReplacement(
   oldPopulation,
   offspring,
-  fitnessFunc,
+  objectiveFn,
   elitismCount = 1
 ) {
-  const combinedPopulation = [...oldPopulation, ...offspring];
-  combinedPopulation.sort((a, b) => fitnessFunc(b) - fitnessFunc(a));
-  return combinedPopulation.slice(0, oldPopulation.length);
+  // Build combined list, sort by objective (lower is better)
+  const combined = [...oldPopulation, ...offspring];
+  combined.sort((a, b) => {
+    const oa = safeObjective(objectiveFn, a);
+    const ob = safeObjective(objectiveFn, b);
+    return oa - ob; // ascending -> lower objective first
+  });
+  // take top N (lowest objective)
+  return combined.slice(0, oldPopulation.length);
 }
 
 function steadyStateReplacement(oldPopulation, offspring, replacementCount) {
@@ -39,7 +47,7 @@ function tournamentReplacement(
     }
     const winner = tournament.reduce(
       (best, individual) =>
-        fitnessFunc(individual) > fitnessFunc(best) ? individual : best,
+        fitnessFunc(individual) < fitnessFunc(best) ? individual : best,
       tournament[0]
     );
     newPopulation.push(winner);
@@ -49,7 +57,7 @@ function tournamentReplacement(
 
 function fitnessBasedReplacement(oldPopulation, offspring, fitnessFunc) {
   const combinedPopulation = [...oldPopulation, ...offspring];
-  combinedPopulation.sort((a, b) => fitnessFunc(b) - fitnessFunc(a));
+  combinedPopulation.sort((a, b) => fitnessFunc(a) - fitnessFunc(b));
   return combinedPopulation.slice(0, oldPopulation.length);
 }
 

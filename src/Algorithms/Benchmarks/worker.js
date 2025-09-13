@@ -147,10 +147,17 @@ import { Genetic } from "../Genetic Algorithm/main.js";
 
 // Get assigned benchmarks and thread ID
 const { benchmarks, threadId } = workerData;
-const mappedBenchmarks = benchmarks.map((name) => benchmarkMap[name]);
+const mappedBenchmarks = benchmarks.map((name) => {
+  const fn = benchmarkMap[name];
+  if (!fn) {
+    console.error(
+      `Thread ${threadId} - Benchmark "${name}" is not defined in benchmarkMap`
+    );
+  }
+  return fn;
+});
 
 console.log(`Thread ${threadId} starting with algorithms:`, benchmarks);
-const dataFilePath = "./data.json";
 // File writing utility with retry mechanism for handling concurrent writes
 async function appendToDataFile(data) {
   let existingData = [];
@@ -182,8 +189,6 @@ async function runBenchmarks(list, algo) {
 
     const runs = Array.from({ length: 20 }, (_, i) => {
       if (algo == "PSO") {
-        console.log("PSO Algorithm is selected!");
-
         return StandardPSO(
           50,
           30,
@@ -208,7 +213,6 @@ async function runBenchmarks(list, algo) {
           return res;
         });
       } else if (algo == "Genetic") {
-        console.log("Genetic Algorithm is selected!");
         const gen = new Genetic(
           50,
           0.01,
@@ -220,13 +224,14 @@ async function runBenchmarks(list, algo) {
           "Real Number",
           "Gaussian Mutation",
           "Elitism",
-          50,
+          30,
           -10,
           10,
-          40000
+          800
         );
 
-        return gen.runAlgorithm.then((res) => {
+        return gen.runAlgorithm().then(() => {
+          let res = gen.bestfit();
           modalResults.push(res);
           parentPort.postMessage({
             type: "run",
@@ -283,7 +288,7 @@ async function runBenchmarks(list, algo) {
   }
   return results;
 }
-runBenchmarks(mappedBenchmarks, "Genetic")
+runBenchmarks(mappedBenchmarks, "PSO")
   .then((res) => {
     console.log(`Thread ${threadId} completed all benchmarks`);
     parentPort.postMessage({

@@ -9,73 +9,250 @@ import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { data, NavLink } from "react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import main_data from "./../Algorithms/Benchmarks/functions.json";
+import pso_data from "./../Algorithms/results/pso.json";
+import ga_data from "./../Algorithms/results/ga.json";
+import { toScientific } from "../Algorithms/Benchmarks/eval";
+import functionsInfoRaw from "./../Algorithms/Benchmarks/functions.json";
 window.XLSX = XLSX;
 window.jspdf = window.jspdf || {};
 window.jspdf.jsPDF = jsPDF;
+const functionsInfo = functionsInfoRaw.functions || functionsInfoRaw;
+function computeErrorStats(results, globalMin) {
+  if (!results || results.length === 0) return null;
 
-console.log(main_data);
-const data1 = main_data.functions.filter((item) => item.modality == "unimodal");
-const data2 = main_data.functions.filter(
-  (item) => item.modality == "multimodal"
-);
+  const errors = results.map((r) => r - globalMin);
+  const mean = errors.reduce((sum, e) => sum + e, 0) / errors.length;
+  const variance =
+    errors.reduce((sum, e) => sum + Math.pow(e - mean, 2), 0) / errors.length;
+
+  return { mean, variance };
+}
+
+function mergeResults(psoJson, gaJson, functionsInfo) {
+  // quick lookup maps
+  const psoMap = new Map(psoJson.map((item) => [item.algorithm, item]));
+  const gaMap = new Map(gaJson.map((item) => [item.algorithm, item]));
+  const fnMap = new Map(
+    functionsInfo.map((f) => [f.name.replace(/\s+/g, "").toLowerCase(), f])
+  );
+
+  const allAlgorithms = new Set([...psoMap.keys(), ...gaMap.keys()]);
+
+  return Array.from(allAlgorithms).map((name) => {
+    const pso = psoMap.get(name);
+    const ga = gaMap.get(name);
+
+    // match function info (case-insensitive)
+    console.log({ name });
+    const funcInfo =
+      fnMap.get(name.toLowerCase()) ||
+      fnMap.get(name.replace(/N\d/, "").toLowerCase()) ||
+      null;
+
+    // safe access
+    const globalMin = funcInfo ? parseFloat(funcInfo.global_minima) : null;
+
+    console.log(funcInfo ? funcInfo.global_minima : "no match", globalMin);
+
+    return {
+      name,
+      globalMin,
+      pso: pso ? pso.statistics : null,
+      ga: ga ? ga.statistics : null,
+      psoError: pso ? computeErrorStats(pso.results, globalMin) : null,
+      gaError: ga ? computeErrorStats(ga.results, globalMin) : null,
+    };
+  });
+}
+
+const main_data = mergeResults(pso_data, ga_data, functionsInfo);
 
 const function_columns = [
   {
     title: "Function",
     field: "name",
   },
-  { title: "Dimensionality", field: "dimensionality" },
-  { title: "Continuity", field: "continuity" },
-  { title: "Convexity", field: "convexity" },
-  { title: "Differentiability", field: "differentiability" },
-  { title: "Separability", field: "separability" },
-  { title: "Input Domain", field: "input_domain" },
-  { title: "Global Minimum", field: "global_minimum" },
-  { title: "Minimizer", field: "minimizer" },
+  {
+    title: "Global Min",
+    field: "globalMin",
+  },
+  {
+    title: "PSO (f)",
+    field: "pso",
+    formatter: (cell) => {
+      const val = cell.getValue();
+      if (!val) return "-";
+      return `μ=${toScientific(val.mean, 6)}, σ²=${toScientific(
+        val.variance,
+        6
+      )}`;
+    },
+  },
+  {
+    title: "GA (f)",
+    field: "ga",
+    formatter: (cell) => {
+      const val = cell.getValue();
+      if (!val) return "-";
+      return `μ=${toScientific(val.mean, 6)}, σ²=${toScientific(
+        val.variance,
+        6
+      )}`;
+    },
+  },
+  {
+    title: "PSO (error)",
+    field: "psoError",
+    formatter: (cell) => {
+      const val = cell.getValue();
+      if (!val) return "-";
+      return `μ=${toScientific(val.mean, 6)}, σ²=${toScientific(
+        val.variance,
+        6
+      )}`;
+    },
+  },
+  {
+    title: "GA (error)",
+    field: "gaError",
+    formatter: (cell) => {
+      const val = cell.getValue();
+      if (!val) return "-";
+      return `μ=${toScientific(val.mean, 6)}, σ²=${toScientific(
+        val.variance,
+        6
+      )}`;
+    },
+  },
 ];
 
 export default function BenchmarkTable3() {
   const [table, setTable] = useState(null);
   const [page, setPage] = useState(1);
 
+  // Build export rows consistently (for PDF, CSV, JSON, XLSX)
+  const buildExportRows = () => {
+    return table.current
+      .getData()
+      .map((row) => [
+        row.name ?? "-",
+        row.globalMin != null ? toScientific(row.globalMin) : "-",
+        safeFormat(row.pso),
+        safeFormat(row.ga),
+        safeFormat(row.psoError),
+        safeFormat(row.gaError),
+      ]);
+  };
+
+  // Headers (same for all exports)
+  const exportHeaders = [
+    "Function",
+    "Global Min",
+    "PSO (f)",
+    "GA (f)",
+    "PSO (error)",
+    "GA (error)",
+  ];
+
+  // CSV / JSON / XLSX
   const handleExport = (type) => {
     if (!table) {
       console.warn("Table not ready yet");
       return;
     }
 
-    console.log({ table });
+    const rows = buildExportRows();
 
-    if (type === "csv") table.current.download("csv", "benchmarks.csv");
-    if (type === "json") table.current.download("json", "benchmarks.json");
-    if (type === "xlsx")
-      table.current.download("xlsx", "benchmarks.xlsx", {
-        sheetName: "Benchmarks",
+    if (type === "csv") {
+      const csv = [
+        exportHeaders.join(","),
+        ...rows.map((r) => r.join(",")),
+      ].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "benchmarks.csv";
+      link.click();
+    }
+
+    if (type === "json") {
+      const json = rows.map((r) =>
+        Object.fromEntries(exportHeaders.map((h, i) => [h, r[i]]))
+      );
+      const blob = new Blob([JSON.stringify(json, null, 2)], {
+        type: "application/json",
       });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "benchmarks.json";
+      link.click();
+    }
+
+    if (type === "xlsx") {
+      const worksheet = XLSX.utils.aoa_to_sheet([exportHeaders, ...rows]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Benchmarks");
+      XLSX.writeFile(workbook, "benchmarks.xlsx");
+    }
+  };
+
+  // Use scientific notation everywhere
+  const safeFormat = (val) => {
+    if (!val) return "-";
+    return `mean: ${toScientific(val.mean)}, variance: ${toScientific(
+      val.variance
+    )}`;
   };
 
   const handleExportPDF = () => {
-    const doc = new jsPDF();
+    // Use landscape so 6 columns fit nicely
+    const doc = new jsPDF("l", "mm", "a4");
 
-    // Add title
-    doc.text("Benchmarks Report", 14, 10);
+    doc.setFontSize(14);
+    doc.text("Benchmarks Report", 14, 15);
 
-    // Convert Tabulator data → rows
     const rows = table.current
       .getData()
-      .map((row) => [row.name, row.mean, row.variance]);
+      .map((row) => [
+        row.name ?? "-",
+        row.globalMin != null ? toScientific(row.globalMin) : "-",
+        safeFormat(row.pso),
+        safeFormat(row.ga),
+        safeFormat(row.psoError),
+        safeFormat(row.gaError),
+      ]);
 
-    // Use autoTable directly
     autoTable(doc, {
-      head: [["Name", "Mean", "Variance"]],
+      head: [
+        [
+          "Function",
+          "Global Min",
+          "PSO (f)",
+          "GA (f)",
+          "PSO (error)",
+          "GA (error)",
+        ],
+      ],
       body: rows,
+      startY: 25,
+      styles: {
+        fontSize: 7,
+        cellWidth: "auto",
+        overflow: "linebreak",
+      },
+      headStyles: {
+        fillColor: [50, 50, 50],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      tableWidth: "auto",
+      pageBreak: "auto",
     });
 
-    // Save file
     doc.save("benchmarks.pdf");
   };
-
   return (
     <div>
       <Header />
@@ -122,7 +299,7 @@ export default function BenchmarkTable3() {
       </div>
       <div className="px-4">
         <ReactTabulator
-          data={data1}
+          data={main_data}
           columns={function_columns}
           layout="fitColumns"
           options={{

@@ -196,14 +196,8 @@ async function main() {
 
   const numberOfThreads = 8; // Set your desired number of threads
   const workerPath = path.resolve("./worker.js"); // Path to your worker file
-  const dataFilePath = "./data.json"; // Path where results will be saved
 
-  const manager = new ThreadManager(
-    numberOfThreads,
-    algorithms,
-    workerPath,
-    dataFilePath
-  );
+  const manager = new ThreadManager(numberOfThreads, algorithms, workerPath);
 
   try {
     console.log("=== Starting Multi-threaded Benchmark ===");
@@ -235,80 +229,6 @@ async function main() {
 }
 
 main();
-
-import { DataReader } from "./reader_utility.js"; // Update path if needed
-import { json } from "stream/consumers";
-
-async function runTest() {
-  console.log("🚀 Starting Multi-Threading Test...\n");
-
-  // Your existing algorithms list
-  const algorithms = [
-    "bohachevskyN1",
-    "ackleyN2",
-    "sphere",
-    "brent",
-    "dropWave",
-    "matyas",
-    "schwefel220",
-    "bird",
-    "deckkersAarts",
-    "goldsteinPrice",
-    "happyCat",
-    "leviN13",
-    "salomon",
-    "wolfe",
-  ];
-
-  // Test configuration
-  const numberOfThreads = 8; // Adjust as needed
-  const workerPath = path.resolve("./worker.js"); // Path to your updated worker
-  const dataFilePath = "./data.json"; // Output file
-
-  // Create thread manager
-  const manager = new ThreadManager(
-    numberOfThreads,
-    algorithms,
-    workerPath,
-    dataFilePath
-  );
-
-  // Optional: Start progress monitoring in parallel
-  const reader = new DataReader(dataFilePath);
-  const stopWatching = reader.watchProgress(3000); // Check every 3 seconds
-
-  try {
-    console.log(
-      `📊 Running ${algorithms.length} algorithms across ${numberOfThreads} threads`
-    );
-    console.log(`💾 Results will be saved to: ${dataFilePath}\n`);
-
-    const startTime = Date.now();
-
-    // Start the workers
-    await manager.startWorkers();
-
-    const endTime = Date.now();
-    const totalTime = (endTime - startTime) / 1000;
-
-    // Stop progress monitoring
-    stopWatching();
-
-    console.log(
-      `\n✅ All threads completed in ${totalTime.toFixed(2)} seconds`
-    );
-
-    // Generate final report
-    console.log("\n📋 Generating final report...");
-    await reader.generateReport();
-  } catch (error) {
-    console.error("❌ Test failed:", error.message);
-    stopWatching();
-  } finally {
-    manager.terminateWorkers();
-    console.log("\n🔧 Cleaned up workers");
-  }
-}
 
 // Run the test
 // runTest().catch(console.error);

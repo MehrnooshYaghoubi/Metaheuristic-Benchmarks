@@ -69,7 +69,7 @@
       "minimizer": "(0,0)"
     },
     {
-      "name": "Alpine N. 1",
+      "name": "AlpineN1",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n) = \\sum{i=1}^{n}|x_i sin(x_i)+0.1x_i|",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
@@ -82,7 +82,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Alpine N. 2",
+      "name": "AlpineN2",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n) = \\prod_{i=1}^{n}\\sqrt{x_i}sin(x_i)",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
@@ -137,7 +137,7 @@
       "minimizer": "(-1.58214,-3.13024)"
     },
     {
-      "name": "Bohachevsky N. 1",
+      "name": "Bohachevsky N1",
       "formula": "f(x, y) = x^2 + 2y^2 -0.3cos(3\\pi x)-0.4cos(4\\pi y)+0.7",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -150,7 +150,7 @@
       "minimizer": "(0,0)"
     },
     {
-      "name": "Bohachevsky N. 2",
+      "name": "Bohachevsky N2",
       "formula": "f(x, y)=x^2 + 2y^2 -0.3cos(3\\pi x)cos(4\\pi y)+0.3",
       "dimensionality": "2-dimensional",
       "continuity": "not specified",
@@ -185,7 +185,7 @@
       "differentiability": "differentiable",
       "separability": "non-separable",
       "input_domain": [-20, 0],
-      "global_minima": "e^{-200}",
+      "global_minima": "0",
       "minimizer": "(−10,−10)"
     },
     {
@@ -202,7 +202,7 @@
       "minimizer": "0"
     },
     {
-      "name": "Bukin N. 6",
+      "name": "BukinN6",
       "formula": "f(x,y)=100\\sqrt{|y-0.01x^2|}+0.01|x+10|",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -231,7 +231,7 @@
       "minimizer": "(\\pm 9.646157266348881,\\pm 9.646157266348881)"
     },
     {
-      "name": "Cross-in-Tray",
+      "name": "CrossinTray",
       "formula": "f(x,y)=-0.0001(|sin(x)sin(y)exp(|100-\\frac{\\sqrt{x^2+y^2}}{\\pi}|)|+1)^{0.1}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -247,7 +247,7 @@
       "minimizer": "(\\pm 1.349406685353340,\\pm 1.349406608602084)"
     },
     {
-      "name": "Deckkers-Aarts",
+      "name": "DeckkersAarts",
       "formula": "f(x, y) = 10^5x^2 + y^2 -(x^2 + y^2)^2 + 10^{-5}(x^2 + y^2)^4",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -260,7 +260,7 @@
       "minimizer": "(0,\\pm 15)"
     },
     {
-      "name": "Drop-Wave",
+      "name": "DropWave",
       "formula": "f(x, y) = - \\frac{1 + cos(12\\sqrt{x^{2} + y^{2}})}{(0.5(x^{2} + y^{2}) + 2)}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -302,7 +302,7 @@
       "minimizer": "(0, 0)"
     },
     {
-      "name": "El-Attar-Vidyasagar-Dutta",
+      "name": "ElAttarVidyasagarDutta",
       "formula": "f(x, y) = (x^2 + y - 10)^2 + (x + y^2 - 7)^2 + (x^2 + y^3 - 1)^2",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -341,7 +341,7 @@
       "minimizer": "0.757249"
     },
     {
-      "name": "Goldstein-Price",
+      "name": "GoldsteinPrice",
       "formula": "f(x,y)=[1 + (x + y + 1)^2(19 − 14x+3x^2− 14y + 6xy + 3y^2)][30 + (2x − 3y)^2(18 − 32x + 12x^2 + 4y − 36xy + 27y^2)]",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -357,7 +357,7 @@
       "minimizer": "(0, -1)"
     },
     {
-      "name": "Gramacy & Lee",
+      "name": "GramacyLee",
       "formula": "f(x) = \\frac{sin(10\\pi x)}{2x} + (x-1)^4",
       "dimensionality": "1-dimensional",
       "continuity": "continuous",
@@ -409,7 +409,7 @@
       "minimizer": "[(3,2), (-2.805118,3.283186), (-3.779310,-3.283186), (3.584458,-1.848126)]"
     },
     {
-      "name": "Holder-Table",
+      "name": "HolderTable",
       "formula": "f(x,y)=-|sin(x)cos(y)exp(|1-\\frac{\\sqrt{x^2+y^2}}{\\pi}|)|",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -451,7 +451,7 @@
       "minimizer": "(1,1)"
     },
     {
-      "name": "Levi N. 13",
+      "name": "LeviN13",
       "formula": "f(x, y) = sin^2(3\\pi x)+(x-1)^2(1+sin^2(3\\pi y))+(y-1)^2(1+sin^2(2\\pi y))",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -573,7 +573,7 @@
       "differentiability": "differentiable",
       "separability": "non-separable",
       "input_domain": [-5, 5],
-      "global_minima": "−γ",
+      "global_minima": "-5",
       "minimizer": "(−γ,0,…,0)"
     },
     {
@@ -603,7 +603,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Schaffer N. 1",
+      "name": "SchafferN1",
       "formula": "f(x, y)=0.5 + \\frac{sin^2(x^2+y^2)^2-0.5}{(1+0.001(x^2+y^2))^2}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -616,7 +616,7 @@
       "minimizer": "(0,0)"
     },
     {
-      "name": "Schaffer N. 2",
+      "name": "SchafferN2",
       "formula": "f(x, y)=0.5 + \\frac{sin^2(x^2-y^2)-0.5}{(1+0.001(x^2+y^2))^2}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -629,7 +629,7 @@
       "minimizer": "(0,0)"
     },
     {
-      "name": "Schaffer N. 3",
+      "name": "SchafferN3",
       "formula": "f(x, y)=0.5 + \\frac{sin^2(cos(|x^2-y^2|))-0.5}{(1+0.001(x^2+y^2))^2}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -642,7 +642,7 @@
       "minimizer": "(0,1.253115)"
     },
     {
-      "name": "Schaffer N. 4",
+      "name": "SchafferN4",
       "formula": "f(x, y)=0.5 + \\frac{cos^2(sin(|x^2-y^2|))-0.5}{(1+0.001(x^2+y^2))^2}",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -655,7 +655,7 @@
       "minimizer": "(0,1.253115)"
     },
     {
-      "name": "Schwefel 2.20",
+      "name": "Schwefel220",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\sum_{i=1}^n |x_i|",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -668,7 +668,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Schwefel 2.21",
+      "name": "Schwefel221",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\sum_{i=1}^n |x_i|",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -682,7 +682,7 @@
     },
 
     {
-      "name": "Schwefel 2.22",
+      "name": "Schwefel222",
       "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^{n}|x_i|+\\prod_{i=1}^{n}|x_i|",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -695,7 +695,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Schwefel 2.23",
+      "name": "Schwefel223",
       "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^{n}x_i^{10}",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -773,7 +773,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Styblinski-Tank",
+      "name": "StyblinskiTank",
       "formula": "f(\\textbf{x}) = f(x_1, ..., x_n)= \\frac{1}{2}\\sum_{i=1}^{n} (x_i^4 -16x_i^2+5x_i)",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -786,7 +786,7 @@
       "minimizer": "(-2.903534,…,-2.903534)"
     },
     {
-      "name": "Sum Squares",
+      "name": "sumOfSquares",
       "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=\\sum_{i=1}^{n}{ix_i^2}",
       "dimensionality": "n-dimensional",
       "continuity": "continuous",
@@ -799,7 +799,7 @@
       "minimizer": "0"
     },
     {
-      "name": "Three-Hump Camel",
+      "name": "ThreeHumpCamel",
       "formula": "f(x,y)=2x^2-1.05x^4+\frac{x^6}{6}+xy+y^2",
       "dimensionality": "2-dimensional",
       "continuity": "continuous",
@@ -838,7 +838,7 @@
       "minimizer": "(0,0,0)"
     },
     {
-      "name": "Xin-She Yang",
+      "name": "XinSheYang",
       "formula": "f(\\mathbf x)=f(x_1, ...,x_n)=\\sum_{i=1}^{n}\\epsilon_i|x_i|^i",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
@@ -851,7 +851,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Xin-She Yang N. 2",
+      "name": "XinSheYangN2",
       "formula": "f(\\mathbf{x})=f(x_1, ..., x_n)=(\\sum_{i=1}^{n}|x_i|)\\exp(-\\sum_{i=1}^{n}\\sin(x_i^2))",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
@@ -864,7 +864,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Xin-She Yang N. 3",
+      "name": "XinSheYangN3",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n) =exp(-\\sum_{i=1}^{n}(x_i / \\beta)^{2m}) - 2exp(-\\sum_{i=1}^{n}x_i^2) \\prod_{i=1}^{n}cos^ 2(x_i) ",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
@@ -877,7 +877,7 @@
       "minimizer": "(0,…,0)"
     },
     {
-      "name": "Xin-She Yang N. 4",
+      "name": "XinSheYangN4",
       "formula": "f(\\mathbf x)=f(x_1, ..., x_n)=\\left(\\sum_{i=1}^{n}sin^2(x_i)-e^{-\\sum_{i=1}^{n}x_i^2}\\right)e^{-\\sum_{i=1}^{n}{sin^2\\sqrt{|x_i|}}}",
       "dimensionality": "n-dimensional",
       "continuity": "not specified",
