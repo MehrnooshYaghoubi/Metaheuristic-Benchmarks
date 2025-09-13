@@ -58,7 +58,7 @@ function App() {
           Revolutionizing The <br /> Future with Algorithms
         </h1>
         <h3 className="mb-10">
-        Discover performance across 67 test functions—
+        Discover performance across 67 test functions
     visualized with <br />interactive graphs, detailed tables,
     and comparative analysis of metaheuristic algorithms.
         </h3>
