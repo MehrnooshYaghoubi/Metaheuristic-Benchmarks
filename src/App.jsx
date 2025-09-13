@@ -52,16 +52,15 @@ function App() {
       <Header />
       <div className="flex flex-col items-center mt-[150px]">
         <h3 className="py-2 px-4 rounded-full border border-gray-200 solid w-fit">
-          MetaSolve secures $20M Series B to reshape the future of algorithmic
-          intelligence.
+        Comparative Benchmarks of Genetic Algorithm & Particle Swarm Optimization
         </h3>
         <h1 className="text-[70px] font-semibold my-7 leading-[1.15] bg-gradient-to-b from-blue-500  to-gray-200 text-transparent bg-clip-text">
           Revolutionizing The <br /> Future with Algorithms
         </h1>
         <h3 className="mb-10">
-          MetaSolve brings powerful, AI-driven tools to life—engineered to{" "}
-          <br />
-          solve the world's toughest challenges
+        Discover performance across 67 test functions—
+    visualized with <br />interactive graphs, detailed tables,
+    and comparative analysis of metaheuristic algorithms.
         </h3>
         <div>
           <NavLink
