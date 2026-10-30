@@ -20,38 +20,38 @@ function bit_flip_mutation(individual, mutation_rate) {
 //   return individual;
 // }
 
-function complementaryMutationAsymmetric(individual, mutationRate, min, max) {
-  const midpoint = (min + max) / 2;
-  for (let i = 0; i < individual.length; i++) {
-    if (Math.random() < mutationRate) {
-      individual[i] = 2 * midpoint - individual[i]; // reflect around midpoint
-      // Clip to bounds:
-      if (individual[i] < min) individual[i] = min;
-      if (individual[i] > max) individual[i] = max;
-    }
-  }
-  return individual;
-}
-
 function complementary_mutation(individual, mutation_rate, min, max) {
-  const midpoint = (min + max) / 2;
   for (let i = 0; i < individual.length; i++) {
     if (Math.random() < mutation_rate) {
-      individual[i] = 2 * midpoint - individual[i]; // reflect around midpoint
-      // Clip to bounds:
-      if (individual[i] < min) individual[i] = min;
-      if (individual[i] > max) individual[i] = max;
+      const lo = min[i];
+      const hi = max[i];
+      individual[i] = lo + hi - individual[i]; // reflect around the midpoint
+      if (individual[i] < lo) individual[i] = lo;
+      if (individual[i] > hi) individual[i] = hi;
     }
   }
   return individual;
 }
 
-function gaussian_mutation(individual, rate, stdDev = 0.1, min, max) {
-  return individual.map((gene) =>
-    Math.random() < rate
-      ? Math.min(max, Math.max(min, gene + stdDev * (Math.random() * 2 - 1)))
-      : gene
-  );
+// Box-Muller transform: a standard normal sample.
+function standardNormal() {
+  let u = 0;
+  while (u === 0) u = Math.random(); // avoid log(0)
+  const v = Math.random();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+// `sigmaFraction` is a fraction of each gene's domain width, so the step size
+// adapts to the scale of the search space. A fixed absolute step of 0.1 was
+// effectively no mutation at all on wide domains such as Schwefel's [-500, 500].
+function gaussian_mutation(individual, rate, sigmaFraction = 0.1, min, max) {
+  return individual.map((gene, i) => {
+    if (Math.random() >= rate) return gene;
+    const lo = min[i];
+    const hi = max[i];
+    const sigma = sigmaFraction * (hi - lo);
+    return Math.min(hi, Math.max(lo, gene + sigma * standardNormal()));
+  });
 }
 
 function swap_mutation(individual, mutation_rate) {
@@ -128,8 +128,8 @@ export function mutation(
   individual,
   mutation_rate,
   mutation_type = "bit_flip_mutation",
-  min = -10,
-  max = 10
+  min = [],
+  max = []
 ) {
   switch (mutation_type) {
     case "Bit Flip Mutation":

@@ -1,25 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import App from "./App";
 import "./index.css";
 import GeneticAlgorithm from "./pages/ga";
 import PSO from "./pages/pso";
-import BenchmarkTable from "./pages/tables";
-import BenchmarkTable2 from "./pages/tables2";
-import BenchmarkTable3 from "./pages/tables3";
+import BenchmarkTables from "./pages/tables";
 
-const root = document.getElementById("root");
-
-ReactDOM.createRoot(root).render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/ga" element={<GeneticAlgorithm />} />
-      <Route path="/pso" element={<PSO />} />
-      <Route path="/tables" element={<BenchmarkTable />} />
-      <Route path="/tables2" element={<BenchmarkTable2 />} />
-      <Route path="/tables3" element={<BenchmarkTable3 />} />
-    </Routes>
-  </BrowserRouter>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/ga" element={<GeneticAlgorithm />} />
+        <Route path="/pso" element={<PSO />} />
+        {/* The three former table pages are now views of one route. */}
+        <Route path="/tables" element={<Navigate to="/tables/unimodal" replace />} />
+        <Route path="/tables/:view" element={<BenchmarkTables />} />
+        <Route path="/tables2" element={<Navigate to="/tables/multimodal" replace />} />
+        <Route path="/tables3" element={<Navigate to="/tables/comparison" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
 );

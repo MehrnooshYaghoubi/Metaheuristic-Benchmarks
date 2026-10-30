@@ -1,4 +1,4 @@
-import { safeObjective, objectiveToFitness } from "./safe.js";
+import { safeObjective, objectivesToFitnesses } from "./safe.js";
 
 function random_selection(population) {
   let randomIndex = Math.floor(Math.random() * population.length);
@@ -9,9 +9,10 @@ function random_selection(population) {
   return [population[randomIndex], population[randomIndex2]];
 }
 export function roulette_wheel_selection(population, objectiveFn) {
-  // Map objective -> fitness (higher better)
+  // Map objective -> fitness (higher better), shifted over the whole
+  // population so that negative objectives are ranked correctly too.
   const objectives = population.map((ind) => safeObjective(objectiveFn, ind));
-  const fitnesses = objectives.map((obj) => objectiveToFitness(obj));
+  const fitnesses = objectivesToFitnesses(objectives);
 
   const sum = fitnesses.reduce((a, b) => a + b, 0);
   if (!isFinite(sum) || sum <= 0) {
@@ -41,15 +42,16 @@ export function roulette_wheel_selection(population, objectiveFn) {
   return [p1, p2];
 }
 
-function rank_based_selection(population, fitness) {
-  // Pair each individual with its fitness
+function rank_based_selection(population, objectiveFn) {
+  // Pair each individual with its objective value
   const individualsWithFitness = population.map((individual) => ({
     individual,
-    fitness: fitness(individual),
+    fitness: safeObjective(objectiveFn, individual),
   }));
 
-  // Sort by fitness ascending (rank 1 is worst)
-  individualsWithFitness.sort((a, b) => a.fitness - b.fitness);
+  // We minimise, so sort by objective DESCENDING: rank 1 is the worst
+  // (highest objective) and rank N the best (lowest objective).
+  individualsWithFitness.sort((a, b) => b.fitness - a.fitness);
 
   // Assign ranks (1 for worst, N for best)
   const ranked = individualsWithFitness.map((entry, index) => ({
@@ -70,7 +72,10 @@ function rank_based_selection(population, fitness) {
   // Selection function based on cumulative probability
   const pick = () => {
     const r = Math.random();
-    const index = cumulative.findIndex((p) => p >= r) ?? cumulative.length - 1;
+    // findIndex returns -1 (not undefined) when nothing matches, so fall back
+    // to the last entry explicitly.
+    const found = cumulative.findIndex((p) => p >= r);
+    const index = found === -1 ? cumulative.length - 1 : found;
     return ranked[index].individual;
   };
 
@@ -93,15 +98,15 @@ function tournamentSelection(population, objectiveFn, k = 3) {
   }
   return [pick(), pick()];
 }
-function truncation_selection(population, fitness, fitness_threshold = 0.5) {
-  // Pair individuals with their fitness
+function truncation_selection(population, objectiveFn, fitness_threshold = 0.5) {
+  // Pair individuals with their objective value
   const fitness_population = population.map((ind) => ({
     individual: ind,
-    fitness: fitness(ind),
+    fitness: safeObjective(objectiveFn, ind),
   }));
 
-  // Sort by fitness descending (higher fitness is better)
-  fitness_population.sort((a, b) => b.fitness - a.fitness);
+  // We minimise, so sort ascending (lowest objective is best)
+  fitness_population.sort((a, b) => a.fitness - b.fitness);
 
   // Determine how many top individuals to keep (fitness_threshold is proportion)
   const top_n = Math.max(2, Math.floor(population.length * fitness_threshold));

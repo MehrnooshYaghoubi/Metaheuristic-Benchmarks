@@ -1,90 +1,76 @@
 import { NavLink } from "react-router";
-import { useEffect } from "react";
+import { Dna, Bird, Table2, ArrowRight } from "lucide-react";
 import Header from "./titlebar";
 
-function App() {
-  useEffect(() => {
-    const threeScript = document.createElement("script");
-    threeScript.src = "./Utils/three.min.js"; // Use the local path to the three.min.js file
-    threeScript.async = true;
-    document.body.appendChild(threeScript);
+const destinations = [
+  {
+    to: "/ga",
+    icon: Dna,
+    title: "Genetic Algorithm",
+    body: "Evolve a population with selection, crossover and mutation. Configure every operator and watch the best chromosomes.",
+  },
+  {
+    to: "/pso",
+    icon: Bird,
+    title: "Particle Swarm",
+    body: "Drive a swarm through the search space with inertia, cognitive and social terms. Plots convergence and particle positions.",
+  },
+  {
+    to: "/tables",
+    icon: Table2,
+    title: "Benchmark Results",
+    body: "All 67 test functions with their properties, plus a head-to-head comparison of GA and PSO. Exports to CSV, XLSX and PDF.",
+  },
+];
 
-    const vantaScript = document.createElement("script");
-    vantaScript.src = "./Utils/vanta.dots.min.js"; // Use the local path to the vanta.dots.min.js file
-    vantaScript.async = true;
-    document.body.appendChild(vantaScript);
-
-    const setVanta = () => {
-      if (window.VANTA) {
-        window.VANTA.DOTS({
-          el: document.querySelector("main"),
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.0,
-          minWidth: 200.0,
-          scale: 1.0,
-          scaleMobile: 1.0,
-          color: 0x2099ff,
-          color2: 0x317cb6,
-          backgroundColor: 0x0,
-          size: 3.0,
-          spacing: 30.0,
-        });
-      }
-    };
-
-    threeScript.onload = () => {
-      vantaScript.onload = setVanta;
-    };
-
-    return () => {
-      if (window.VANTA && window.VANTA.current) {
-        window.VANTA.current.destroy();
-      }
-      document.body.removeChild(threeScript);
-      document.body.removeChild(vantaScript);
-    };
-  }, []);
-
+export default function App() {
   return (
-    <main className="flex flex-col items-center h-screen text-center font-[Montserrat] ">
+    <div className="flex h-full flex-col bg-base">
       <Header />
-      <div className="flex flex-col items-center mt-[150px]">
-        <h3 className="py-2 px-4 rounded-full border border-gray-200 solid w-fit">
-        Comparative Benchmarks of Genetic Algorithm & Particle Swarm Optimization
-        </h3>
-        <h1 className="text-[70px] font-semibold my-7 leading-[1.15] bg-gradient-to-b from-blue-500  to-gray-200 text-transparent bg-clip-text">
-          Revolutionizing The <br /> Future with Algorithms
-        </h1>
-        <h3 className="mb-10">
-        Discover performance across 67 test functions
-    visualized with <br />interactive graphs, detailed tables,
-    and comparative analysis of metaheuristic algorithms.
-        </h3>
-        <div>
-          <NavLink
-            to="/ga"
-            className="bg-blue-500  text-white rounded-full px-6 py-3 hover:bg-blue-400 transition duration-300 ease-in-out"
-          >
-            Use Genetic Algorithm
-          </NavLink>
-          <NavLink
-            to="/pso"
-            className="text-white border border-blue-400 rounded-full px-6 py-3 ml-4 hover:bg-blue-500  transition duration-300 ease-in-out"
-          >
-            Use Particle Swarm Optimization
-          </NavLink>
-          <NavLink
-            to="/tables"
-            className="text-white border border-blue-400 rounded-full px-6 py-3 ml-4 hover:bg-blue-500  transition duration-300 ease-in-out"
-          >
-            Benchmark Results
-          </NavLink>
+      <main className="min-h-0 flex-1 overflow-auto">
+        <div className="mx-auto flex min-h-full max-w-5xl flex-col justify-center px-8 py-16">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-medium tracking-wide text-ink-muted">
+              67 benchmark functions
+            </span>
+            <h1 className="mt-5 text-4xl leading-[1.1] font-semibold tracking-tight text-balance">
+              Metaheuristic algorithms,
+              <br />
+              measured side by side.
+            </h1>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink-muted text-pretty">
+              Run a Genetic Algorithm or Particle Swarm Optimization against a
+              standard benchmark suite, then compare their results under a
+              matched evaluation budget.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+            {destinations.map(({ to, icon: Icon, title, body }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className="group flex flex-col rounded-[12px] border border-line bg-surface p-5 transition-colors hover:border-line-strong hover:bg-surface-2"
+              >
+                <Icon size={18} className="text-accent" />
+                <h2 className="mt-4 text-[14px] font-semibold tracking-tight">
+                  {title}
+                </h2>
+                <p className="mt-2 flex-1 text-[13px] leading-relaxed text-ink-muted">
+                  {body}
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-ink-faint transition-colors group-hover:text-accent">
+                  Open
+                  <ArrowRight
+                    size={13}
+                    className="transition-transform group-hover:translate-x-0.5"
+                  />
+                </span>
+              </NavLink>
+            ))}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
-
-export default App;

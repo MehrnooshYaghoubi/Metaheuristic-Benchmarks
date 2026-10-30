@@ -1,4 +1,5 @@
 import { meanAndVariance } from "../Benchmarks/eval.js";
+import { normaliseBounds } from "../Benchmarks/bounds.js";
 import {
   ackleyN2,
   bird,
@@ -43,10 +44,17 @@ export async function StandardPSO(
   Wseed = 0.726,
   setData = () => {} // function to set data for visualization
 ) {
+  // Bounds may be scalars or per-dimension arrays.
+  const { lower, upper } = normaliseBounds(lowerBound, upperBound, dimension);
+
+  // Cap each component of the velocity at the width of its own dimension,
+  // so a particle cannot overshoot the entire search space in one step.
+  const vMax = lower.map((lo, k) => upper[k] - lo);
+
   const population = Array.from({ length: populationSize }, () =>
     Array.from(
       { length: dimension },
-      () => lowerBound + (upperBound - lowerBound) * Math.random()
+      (_, k) => lower[k] + (upper[k] - lower[k]) * Math.random()
     )
   );
 
@@ -55,25 +63,33 @@ export async function StandardPSO(
   );
 
   const pbest = population.map((p) => [...p]);
-  let gbest = population[0];
+  // Cache each particle's personal-best objective value. Re-evaluating
+  // pbest[j] every iteration doubled the fitness-call cost for no reason:
+  // the value only changes when pbest[j] itself is replaced.
+  const pbestFitness = new Array(populationSize);
 
   let fitnessCallCount = 0;
-  let gbestFitness = await fitnessFunction(gbest);
-  fitnessCallCount++;
+  let gbest = [...population[0]];
+  let gbestFitness = Infinity;
 
-  for (let i = 1; i < population.length; i++) {
+  for (let i = 0; i < population.length; i++) {
     if (fitnessCallCount >= maxFitnessCalls) break;
     const fitness = await fitnessFunction(population[i]);
     fitnessCallCount++;
-    const currentBestFitness = gbestFitness; // already computed
-    if (fitness < currentBestFitness) {
+    pbestFitness[i] = fitness;
+    if (fitness < gbestFitness) {
       gbest = [...population[i]];
       gbestFitness = fitness;
     }
   }
+  // Any particle not evaluated within the budget still needs a comparable value.
+  for (let i = 0; i < populationSize; i++) {
+    if (pbestFitness[i] === undefined) pbestFitness[i] = Infinity;
+  }
 
   let logisticState = Wseed;
-  const yieldEvery = 50; // yield every 50 iterations
+  const yieldEvery = 50; // publish/yield every 50 fitness calls
+  let lastPublished = 0;
   let data = [];
 
   // Main loop continues until fitness call limit is reached
@@ -99,11 +115,9 @@ export async function StandardPSO(
       const currentFitness = await fitnessFunction(population[j]);
       fitnessCallCount++;
 
-      const pbestFitness = await fitnessFunction(pbest[j]);
-      fitnessCallCount++;
-
-      if (currentFitness < pbestFitness) {
+      if (currentFitness < pbestFitness[j]) {
         pbest[j] = [...population[j]];
+        pbestFitness[j] = currentFitness;
 
         if (currentFitness < gbestFitness) {
           gbest = [...population[j]];
@@ -118,15 +132,17 @@ export async function StandardPSO(
         const r2 = Math.random();
         const inertia = inertiaWeights[k];
 
-        velocities[j][k] =
+        let v =
           inertia * velocities[j][k] +
           c1 * r1 * (pbest[j][k] - population[j][k]) +
           c2 * r2 * (gbest[k] - population[j][k]);
 
-        population[j][k] += velocities[j][k];
+        v = Math.max(-vMax[k], Math.min(vMax[k], v));
+        velocities[j][k] = v;
+
         population[j][k] = Math.max(
-          lowerBound,
-          Math.min(upperBound, population[j][k])
+          lower[k],
+          Math.min(upper[k], population[j][k] + v)
         );
       }
     }
@@ -136,12 +152,17 @@ export async function StandardPSO(
       fitnessCalls: fitnessCallCount,
     });
 
-    setData(data);
-
-    if (fitnessCallCount % yieldEvery === 0) {
+    // Hand React a NEW array, and only periodically. Passing `data` itself
+    // meant the reference never changed, so React skipped every re-render and
+    // the convergence chart froze a few iterations into the run.
+    if (fitnessCallCount - lastPublished >= yieldEvery) {
+      lastPublished = fitnessCallCount;
+      setData([...data]);
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
   }
+
+  setData([...data]);
 
   return { gbest, bestFitness: gbestFitness, fitnessCalls: fitnessCallCount };
 }

@@ -1,16 +1,14 @@
+import { normaliseBounds } from "../Benchmarks/bounds.js";
+
 // Create a binary individual with a specified gene length.
 function createBinaryIndividual(geneLength) {
   return Array.from({ length: geneLength }, () => Math.round(Math.random()));
 }
-// Create a real-valued individual.
-function createRealIndividual(
-  geneLength,
-  lowerBound = -10.0,
-  upperBound = 10.0
-) {
+// Create a real-valued individual. `lower`/`upper` are per-gene arrays.
+function createRealIndividual(geneLength, lower, upper) {
   return Array.from(
     { length: geneLength },
-    () => lowerBound + (upperBound - lowerBound) * Math.random()
+    (_, i) => lower[i] + (upper[i] - lower[i]) * Math.random()
   );
 }
 
@@ -36,10 +34,15 @@ export function createPopulation(
       createBinaryIndividual(geneLength)
     );
   } else if (representation === "Real Number") {
-    const lowerBound = options.lowerBound || -10.0;
-    const upperBound = options.upperBound || 10.0;
+    // Use ?? so that an explicit bound of 0 is respected. Bounds may be a
+    // scalar or a per-gene array; normaliseBounds handles both.
+    const { lower, upper } = normaliseBounds(
+      options.lowerBound ?? -10.0,
+      options.upperBound ?? 10.0,
+      geneLength
+    );
     return Array.from({ length: populationSize }, () =>
-      createRealIndividual(geneLength, lowerBound, upperBound)
+      createRealIndividual(geneLength, lower, upper)
     );
   } else if (representation === "Permutation") {
     return Array.from({ length: populationSize }, () =>

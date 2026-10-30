@@ -4,10 +4,10 @@ import { mutation } from "./mutation.js";
 import { replacement } from "./replacement.js";
 import { selection } from "./selection.js";
 import { stopCondition } from "./stop_condition.js";
+import { safeObjective } from "./safe.js";
+import { normaliseBounds, clampToBounds } from "../Benchmarks/bounds.js";
 
-function clampGenes(individual, lower, upper) {
-  return individual.map((g) => Math.min(upper, Math.max(lower, g)));
-}
+
 
 export class Genetic {
   constructor(
@@ -28,12 +28,24 @@ export class Genetic {
     fitnessThreshold = 0.01,
     stagnationLimit = 10,
     timeLimit = 60000,
-    convergenceThreshold = 0.001
+    convergenceThreshold = 0.001,
+    maxFitnessCalls = Infinity
   ) {
     this.populationSize = populationSize;
     this.mutationRate = mutationRate;
     this.crossoverRate = crossoverRate;
-    this.fitnessFunction = fitnessFunction;
+    // Count objective evaluations so the GA can be given the same budget as
+    // PSO; without this the two algorithms were compared at wildly different
+    // numbers of fitness calls (generations vs. calls).
+    this.fitnessCalls = 0;
+    this.bestEver = Infinity;
+    this.maxFitnessCalls = maxFitnessCalls;
+    this.fitnessFunction = (individual) => {
+      this.fitnessCalls++;
+      return fitnessFunction(individual);
+    };
+    // Un-counted version, for reporting after the run has finished.
+    this.rawFitnessFunction = fitnessFunction;
     this.population = [];
     this.crossoverType = crossoverType;
     this.selectionType = selectionType;
@@ -41,9 +53,16 @@ export class Genetic {
     this.dataType = dataType;
     this.mutationType = mutationType;
     this.replacementType = replacementType;
-    this.geneLength = geneLength;
-    this.upperBound = upperBound;
-    this.lowerBound = lowerBound;
+    this.geneLength = Number(geneLength);
+    // Bounds may be scalars or per-gene arrays; normaliseBounds also guards
+    // against a caller passing the pair in the wrong order.
+    const { lower, upper } = normaliseBounds(
+      lowerBound,
+      upperBound,
+      this.geneLength
+    );
+    this.lowerBound = lower;
+    this.upperBound = upper;
     this.maxGenerations = maxGenerations;
     this.fitnessThreshold = fitnessThreshold;
     this.stagnationLimit = stagnationLimit;
@@ -61,9 +80,10 @@ export class Genetic {
     let generationCount = 0;
     const startTime = Date.now();
     let bestFitnessHistory = [];
-    let bestFitness = -Infinity;
+    let bestFitness = Infinity;
 
     while (true) {
+      if (this.fitnessCalls >= this.maxFitnessCalls) break;
       let newGeneration = [];
 
       while (newGeneration.length < this.population.length) {
@@ -90,7 +110,7 @@ export class Genetic {
             );
 
             // clamp to valid range
-            child = clampGenes(child, this.lowerBound, this.upperBound);
+            child = clampToBounds(child, this.lowerBound, this.upperBound);
 
             return child;
           });
@@ -118,20 +138,17 @@ export class Genetic {
 
       generationCount++;
 
-      const currentBest = this.population.reduce((best, ind) => {
-        if (ind === undefined || typeof ind === "number") {
-          console.error(
-            "BAD INDIVIDUAL:",
-            ind,
-            "in generation",
-            generationCount
-          );
-        }
-        const fit = this.fitnessFunction(ind);
-        return fit > best ? fit : best;
-      }, -Infinity);
+      // The whole engine minimises (see safe.js / replacement.js), so the
+      // best individual is the one with the lowest objective value.
+      const currentBest = this.population.reduce(
+        (best, ind) => Math.min(best, safeObjective(this.fitnessFunction, ind)),
+        Infinity
+      );
 
       bestFitness = currentBest;
+      // Non-elitist replacement can discard the best individual found so far,
+      // so remember it rather than only reporting the final population.
+      this.bestEver = Math.min(this.bestEver, currentBest);
       bestFitnessHistory.push(currentBest);
 
       if (
@@ -156,23 +173,24 @@ export class Genetic {
     }
   }
   top10() {
-    let replica = this.population.map((ind) => {
+    // Sort ascending: lowest objective value first (best).
+    const ranked = [...this.population].sort(
+      (a, b) =>
+        safeObjective(this.rawFitnessFunction, a) -
+        safeObjective(this.rawFitnessFunction, b)
+    );
+    return ranked.slice(0, 10).map((ind) => {
       if (this.dataType === "Real Number") {
         return ind.map((gene) => gene.toFixed(2));
-      } else {
-        return ind;
       }
+      return ind;
     });
-    replica.sort((a, b) => {
-      return this.fitnessFunction(b) - this.fitnessFunction(a);
-    });
-    replica = replica.slice(0, 10);
-    return replica;
   }
   bestfit() {
-    return this.population.reduce((best, ind) => {
-      const fit = this.fitnessFunction(ind);
-      return fit > best ? fit : best;
-    }, -Infinity);
+    return this.population.reduce(
+      (best, ind) =>
+        Math.min(best, safeObjective(this.rawFitnessFunction, ind)),
+      this.bestEver
+    );
   }
 }

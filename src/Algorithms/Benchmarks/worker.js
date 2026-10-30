@@ -144,9 +144,15 @@ const benchmarkMap = {
 
 import fs from "fs/promises"; // Make sure you import fs
 import { Genetic } from "../Genetic Algorithm/main.js";
+import { specFor } from "./problem-specs.js";
 
-// Get assigned benchmarks and thread ID
-const { benchmarks, threadId } = workerData;
+// Number of objective evaluations each algorithm is allowed per run. Both GA
+// and PSO are held to the same budget so the comparison is meaningful.
+const MAX_FITNESS_CALLS = 60000;
+const RUNS_PER_BENCHMARK = 20;
+
+// Get assigned benchmarks, thread ID and which algorithm to run.
+const { benchmarks, threadId, algorithm = "PSO" } = workerData;
 const mappedBenchmarks = benchmarks.map((name) => {
   const fn = benchmarkMap[name];
   if (!fn) {
@@ -161,7 +167,7 @@ console.log(`Thread ${threadId} starting with algorithms:`, benchmarks);
 // File writing utility with retry mechanism for handling concurrent writes
 async function appendToDataFile(data) {
   let existingData = [];
-  let path = `data/${threadId}-data.json`;
+  let path = `data/${algorithm}-${threadId}-data.json`;
   try {
     const fileContent = await fs.readFile(path, "utf8");
     const parsed = JSON.parse(fileContent);
@@ -187,32 +193,38 @@ async function runBenchmarks(list, algo) {
     const modalResults = [];
     const startTime = Date.now();
 
-    const runs = Array.from({ length: 20 }, (_, i) => {
-      if (algo == "PSO") {
+    const spec = specFor(modal.name);
+
+    const runs = Array.from({ length: RUNS_PER_BENCHMARK }, (_, i) => {
+      const report = (bestFitness) => {
+        modalResults.push(bestFitness);
+        parentPort.postMessage({
+          type: "run",
+          modal: modal.name,
+          run: i + 1,
+          bestFitness,
+          threadId: threadId,
+        });
+        return bestFitness;
+      };
+
+      if (algo === "PSO") {
         return StandardPSO(
           50,
-          30,
-          -10,
-          10,
-          60000,
+          spec.dimension,
+          spec.lowerBound,
+          spec.upperBound,
+          MAX_FITNESS_CALLS,
           modal,
           0.74,
           1.42,
           1.42,
           null,
           false
-        ).then((res) => {
-          modalResults.push(res.bestFitness);
-          parentPort.postMessage({
-            type: "run",
-            modal: modal.name,
-            run: i + 1,
-            bestFitness: res.bestFitness,
-            threadId: threadId,
-          });
-          return res;
-        });
-      } else if (algo == "Genetic") {
+        ).then((res) => report(res.bestFitness));
+      }
+
+      if (algo === "Genetic") {
         const gen = new Genetic(
           50,
           0.01,
@@ -224,25 +236,21 @@ async function runBenchmarks(list, algo) {
           "Real Number",
           "Gaussian Mutation",
           "Elitism",
-          30,
-          -10,
+          spec.dimension,
+          spec.lowerBound,
+          spec.upperBound,
+          Infinity, // generations are bounded by the fitness-call budget
+          0.01,
           10,
-          800
+          60000,
+          0.001,
+          MAX_FITNESS_CALLS
         );
 
-        return gen.runAlgorithm().then(() => {
-          let res = gen.bestfit();
-          modalResults.push(res);
-          parentPort.postMessage({
-            type: "run",
-            modal: modal.name,
-            run: i + 1,
-            bestFitness: res,
-            threadId: threadId,
-          });
-          return res;
-        });
+        return gen.runAlgorithm().then(() => report(gen.bestfit()));
       }
+
+      return Promise.reject(new Error(`Unknown algorithm "${algo}"`));
     });
 
     await Promise.all(runs);
@@ -256,10 +264,16 @@ async function runBenchmarks(list, algo) {
     // Prepare data for JSON file
     const dataEntry = {
       algorithm: modal.name,
+      optimizer: algo,
+      dimension: spec.dimension,
+      lowerBound: spec.lowerBound,
+      upperBound: spec.upperBound,
+      globalMinimum: spec.globalMinimum,
+      maxFitnessCalls: MAX_FITNESS_CALLS,
       threadId: threadId,
       timestamp: new Date().toISOString(),
       executionTime: executionTime,
-      runs: 20,
+      runs: RUNS_PER_BENCHMARK,
       results: modalResults,
       statistics: {
         mean: stats.mean,
@@ -288,7 +302,7 @@ async function runBenchmarks(list, algo) {
   }
   return results;
 }
-runBenchmarks(mappedBenchmarks, "PSO")
+runBenchmarks(mappedBenchmarks, algorithm)
   .then((res) => {
     console.log(`Thread ${threadId} completed all benchmarks`);
     parentPort.postMessage({

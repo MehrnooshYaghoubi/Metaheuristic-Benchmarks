@@ -2,10 +2,11 @@ import { Worker } from "worker_threads";
 import path from "path";
 
 class ThreadManager {
-  constructor(numberOfThreads, algorithms, workerPath) {
+  constructor(numberOfThreads, algorithms, workerPath, optimizer = "PSO") {
     this.numberOfThreads = numberOfThreads;
     this.algorithms = algorithms;
     this.workerPath = workerPath;
+    this.optimizer = optimizer;
     this.workers = [];
     this.results = {};
     this.completedThreads = 0;
@@ -46,6 +47,7 @@ class ThreadManager {
           workerData: {
             benchmarks: chunk,
             threadId: threadIndex + 1,
+            algorithm: this.optimizer,
           },
         });
 
@@ -197,7 +199,21 @@ async function main() {
   const numberOfThreads = 8; // Set your desired number of threads
   const workerPath = path.resolve("./worker.js"); // Path to your worker file
 
-  const manager = new ThreadManager(numberOfThreads, algorithms, workerPath);
+  // Which optimizer to sweep: "PSO" or "Genetic".
+  // Usage: node benchmarks-master.js [PSO|Genetic]
+  const optimizer = process.argv[2] || "PSO";
+  if (!["PSO", "Genetic"].includes(optimizer)) {
+    console.error(`Unknown optimizer "${optimizer}". Use PSO or Genetic.`);
+    process.exit(1);
+  }
+  console.log(`Optimizer: ${optimizer}`);
+
+  const manager = new ThreadManager(
+    numberOfThreads,
+    algorithms,
+    workerPath,
+    optimizer
+  );
 
   try {
     console.log("=== Starting Multi-threaded Benchmark ===");

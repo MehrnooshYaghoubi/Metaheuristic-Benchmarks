@@ -40,7 +40,9 @@ export function brent(vec) {
 export function dropWave(vec) {
   const [x, y] = vec; // 2D only
   const r2 = x * x + y * y;
-  return -1 + Math.cos(12 * Math.sqrt(r2)) / (0.5 * r2 + 2);
+  // -(1 + cos(12r)) / (0.5r^2 + 2): the leading 1 belongs inside the
+  // numerator, not as a separate -1 term, or the optimum is -0.5 not -1.
+  return -(1 + Math.cos(12 * Math.sqrt(r2))) / (0.5 * r2 + 2);
 }
 
 export function matyas(vec) {
@@ -284,7 +286,7 @@ export function goldsteinPrice(vec) {
   const part2 =
     30 +
     (2 * x - 3 * y) ** 2 *
-      (18 - 32 * x + 12 * x ** 2 + 4 * y - 36 * x * y + 27 * y ** 2);
+      (18 - 32 * x + 12 * x ** 2 + 48 * y - 36 * x * y + 27 * y ** 2);
 
   return part1 * part2;
 }

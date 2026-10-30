@@ -13,11 +13,12 @@ function maxGenerationsStop(currentGeneration, maxGenerations) {
 // 2. Fitness Threshold
 // ========================
 
-function fitnessThresholdStop(bestFitness, fitnessThreshold) {
+function fitnessThresholdStop(bestObjective, fitnessThreshold) {
     /**
-     * Stop if the best fitness exceeds the predefined threshold.
+     * The engine minimises, so stop once the best objective value has dropped
+     * to or below the threshold.
      */
-    return bestFitness >= fitnessThreshold;
+    return bestObjective <= fitnessThreshold;
 }
 
 // ========================
