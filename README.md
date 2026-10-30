@@ -4,7 +4,7 @@ A desktop app for running and comparing two metaheuristic optimizers — a **Gen
 
 Configure every operator and coefficient from the UI, watch a run converge, and compare both algorithms under a matched evaluation budget. Built with React, Vite and Tauri.
 
-![The Genetic Algorithm page](docs/screenshots/genetic-algorithm.jpg)
+![The Genetic Algorithm page](docs/screenshots/genetic-algorithm‎.jpg)
 
 ---
 
